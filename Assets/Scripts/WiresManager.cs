@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+using OscilloscopeSimulation.InteractableObjects;
+
 using UnityEngine;
 namespace OscilloscopeSimulation
 {
@@ -39,7 +41,7 @@ namespace OscilloscopeSimulation
         /// <param name="positionForWireConnector"></param>
         /// 
         /// <returns></returns>
-        internal Wire ConnectWire(Transform positionForWireConnector)
+        internal Wire ConnectWire(WireSocketInteractable positionForWireConnector)
         {
             //Если в данный момент нет активного провода
             if (!ActiveWire)
@@ -77,7 +79,7 @@ namespace OscilloscopeSimulation
         /// Метод полного отключения активного провода от сокетов
         /// </summary>
         /// <param name="currentWire"></param>
-        internal void DisconnectAbs(Wire currentWire)
+        internal void DisconnectWireAbs(Wire currentWire)
         {
             currentWire.Disconnect();
 
@@ -93,9 +95,9 @@ namespace OscilloscopeSimulation
         /// </summary>
         /// <param name="point"></param>
         /// <param name="currentWire"></param>
-        internal void DisconnectFromPoint(Transform point, Wire currentWire)
+        internal void DisconnectWireFromPoint(WireSocketInteractable socket, Wire currentWire)
         {
-            currentWire.DisconnectFromPoint(point);
+            currentWire.DisconnectFromPoint(socket);
 
             //Устанавливаем активным проводом тот, который был наполовину отключен
             ActiveWire = currentWire;

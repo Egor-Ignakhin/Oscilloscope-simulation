@@ -6,7 +6,7 @@ namespace OscilloscopeSimulation.InteractableObjects
     /// <summary>
     /// Сокет для подключения провода
     /// </summary>
-    internal sealed class WireSocketInteractable : Interactable
+    internal sealed class WireSocketInteractable : Interactable, LogicalValue
     {
         /// <summary>
         /// Место установки штекера провода
@@ -23,6 +23,11 @@ namespace OscilloscopeSimulation.InteractableObjects
         /// </summary>
         private WiresManager wiresManager;
 
+        [SerializeField] private TMPro.TextMeshPro valueText;
+
+        public bool Value { get; set; }
+
+        [SerializeField] private ToggleSwitchInteractable toggleSwitch;
         private void Start()
         {
             //Находим при загрузке сцены менеджер проводов
@@ -62,7 +67,7 @@ namespace OscilloscopeSimulation.InteractableObjects
         /// </summary>
         public void ConnectWire()
         {
-            connectedWire = wiresManager.ConnectWire(positionForWireConnector);
+            connectedWire = wiresManager.ConnectWire(this);
         }
 
         /// <summary>
@@ -70,7 +75,7 @@ namespace OscilloscopeSimulation.InteractableObjects
         /// </summary>
         public void DisconnectWireAbs()
         {
-            wiresManager.DisconnectAbs(connectedWire);
+            wiresManager.DisconnectWireAbs(connectedWire);
             connectedWire = null;
         }
 
@@ -79,8 +84,38 @@ namespace OscilloscopeSimulation.InteractableObjects
         /// </summary>
         private void DisconnectWireFromThisPoint()
         {
-            wiresManager.DisconnectFromPoint(positionForWireConnector, connectedWire);
+            wiresManager.DisconnectWireFromPoint(this, connectedWire);
             connectedWire = null;
+        }
+
+        private void Update()
+        {
+            if (toggleSwitch)
+            {
+                Value = toggleSwitch.Value;
+            }
+
+            if (connectedWire)
+            {
+                if (connectedWire.Connector_1 && connectedWire.Connector_2)
+                {
+                    if (connectedWire.Connector_1.Equals(this))
+                    {
+                        Value = connectedWire.Connector_2.Value;
+                    }
+                    else
+                    {
+                        Value = connectedWire.Connector_1.Value;
+                    }
+                }
+            }
+
+            valueText.SetText(Value ? "1" : "0");
+        }
+
+        public Vector3 GetPositionForWireConnector()
+        {
+            return positionForWireConnector.position;
         }
     }
 }

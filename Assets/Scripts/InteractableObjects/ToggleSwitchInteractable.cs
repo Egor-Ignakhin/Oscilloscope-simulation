@@ -5,12 +5,8 @@ namespace OscilloscopeSimulation.InteractableObjects
     /// <summary>
     /// Интерактивный тумблер
     /// </summary>
-    internal sealed class ToggleSwitchInteractable : Interactable
+    internal sealed class ToggleSwitchInteractable : Interactable, LogicalValue
     {
-        /// <summary>
-        /// Тумблер включен?
-        /// </summary>
-        private bool isEnabled = false;
         /// <summary>
         /// Положение тумблера во включенном и 
         /// выключенных состояниих соответственно
@@ -18,17 +14,19 @@ namespace OscilloscopeSimulation.InteractableObjects
         [SerializeField] private Vector3 enabledLocalEulersState;
         [SerializeField] private Vector3 disabledLocalEulersState;
 
+        public bool Value { get; set; } = false;
+
         private void Start()
         {
             //Изначальное положение тумблера устанавливаем как FALSE
-            Switch(isEnabled);
+            Switch(Value);
         }
 
         internal override void Interact()
         {
             //Переключаем значение тумблера на противоположное,
             //при взаимодействии с ним
-            Switch(!isEnabled);
+            Switch(!Value);
         }
 
         /// <summary>
@@ -38,10 +36,10 @@ namespace OscilloscopeSimulation.InteractableObjects
         private void Switch(bool nextState)
         {
             //Устанавливаем в память объекта новое значение состояния тумблера
-            isEnabled = nextState;
+            Value = nextState;
 
             //Поворачиваем тумблер в зависимости от его состояния
-            transform.localEulerAngles = isEnabled ? enabledLocalEulersState : disabledLocalEulersState;
+            transform.localEulerAngles = Value ? enabledLocalEulersState : disabledLocalEulersState;
         }
     }
 }

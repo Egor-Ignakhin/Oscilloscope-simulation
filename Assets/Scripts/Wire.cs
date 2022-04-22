@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+using OscilloscopeSimulation.InteractableObjects;
+
 using UnityEngine;
 namespace OscilloscopeSimulation
 {
@@ -13,8 +15,8 @@ namespace OscilloscopeSimulation
         /// </summary>
         [SerializeField] private LineRenderer lineRenderer;
         
-        private Transform connector_1;
-        private Transform connector_2;
+        public WireSocketInteractable Connector_1 { get; private set; }
+        public WireSocketInteractable Connector_2 { get; private set; }
 
         /// <summary>
         /// Пользователь взаимодействует с проводом?
@@ -39,13 +41,13 @@ namespace OscilloscopeSimulation
         /// Метод установки позиции коннектора
         /// </summary>
         /// <param name="positionForWireConnector"></param>
-        internal void SetConnectorPosition(Transform positionForWireConnector)
+        internal void SetConnectorPosition(WireSocketInteractable positionForWireConnector)
         {
             //Если коннектор 1 не подключен
-            if (!connector_1)
+            if (!Connector_1)
             {
                 //Коннектор 1 подключается к сокету
-                connector_1 = positionForWireConnector;
+                Connector_1 = positionForWireConnector;
 
                 //Провод входит в активное состояния взаимодействия
                 UserInteractingWithTheWire = true;
@@ -53,7 +55,7 @@ namespace OscilloscopeSimulation
             else
             {
                 //Коннектор 1 подключается к сокету
-                connector_2 = positionForWireConnector;
+                Connector_2 = positionForWireConnector;
 
                 //Провод выходит из активного состояния взаимодействия
                 UserInteractingWithTheWire = false;
@@ -66,7 +68,7 @@ namespace OscilloscopeSimulation
         private void Reconnect()
         {
             //Если коннектор 1 не подключен
-            if (!connector_1)
+            if (!Connector_1)
             {
                 //Заставляем вершины провода переместиться в начало мировых координат
                 lineRenderer.SetPositions(new Vector3[]{Vector3.zero, Vector3.zero});
@@ -82,7 +84,7 @@ namespace OscilloscopeSimulation
                 // - коннетор 1
                 // - координаты точки соприкосновения луча оператора с физ. объектами сцены
                 lineRenderer.SetPositions(
-                    new Vector3[] { connector_1.position, playerInteractive.LastHitPoint });
+                    new Vector3[] { Connector_1.GetPositionForWireConnector(), playerInteractive.LastHitPoint });
             }
             else
             {
@@ -90,7 +92,7 @@ namespace OscilloscopeSimulation
                 // - коннетор 1
                 // - коннетор 2
                 lineRenderer.SetPositions(
-                    new Vector3[] { connector_1.position, connector_2.position });
+                    new Vector3[] { Connector_1.GetPositionForWireConnector(), Connector_2.GetPositionForWireConnector() });
             }
         }
 
@@ -104,8 +106,8 @@ namespace OscilloscopeSimulation
         /// </summary>
         internal void Disconnect()
         {
-            connector_1 = null;
-            connector_2 = null;
+            Connector_1 = null;
+            Connector_2 = null;
             UserInteractingWithTheWire = false;
         }
 
@@ -113,31 +115,31 @@ namespace OscilloscopeSimulation
         /// Метод частичного отключения провода от сокета. Параметр - сокет
         /// </summary>
         /// <param name="point"></param>
-        internal void DisconnectFromPoint(Transform point)
+        internal void DisconnectFromPoint(WireSocketInteractable point)
         {
             //Если коннетор 1 - это сокет
-            if (connector_1.Equals(point))
+            if (Connector_1.Equals(point))
             {
                 // Обнуляем коннектор 1
-                connector_1 = null;
+                Connector_1 = null;
             }
             else
             {
                 // Обнуляем коннектор 2
-                connector_2 = null;
+                Connector_2 = null;
             }
 
             //Если коннетор 1 - пуст
-            if (connector_1 == null)
+            if (Connector_1 == null)
             {
                 //Переназначаем коннектор 2 на коннектор 1
-                connector_1 = connector_2;
+                Connector_1 = Connector_2;
                 //Коннетор 2 очищаем
-                connector_2 = null;
+                Connector_2 = null;
             }
 
             //Теперь пользователь взаимодействует с проводом
             UserInteractingWithTheWire = true;
-        }
+        }        
     }
 }
