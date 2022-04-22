@@ -1,59 +1,86 @@
-using System;
 
 using UnityEngine;
 
 namespace OscilloscopeSimulation.InteractableObjects
 {
+    /// <summary>
+    /// Сокет для подключения провода
+    /// </summary>
     internal sealed class WireSocketInteractable : Interactable
     {
-        private bool wireIsConnected;
+        /// <summary>
+        /// Место установки штекера провода
+        /// </summary>
         [SerializeField] private Transform positionForWireConnector;
-        private Wire currentWire;
+
+        /// <summary>
+        /// Подключенный провод
+        /// </summary>
+        private Wire connectedWire;
+
+        /// <summary>
+        /// Менеджер проводов
+        /// </summary>
         private WiresManager wiresManager;
+
         private void Start()
         {
+            //Находим при загрузке сцены менеджер проводов
             wiresManager = FindObjectOfType<WiresManager>();
         }
+
         internal override void Interact()
         {
-            if (wireIsConnected)
+            //Если в сокет уже подключен провод
+            if (connectedWire)
             {
-                if (currentWire.WireIsActive)
+                //Если провод подключен только в этот сокет
+                if (connectedWire.UserInteractingWithTheWire)
                 {
-                    DisconnectWireAbs();                    
+                    //Полностью отключаем провод от сокетов
+                    DisconnectWireAbs();
                 }
                 else
                 {
+                    //Если провод подключен не только в этот сокет
+                    // Отключаем провод из настоящего сокета
                     DisconnectWireFromThisPoint();
-                    // Сюда надо поместить действо отключения от точки, на которую нажали,
-                    // и вернуть линии ход свободный, но привязанный к 1 точке. 
                 }
             }
             else
             {
+                // Если в сокет еще не подключен провод - 
+                // Подключаем провод
                 ConnectWire();
             }
         }
 
-        
 
+
+        /// <summary>
+        /// Метод подключения провода к сокету
+        /// </summary>
         public void ConnectWire()
         {
-            currentWire = wiresManager.ConnectWire(this, positionForWireConnector);
-
-            wireIsConnected = true;
+            connectedWire = wiresManager.ConnectWire(positionForWireConnector);
         }
+
+        /// <summary>
+        /// Метод полного отключения провода от сокетов
+        /// </summary>
         public void DisconnectWireAbs()
         {
-            wiresManager.Disconnect(currentWire);
-            currentWire = null;
-            wireIsConnected = false;
+            wiresManager.DisconnectAbs(connectedWire);
+            connectedWire = null;
         }
+
+        /// <summary>
+        /// Метод отключения провода от настоящего сокета
+        /// </summary>
         private void DisconnectWireFromThisPoint()
         {
-            wiresManager.DisconnectFromPoint(positionForWireConnector, currentWire);
-            currentWire = null;
-            wireIsConnected = false;
+            wiresManager.DisconnectFromPoint(positionForWireConnector, connectedWire);
+            connectedWire = null;
         }
     }
 }
