@@ -1,4 +1,6 @@
 
+using System;
+
 using UnityEngine;
 
 namespace OscilloscopeSimulation.InteractableObjects
@@ -8,6 +10,7 @@ namespace OscilloscopeSimulation.InteractableObjects
     /// </summary>
     internal sealed class WireSocketInteractable : Interactable, ILogicalValue
     {
+        public Action<bool> ChangeValueEvent { get; set; }
         /// <summary>
         /// Место установки штекера провода
         /// </summary>
@@ -30,6 +33,7 @@ namespace OscilloscopeSimulation.InteractableObjects
             get => value; set
             {
                 this.value = value;
+                ChangeValueEvent?.Invoke(value);
 
                 //Выводим текст, отображающий настоящее значение лог. переменной
                 valueText.SetText(value ? "1" : "0");
@@ -43,6 +47,17 @@ namespace OscilloscopeSimulation.InteractableObjects
         {
             //Находим при загрузке сцены менеджер проводов
             wiresManager = FindObjectOfType<WiresManager>();
+            Value = false;
+
+            //Если сокет подключен к тумблеру            
+            if (toggleSwitch)
+            {
+                //Подписываемся на изменения его состояния
+                toggleSwitch.ChangeValueEvent += (bool v)=>
+                {
+                    Value = v;
+                };
+            }
         }
 
         internal override void Interact()
@@ -80,6 +95,29 @@ namespace OscilloscopeSimulation.InteractableObjects
         public void ConnectWire()
         {
             connectedWire = wiresManager.ConnectWire(this);
+
+            //Если провод подключен обоими концами
+            if (connectedWire.Connector_1 && connectedWire.Connector_2)
+            {
+                // Если в сокет подключен 2 коннектор                    
+                if (connectedWire.Connector_2 == this)
+                {
+                    // Если настоящий сокет не подключен к тумблеру
+                    if (!toggleSwitch)
+                    {
+                        // Значение сокета = значение коннектора 1
+                        Value = connectedWire.Connector_1.Value;
+                    }
+                    else
+                    {
+                        // Если настоящий сокет подключен к тумблеру
+                        //Меняем коннекторы местами
+                        connectedWire.SwapConnectors();
+                    }
+
+                    connectedWire.Connector_1.ChangeValueEvent += OnBehindSocketValueUpdate;
+                }
+            }
         }
 
         /// <summary>
@@ -87,6 +125,7 @@ namespace OscilloscopeSimulation.InteractableObjects
         /// </summary>
         public void DisconnectWireAbs()
         {
+            connectedWire.Connector_1.ChangeValueEvent -= OnBehindSocketValueUpdate;
             wiresManager.DisconnectWireAbs(connectedWire);
             connectedWire = null;
         }
@@ -96,42 +135,10 @@ namespace OscilloscopeSimulation.InteractableObjects
         /// </summary>
         private void DisconnectWireFromThisPoint()
         {
+            connectedWire.Connector_1.ChangeValueEvent -= OnBehindSocketValueUpdate;
+            Value = false;
             wiresManager.DisconnectWireFromPoint(this, connectedWire);
             connectedWire = null;
-        }
-
-        private void Update()
-        {
-            Value = false;
-
-            if (toggleSwitch)
-            {
-                Value = toggleSwitch.Value;
-            }
-
-            if (connectedWire)
-            {
-                //Если провод подключен обоими концами
-                if (connectedWire.Connector_1 && connectedWire.Connector_2)
-                {
-                    // Если в сокет подключен 2 коннектор                    
-                    if (connectedWire.Connector_2 == this)
-                    {
-                        // Если настоящий сокет не подключен к тумблеру
-                        if (!toggleSwitch)
-                        {
-                            // Значение сокета = значение коннектора 1
-                            Value = connectedWire.Connector_1.Value;
-                        }
-                        else
-                        {
-                            // Если настоящий сокет подключен к тумблеру
-                            //Меняем коннекторы местами
-                            connectedWire.SwapConnectors();
-                        }
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -142,6 +149,12 @@ namespace OscilloscopeSimulation.InteractableObjects
         public Vector3 GetPositionForWireConnector()
         {
             return positionForWireConnector.position;
+        }
+
+        private void OnBehindSocketValueUpdate(bool v)
+        {
+            // Значение сокета = значение коннектора 1
+            Value = connectedWire.Connector_1.Value;
         }
     }
 }

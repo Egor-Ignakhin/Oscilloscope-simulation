@@ -1,3 +1,5 @@
+using System;
+
 using UnityEngine;
 
 namespace OscilloscopeSimulation.InteractableObjects
@@ -7,6 +9,8 @@ namespace OscilloscopeSimulation.InteractableObjects
     /// </summary>
     internal sealed class ToggleSwitchInteractable : Interactable, ILogicalValue
     {
+        public Action<bool> ChangeValueEvent { get; set; }
+
         /// <summary>
         /// Положение тумблера во включенном и 
         /// выключенных состояниих соответственно
@@ -40,6 +44,8 @@ namespace OscilloscopeSimulation.InteractableObjects
 
             //Поворачиваем тумблер в зависимости от его состояния
             transform.localEulerAngles = Value ? enabledLocalEulersState : disabledLocalEulersState;
+
+            ChangeValueEvent?.Invoke(Value);
         }
     }
 }

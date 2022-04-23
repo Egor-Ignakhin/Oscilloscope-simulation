@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -7,6 +8,7 @@ namespace OscilloscopeSimulation
 {
     internal sealed class LogicalOperationsProcessingSystem : MonoBehaviour, ILogicalValue
     {
+        public Action<bool> ChangeValueEvent { get; set; }
         /// <summary>
         /// “ипы операций, которые может осуществл€ть система
         /// </summary>
@@ -37,7 +39,7 @@ namespace OscilloscopeSimulation
 
                 if (behindLogicalValues[i] == null)
                 {
-                    throw new System.Exception("crashed link");
+                    throw new Exception("crashed link");
                 }
             }
 
@@ -47,7 +49,7 @@ namespace OscilloscopeSimulation
 
                 if (aheadLogicalValues[i] == null)
                 {
-                    throw new System.Exception("crashed link");
+                    throw new Exception("crashed link");
                 }
             }
         }
@@ -96,7 +98,7 @@ namespace OscilloscopeSimulation
                     }
                 default:
                     {
-                        throw new System.Exception("");
+                        throw new Exception("");
                     }
             }
         }
