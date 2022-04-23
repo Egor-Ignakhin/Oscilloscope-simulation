@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+
+using System;
 
 using OscilloscopeSimulation.InteractableObjects;
 
@@ -14,7 +15,7 @@ namespace OscilloscopeSimulation
         /// Визуальная составляющая провода
         /// </summary>
         [SerializeField] private LineRenderer lineRenderer;
-        
+
         public WireSocketInteractable Connector_1 { get; private set; }
         public WireSocketInteractable Connector_2 { get; private set; }
 
@@ -71,7 +72,7 @@ namespace OscilloscopeSimulation
             if (!Connector_1)
             {
                 //Заставляем вершины провода переместиться в начало мировых координат
-                lineRenderer.SetPositions(new Vector3[]{Vector3.zero, Vector3.zero});
+                lineRenderer.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
 
                 //Выходим из метода
                 return;
@@ -109,7 +110,7 @@ namespace OscilloscopeSimulation
             Connector_1 = null;
             Connector_2 = null;
             UserInteractingWithTheWire = false;
-        }
+        }      
 
         /// <summary>
         /// Метод частичного отключения провода от сокета. Параметр - сокет
@@ -140,6 +141,14 @@ namespace OscilloscopeSimulation
 
             //Теперь пользователь взаимодействует с проводом
             UserInteractingWithTheWire = true;
-        }        
+        }
+
+        internal void SwapConnectors()
+        {
+            WireSocketInteractable connector_1Buffer = Connector_1;
+
+            Connector_1 = Connector_2;
+            Connector_2 = connector_1Buffer;
+        }
     }
 }

@@ -5,7 +5,7 @@ namespace OscilloscopeSimulation.InteractableObjects
     /// <summary>
     /// Интерактивный тумблер
     /// </summary>
-    internal sealed class ToggleSwitchInteractable : Interactable, LogicalValue
+    internal sealed class ToggleSwitchInteractable : Interactable, ILogicalValue
     {
         /// <summary>
         /// Положение тумблера во включенном и 

@@ -6,7 +6,7 @@ namespace OscilloscopeSimulation.InteractableObjects
     /// <summary>
     /// Сокет для подключения провода
     /// </summary>
-    internal sealed class WireSocketInteractable : Interactable, LogicalValue
+    internal sealed class WireSocketInteractable : Interactable, ILogicalValue
     {
         /// <summary>
         /// Место установки штекера провода
@@ -97,15 +97,24 @@ namespace OscilloscopeSimulation.InteractableObjects
 
             if (connectedWire)
             {
+                //Если провод подключен обоими концами
                 if (connectedWire.Connector_1 && connectedWire.Connector_2)
                 {
-                    if (connectedWire.Connector_1.Equals(this))
+                    // Если в сокет подключен 2 коннектор                    
+                    if (connectedWire.Connector_2 == this)
                     {
-                        Value = connectedWire.Connector_2.Value;
-                    }
-                    else
-                    {
-                        Value = connectedWire.Connector_1.Value;
+                        // Если настоящий сокет не подключен к тумблеру
+                        if (!toggleSwitch)
+                        {
+                            // Значение сокета = значение коннектора 1
+                            Value = connectedWire.Connector_1.Value;
+                        }
+                        else
+                        {
+                            // Если настоящий сокет подключен к тумблеру
+                            //Меняем коннекторы местами
+                            connectedWire.SwapConnectors();
+                        }
                     }
                 }
             }
