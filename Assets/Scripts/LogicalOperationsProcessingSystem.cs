@@ -5,22 +5,32 @@ using UnityEngine;
 
 namespace OscilloscopeSimulation
 {
-    public class LogicalOperationsProcessingSystem : MonoBehaviour, ILogicalValue
+    internal sealed class LogicalOperationsProcessingSystem : MonoBehaviour, ILogicalValue
     {
+        /// <summary>
+        /// Типы операций, которые может осуществлять система
+        /// </summary>
         private enum Operators { And, Or, NOR, NAND }
 
+        /// <summary>
+        /// Выбранная операция из доступных для системы
+        /// </summary>
         [SerializeField] private Operators systemOperator;
 
+        //Предыдущие лог. носители
         [SerializeField] private List<GameObject> behindLogicalValuesGM = new List<GameObject>();
-        private List<ILogicalValue> behindLogicalValues = new List<ILogicalValue>();
+        private readonly List<ILogicalValue> behindLogicalValues = new List<ILogicalValue>();
 
+        //Последущие лог. носители
         [SerializeField] private List<GameObject> aheadLogicalValuesGM = new List<GameObject>();
-        private List<ILogicalValue> aheadLogicalValues = new List<ILogicalValue>();
+        private readonly List<ILogicalValue> aheadLogicalValues = new List<ILogicalValue>();
 
         public bool Value { get; set; }
 
         private void Start()
         {
+            //При загрузке сцены происходит инициализация коллекций
+            //(пред, после)- шествующих лог. носителей
             for (int i = 0; i < behindLogicalValuesGM.Count; i++)
             {
                 behindLogicalValues.Add(behindLogicalValuesGM[i].GetComponent<ILogicalValue>());
@@ -32,13 +42,18 @@ namespace OscilloscopeSimulation
             }
         }
 
+        /// <summary>
+        /// Метод обработки предыдущих логичских носителей
+        /// </summary>
+        /// <param name="sysOperator"></param>
+        /// <returns></returns>
         private bool OperateBehindLogicalValues(Operators sysOperator)
         {
             switch (sysOperator)
             {
                 case Operators.And:
 
-                    foreach (var blv in behindLogicalValues)
+                    foreach (ILogicalValue blv in behindLogicalValues)
                     {
                         if (!blv.Value)
                         {
@@ -50,7 +65,7 @@ namespace OscilloscopeSimulation
 
                 case Operators.Or:
 
-                    foreach (var blv in behindLogicalValues)
+                    foreach (ILogicalValue blv in behindLogicalValues)
                     {
                         if (blv.Value)
                         {
@@ -73,12 +88,19 @@ namespace OscilloscopeSimulation
             }
         }
 
+        /// <summary>
+        /// В методе каждый кадр происходит пересчет значения из 
+        /// предыдущих лог. носителей выбранным оператором и затем 
+        /// присвоение полученного результата последующему лог. носителю
+        /// </summary>
         private void Update()
         {
             Value = OperateBehindLogicalValues(systemOperator);
 
-            foreach (var alv in aheadLogicalValues)
+            foreach (ILogicalValue alv in aheadLogicalValues)
+            {
                 alv.Value = Value;
+            }
         }
     }
 }

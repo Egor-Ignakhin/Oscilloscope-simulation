@@ -1,6 +1,4 @@
 
-using System;
-
 using OscilloscopeSimulation.InteractableObjects;
 
 using UnityEngine;
@@ -110,7 +108,7 @@ namespace OscilloscopeSimulation
             Connector_1 = null;
             Connector_2 = null;
             UserInteractingWithTheWire = false;
-        }      
+        }
 
         /// <summary>
         /// Метод частичного отключения провода от сокета. Параметр - сокет
@@ -143,6 +141,9 @@ namespace OscilloscopeSimulation
             UserInteractingWithTheWire = true;
         }
 
+        /// <summary>
+        /// Метод смены коннекторов индексами
+        /// </summary>
         internal void SwapConnectors()
         {
             WireSocketInteractable connector_1Buffer = Connector_1;

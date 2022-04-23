@@ -90,6 +90,8 @@ namespace OscilloscopeSimulation.InteractableObjects
 
         private void Update()
         {
+            Value = false;
+
             if (toggleSwitch)
             {
                 Value = toggleSwitch.Value;
@@ -119,9 +121,15 @@ namespace OscilloscopeSimulation.InteractableObjects
                 }
             }
 
+            //Выводим текст, отображающий настоящее значение лог. переменной
             valueText.SetText(Value ? "1" : "0");
         }
 
+        /// <summary>
+        /// Геттер позиции, которую принимает 
+        /// провод при подключении в сокет
+        /// </summary>
+        /// <returns></returns>
         public Vector3 GetPositionForWireConnector()
         {
             return positionForWireConnector.position;
