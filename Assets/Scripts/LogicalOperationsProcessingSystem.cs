@@ -34,11 +34,21 @@ namespace OscilloscopeSimulation
             for (int i = 0; i < behindLogicalValuesGM.Count; i++)
             {
                 behindLogicalValues.Add(behindLogicalValuesGM[i].GetComponent<ILogicalValue>());
+
+                if (behindLogicalValues[i] == null)
+                {
+                    throw new System.Exception("crashed link");
+                }
             }
 
             for (int i = 0; i < aheadLogicalValuesGM.Count; i++)
             {
                 aheadLogicalValues.Add(aheadLogicalValuesGM[i].GetComponent<ILogicalValue>());
+
+                if (aheadLogicalValues[i] == null)
+                {
+                    throw new System.Exception("crashed link");
+                }
             }
         }
 
@@ -52,39 +62,42 @@ namespace OscilloscopeSimulation
             switch (sysOperator)
             {
                 case Operators.And:
-
-                    foreach (ILogicalValue blv in behindLogicalValues)
                     {
-                        if (!blv.Value)
+                        foreach (ILogicalValue blv in behindLogicalValues)
                         {
-                            return false;
+                            if (!blv.Value)
+                            {
+                                return false;
+                            }
                         }
+                        return true;
                     }
-
-                    return true;
 
                 case Operators.Or:
-
-                    foreach (ILogicalValue blv in behindLogicalValues)
                     {
-                        if (blv.Value)
+                        foreach (ILogicalValue blv in behindLogicalValues)
                         {
-                            return true;
+                            if (blv.Value)
+                            {
+                                return true;
+                            }
                         }
+                        return false;
                     }
-
-                    return false;
-
                 case Operators.NOR:
-                    bool orOp = OperateBehindLogicalValues(Operators.Or);
-                    return !orOp;
-
+                    {
+                        bool orOp = OperateBehindLogicalValues(Operators.Or);
+                        return !orOp;
+                    }
                 case Operators.NAND:
-                    bool andOp = OperateBehindLogicalValues(Operators.And);
-                    return !andOp;
-
+                    {
+                        bool andOp = OperateBehindLogicalValues(Operators.And);
+                        return !andOp;
+                    }
                 default:
-                    throw new System.Exception("");
+                    {
+                        throw new System.Exception("");
+                    }
             }
         }
 
@@ -93,7 +106,7 @@ namespace OscilloscopeSimulation
         /// предыдущих лог. носителей выбранным оператором и затем 
         /// присвоение полученного результата последующему лог. носителю
         /// </summary>
-        private void Update()
+        private void LateUpdate()
         {
             Value = OperateBehindLogicalValues(systemOperator);
 

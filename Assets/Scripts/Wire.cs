@@ -17,12 +17,8 @@ namespace OscilloscopeSimulation
         public WireSocketInteractable Connector_1 { get; private set; }
         public WireSocketInteractable Connector_2 { get; private set; }
 
-        /// <summary>
-        /// Пользователь взаимодействует с проводом?
-        /// </summary>
-        public bool UserInteractingWithTheWire { get; private set; }
-
         private PlayerInteractive playerInteractive;
+        private WiresManager wiresManager;
 
         /// <summary>
         /// Метод, вызываемый перед первым вызовом метода Update
@@ -34,6 +30,7 @@ namespace OscilloscopeSimulation
 
             //Находим на сцене оператор взаимодействия
             playerInteractive = FindObjectOfType<PlayerInteractive>();
+            wiresManager = FindObjectOfType<WiresManager>();
         }
 
         /// <summary>
@@ -47,17 +44,11 @@ namespace OscilloscopeSimulation
             {
                 //Коннектор 1 подключается к сокету
                 Connector_1 = positionForWireConnector;
-
-                //Провод входит в активное состояния взаимодействия
-                UserInteractingWithTheWire = true;
             }
             else
             {
                 //Коннектор 1 подключается к сокету
                 Connector_2 = positionForWireConnector;
-
-                //Провод выходит из активного состояния взаимодействия
-                UserInteractingWithTheWire = false;
             }
         }
 
@@ -77,7 +68,7 @@ namespace OscilloscopeSimulation
             }
 
             //Если пользователь взаимодействует с проводом
-            if (UserInteractingWithTheWire)
+            if (wiresManager.ActiveWire == this)
             {
                 //Устанавливаем вершины:
                 // - коннетор 1
@@ -107,7 +98,6 @@ namespace OscilloscopeSimulation
         {
             Connector_1 = null;
             Connector_2 = null;
-            UserInteractingWithTheWire = false;
         }
 
         /// <summary>
@@ -136,9 +126,6 @@ namespace OscilloscopeSimulation
                 //Коннетор 2 очищаем
                 Connector_2 = null;
             }
-
-            //Теперь пользователь взаимодействует с проводом
-            UserInteractingWithTheWire = true;
         }
 
         /// <summary>

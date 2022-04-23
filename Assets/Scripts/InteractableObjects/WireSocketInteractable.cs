@@ -25,9 +25,20 @@ namespace OscilloscopeSimulation.InteractableObjects
 
         [SerializeField] private TMPro.TextMeshPro valueText;
 
-        public bool Value { get; set; }
+        public bool Value
+        {
+            get => value; set
+            {
+                this.value = value;
+
+                //Выводим текст, отображающий настоящее значение лог. переменной
+                valueText.SetText(value ? "1" : "0");
+            }
+        }
 
         [SerializeField] private ToggleSwitchInteractable toggleSwitch;
+        private bool value;
+
         private void Start()
         {
             //Находим при загрузке сцены менеджер проводов
@@ -40,7 +51,7 @@ namespace OscilloscopeSimulation.InteractableObjects
             if (connectedWire)
             {
                 //Если провод подключен только в этот сокет
-                if (connectedWire.UserInteractingWithTheWire)
+                if (wiresManager.ActiveWire == connectedWire)
                 {
                     //Полностью отключаем провод от сокетов
                     DisconnectWireAbs();
@@ -48,6 +59,7 @@ namespace OscilloscopeSimulation.InteractableObjects
                 else
                 {
                     //Если провод подключен не только в этот сокет
+
                     // Отключаем провод из настоящего сокета
                     DisconnectWireFromThisPoint();
                 }
@@ -120,9 +132,6 @@ namespace OscilloscopeSimulation.InteractableObjects
                     }
                 }
             }
-
-            //Выводим текст, отображающий настоящее значение лог. переменной
-            valueText.SetText(Value ? "1" : "0");
         }
 
         /// <summary>
