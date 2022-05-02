@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using OscilloscopeSimulation.InteractableObjects;
 
 using UnityEngine;
+
 namespace OscilloscopeSimulation
 {
     /// <summary>
@@ -10,6 +11,8 @@ namespace OscilloscopeSimulation
     /// </summary>
     internal sealed class WiresManager : MonoBehaviour
     {
+        private bool allWiresIsVisible = true;
+        private readonly List<Wire> allWires = new List<Wire>();
         /// <summary>
         /// Стек свободных проводов (не учитываются уже подключенные)
         /// </summary>
@@ -31,6 +34,7 @@ namespace OscilloscopeSimulation
             {
                 Wire wire = Instantiate(Resources.Load<Wire>("Wire"), transform);
                 freeWires.Push(wire);
+                allWires.Add(wire);
             }
 
         }
@@ -101,6 +105,19 @@ namespace OscilloscopeSimulation
 
             //Устанавливаем активным проводом тот, который был наполовину отключен
             ActiveWire = currentWire;
+        }
+
+        /// <summary>
+        /// Установка видимости всем проводам на сцене
+        /// </summary>
+        /// <param name="button"></param>
+        internal void SetVisibilityToWires()
+        {
+            allWiresIsVisible = !allWiresIsVisible;
+            foreach (var w in allWires)
+            {
+                w.SetVisible(allWiresIsVisible);
+            }
         }
     }
 }

@@ -32,19 +32,28 @@ namespace OscilloscopeSimulation.InteractableObjects
         {
             get => value; set
             {
-                this.value = value;
-                ChangeValueEvent?.Invoke(value);
+                if (!isInvertedSignal)
+                    this.value = value;
+                else
+                    this.value = !value;
+
+                ChangeValueEvent?.Invoke(this.value);
 
                 //Выводим текст, отображающий настоящее значение лог. переменной
-                valueText.SetText(value ? "1" : "0");
+                valueText.SetText((connectedWire || toggleSwitch) ? (this.value ? "1" : "0") : "");
             }
         }
 
         [SerializeField] private ToggleSwitchInteractable toggleSwitch;
+        [SerializeField] private bool isInvertedSignal;
         private bool value;
 
         private void Start()
         {
+            //dev
+            GetComponent<MeshRenderer>().enabled = false;
+            //dev
+
             //Находим при загрузке сцены менеджер проводов
             wiresManager = FindObjectOfType<WiresManager>();
             Value = false;
@@ -53,7 +62,7 @@ namespace OscilloscopeSimulation.InteractableObjects
             if (toggleSwitch)
             {
                 //Подписываемся на изменения его состояния
-                toggleSwitch.ChangeValueEvent += (bool v)=>
+                toggleSwitch.ChangeValueEvent += (bool v) =>
                 {
                     Value = v;
                 };

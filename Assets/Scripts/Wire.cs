@@ -138,5 +138,14 @@ namespace OscilloscopeSimulation
             Connector_1 = Connector_2;
             Connector_2 = connector_1Buffer;
         }
+
+        /// <summary>
+        /// Установка видимости провода
+        /// </summary>
+        /// <param name="allWiresIsVisible"></param>
+        internal void SetVisible(bool allWiresIsVisible)
+        {
+            lineRenderer.enabled = allWiresIsVisible;
+        }
     }
 }
