@@ -19,7 +19,7 @@ namespace OscilloscopeSimulation.InteractableObjects
         /// <summary>
         /// Подключенный провод
         /// </summary>
-        private Wire connectedWire;
+        internal Wire ConnectedWire { get; private set; }
 
         /// <summary>
         /// Менеджер проводов
@@ -40,11 +40,22 @@ namespace OscilloscopeSimulation.InteractableObjects
                 ChangeValueEvent?.Invoke(this.value);
 
                 //Выводим текст, отображающий настоящее значение лог. переменной
-                valueText.SetText((connectedWire || toggleSwitch) ? (this.value ? "1" : "0") : "");
+                valueText.SetText(this.value ? "1" : "0");
+
+                if (toggleSwitch || ConnectedWire ||
+                    (behindLOPS && behindLOPS.BehindSocketsHasAConnectedWire()))
+                {
+                    valueText.SetText(this.value ? "1" : "0");
+                }
+                else
+                {
+                    valueText.SetText("");
+                }
             }
         }
 
         [SerializeField] private ToggleSwitchInteractable toggleSwitch;
+        [SerializeField] private LogicalOperationsProcessingSystem behindLOPS;
         [SerializeField] private bool isInvertedSignal;
         private bool value;
 
@@ -72,10 +83,10 @@ namespace OscilloscopeSimulation.InteractableObjects
         internal override void Interact()
         {
             //Если в сокет уже подключен провод
-            if (connectedWire)
+            if (ConnectedWire)
             {
                 //Если провод подключен только в этот сокет
-                if (wiresManager.ActiveWire == connectedWire)
+                if (wiresManager.ActiveWire == ConnectedWire)
                 {
                     //Полностью отключаем провод от сокетов
                     DisconnectWireAbs();
@@ -103,28 +114,35 @@ namespace OscilloscopeSimulation.InteractableObjects
         /// </summary>
         public void ConnectWire()
         {
-            connectedWire = wiresManager.ConnectWire(this);
+            ConnectedWire = wiresManager.ConnectWire(this);
 
             //Если провод подключен обоими концами
-            if (connectedWire.Connector_1 && connectedWire.Connector_2)
+            if (ConnectedWire.Connector_1 && ConnectedWire.Connector_2)
             {
                 // Если в сокет подключен 2 коннектор                    
-                if (connectedWire.Connector_2 == this)
+                if (ConnectedWire.Connector_2 == this)
                 {
                     // Если настоящий сокет не подключен к тумблеру
                     if (!toggleSwitch)
                     {
                         // Значение сокета = значение коннектора 1
-                        Value = connectedWire.Connector_1.Value;
+                        Value = ConnectedWire.Connector_1.Value;
                     }
                     else
                     {
                         // Если настоящий сокет подключен к тумблеру
                         //Меняем коннекторы местами
-                        connectedWire.SwapConnectors();
+                        ConnectedWire.SwapConnectors();
                     }
+                    if (ConnectedWire.Connector_2 == this)
+                    {
+                        ConnectedWire.Connector_1.ChangeValueEvent += OnBehindSocketValueUpdate;
+                    }
+                    else
+                    {
+                        ChangeValueEvent += ConnectedWire.Connector_2.OnBehindSocketValueUpdate;
 
-                    connectedWire.Connector_1.ChangeValueEvent += OnBehindSocketValueUpdate;
+                    }
                 }
             }
         }
@@ -134,9 +152,20 @@ namespace OscilloscopeSimulation.InteractableObjects
         /// </summary>
         public void DisconnectWireAbs()
         {
-            connectedWire.Connector_1.ChangeValueEvent -= OnBehindSocketValueUpdate;
-            wiresManager.DisconnectWireAbs(connectedWire);
-            connectedWire = null;
+            if (ConnectedWire.Connector_2 == this)
+            {
+                ConnectedWire.Connector_1.ChangeValueEvent = null;
+            }
+            else
+            {
+                ChangeValueEvent = null;
+            }
+            wiresManager.DisconnectWireAbs(ConnectedWire);
+            ConnectedWire = null;
+
+            if (toggleSwitch)
+                return;
+            Value = false;
         }
 
         /// <summary>
@@ -144,10 +173,20 @@ namespace OscilloscopeSimulation.InteractableObjects
         /// </summary>
         private void DisconnectWireFromThisPoint()
         {
-            connectedWire.Connector_1.ChangeValueEvent -= OnBehindSocketValueUpdate;
+            if (ConnectedWire.Connector_2 == this)
+            {
+                ConnectedWire.Connector_1.ChangeValueEvent = null;
+            }
+            else
+            {
+                ChangeValueEvent = null;
+            }
+            wiresManager.DisconnectWireFromPoint(this, ConnectedWire);
+            ConnectedWire = null;
+
+            if (toggleSwitch)
+                return;
             Value = false;
-            wiresManager.DisconnectWireFromPoint(this, connectedWire);
-            connectedWire = null;
         }
 
         /// <summary>
@@ -163,7 +202,7 @@ namespace OscilloscopeSimulation.InteractableObjects
         private void OnBehindSocketValueUpdate(bool v)
         {
             // Значение сокета = значение коннектора 1
-            Value = connectedWire.Connector_1.Value;
+            Value = v;
         }
     }
 }

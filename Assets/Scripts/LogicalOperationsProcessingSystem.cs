@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 
+using OscilloscopeSimulation.InteractableObjects;
+
 using UnityEngine;
 
 namespace OscilloscopeSimulation
@@ -28,6 +30,9 @@ namespace OscilloscopeSimulation
         private readonly List<ILogicalValue> aheadLogicalValues = new List<ILogicalValue>();
 
         public bool Value { get; set; }
+
+        [SerializeField] private List<WireSocketInteractable> behindSockets = new List<WireSocketInteractable>();
+        [SerializeField] private List<LogicalOperationsProcessingSystem> behindLOPS = new List<LogicalOperationsProcessingSystem>();
 
         private void Start()
         {
@@ -116,6 +121,27 @@ namespace OscilloscopeSimulation
             {
                 alv.Value = Value;
             }
+        }
+        /// <summary>
+        /// Метод возвращает правду, если хотя у бы в одного из предыдущих сокетов вставлен провод
+        /// </summary>
+        /// <returns></returns>
+        internal bool BehindSocketsHasAConnectedWire()
+        {
+            //Если это обычный обработчик, то проверяем у каждого предыдущего сокета провод
+            foreach(var bs in behindSockets)
+            {
+                if (bs.ConnectedWire)
+                    return true;
+            }
+            //Если это обработчик в цепи, имеющий индекс 0+, то вызываем настоящую ф-ю рекурсивно
+            foreach (var bLOPs in behindLOPS)
+            {
+                if (bLOPs.BehindSocketsHasAConnectedWire())
+                    return true;
+            }
+
+            return false;
         }
     }
 }
