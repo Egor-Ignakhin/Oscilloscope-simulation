@@ -12102,7 +12102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1431567371}
   m_Layer: 0
-  m_Name: Adder_1 (2)
+  m_Name: Adder_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

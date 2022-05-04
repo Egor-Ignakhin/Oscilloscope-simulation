@@ -64,7 +64,7 @@ namespace OscilloscopeSimulation
         /// </summary>
         /// <param name="sysOperator"></param>
         /// <returns></returns>
-        protected virtual bool OperateBehindLogicalValues(Operators sysOperator)
+        protected bool OperateBehindLogicalValues(Operators sysOperator)
         {
             switch (sysOperator)
             {

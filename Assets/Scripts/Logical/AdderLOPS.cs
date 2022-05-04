@@ -7,30 +7,27 @@ using UnityEngine;
 
 namespace OscilloscopeSimulation
 {
+    //Сумматор - обработчик
     internal sealed class AdderLOPS : LogicalOperationsProcessingSystem
     {
+        /// <summary>
+        /// Сумм-сокеты
+        /// </summary>
         [SerializeField] private List<WireSocketInteractable> sumSockets = new List<WireSocketInteractable>();
+
+        /// <summary>
+        /// Разряд-сокеты
+        /// </summary>
         [SerializeField] private List<WireSocketInteractable> digitSockets = new List<WireSocketInteractable>();
+
+        /// <summary>
+        /// Инвертированный разряд-сокет
+        /// </summary>
         [SerializeField] private WireSocketInteractable invertedDigitSocket;
-        private int SValue;
-        protected override bool OperateBehindLogicalValues(Operators sysOperator)
-        {
-            switch (sysOperator)
-            {
-                case Operators.Add:
-                    {
-                        return false;
-                    }
-                default:
-                    {
-                        throw new Exception("");
-                    }
-            }
-        }
         private void Add()
         {
-            //Сначала обнуляем значение суммы
-            SValue = 0;
+            //Создаем значение суммы
+            int SValue = 0;
 
             //Проходимся по пред. сокетами и складываем их значения
             foreach (var bs in behindSockets)
@@ -46,13 +43,13 @@ namespace OscilloscopeSimulation
             {
                 //Записываем в сумм-сокеты сумму
                 foreach(var ss in sumSockets)
-                    ss.Value = binaryCode == "0" ? false : true;
+                    ss.Value = binaryCode[0] == '0' ? false : true;
 
                 //Записываем в рязряд-сокеты нуль
                 foreach(var ds in digitSockets)
                     ds.Value = false;
             }
-            //Если же длина строки - 2, появился новый разряд
+            //Если же длина строки - 2
             else if(binaryCode.Length == 2)
             {
                 //Записываем в сумм-сокеты сумму
@@ -64,6 +61,7 @@ namespace OscilloscopeSimulation
                     ds.Value = binaryCode[0] == '0' ? false : true;
             }
 
+            //Записываем в инвертированный разряд-сокет значение
             invertedDigitSocket.Value = !digitSockets[0].Value;
         }
         protected override void LateUpdate()
