@@ -204,5 +204,9 @@ namespace OscilloscopeSimulation.InteractableObjects
             // Значение сокета = значение коннектора 1
             Value = v;
         }
+        internal LogicalOperationsProcessingSystem GetBehindLOPS()
+        {
+            return behindLOPS;
+        }
     }
 }

@@ -123,16 +123,33 @@ namespace OscilloscopeSimulation
             }
         }
         /// <summary>
-        /// Метод возвращает правду, если хотя у бы в одного из предыдущих сокетов вставлен провод
+        ///  Метод возвращает правду, если хотя у бы в одного из предыдущих сокетов вставлен провод
         /// </summary>
+        /// <param name="behindCalledlops"></param>
         /// <returns></returns>
-        internal bool BehindSocketsHasAConnectedWire()
+        internal bool BehindSocketsHasAConnectedWire(LogicalOperationsProcessingSystem behindCalledlops = null)
         {
             //Если это обычный обработчик, то проверяем у каждого предыдущего сокета провод
-            foreach(var bs in behindSockets)
+            foreach (var bs in behindSockets)
             {
                 if (bs.ConnectedWire)
                     return true;
+            }
+            //Проверяем, нет ли у каждого предущего сокета
+             //заполненного поля "предыдущий обработчик"
+            foreach (var bs2 in behindSockets)
+            {
+                //Если нашелся обработчик
+                if (bs2.GetBehindLOPS() != null)
+                {
+                    //Если найденный обработчик не указывает на обработчик предыдущий
+                    if (bs2.GetBehindLOPS() != behindCalledlops)
+                    {
+                        //Если поле есть - вызываем эту же ф-ю рекурсивно в найденном обработчике
+                        if (bs2.GetBehindLOPS().BehindSocketsHasAConnectedWire(this))
+                            return true;
+                    }
+                }
             }
             //Если это обработчик в цепи, имеющий индекс 0+, то вызываем настоящую ф-ю рекурсивно
             foreach (var bLOPs in behindLOPS)
