@@ -39,17 +39,14 @@ namespace OscilloscopeSimulation.InteractableObjects
 
                 ChangeValueEvent?.Invoke(this.value);
 
-                //Выводим текст, отображающий настоящее значение лог. переменной
-                valueText.SetText(this.value ? "1" : "0");
-
-                if (toggleSwitch || ConnectedWire ||
-                    (behindLOPS && behindLOPS.BehindSocketsHasAConnectedWire()))
+              //  if (toggleSwitch || ConnectedWire /*||
+                  //  (behindLOPS && behindLOPS.BehindSocketsHasAConnectedWire())*/)
                 {
                     valueText.SetText(this.value ? "1" : "0");
                 }
-                else
+             //   else
                 {
-                    valueText.SetText("");
+               //     valueText.SetText("");
                 }
             }
         }
