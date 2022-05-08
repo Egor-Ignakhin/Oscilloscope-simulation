@@ -38,7 +38,7 @@ namespace OscilloscopeSimulation.InteractableObjects
                 if (toggleSwitch || ConnectedWire ||
                     behindLOPS /*&& behindLOPS.BehindSocketsHasAConnectedWire())*/)
                 {
-                    valueText.SetText(this.logicalValue ? "1" : "0");
+                    valueText.SetText(logicalValue ? "1" : "0");
                 }
                 else
                 {
