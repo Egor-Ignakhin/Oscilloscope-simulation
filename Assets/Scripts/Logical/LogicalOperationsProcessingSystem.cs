@@ -36,8 +36,6 @@ namespace OscilloscopeSimulation
 
         private void Start()
         {
-            //При загрузке сцены происходит инициализация коллекций
-            //(пред, после)- шествующих лог. носителей
             for (int i = 0; i < behindLogicalValuesGM.Count; i++)
             {
                 behindLogicalValues.Add(behindLogicalValuesGM[i].GetComponent<ILogicalValue>());

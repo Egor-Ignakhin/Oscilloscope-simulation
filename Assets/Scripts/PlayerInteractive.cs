@@ -24,13 +24,12 @@ namespace OscilloscopeSimulation
             if (Physics.Raycast(ray, out RaycastHit hit, float.PositiveInfinity, ~0, QueryTriggerInteraction.Ignore))
             {
                 //Если у объект коллайдера является интерактивным
-                if (hit.transform.TryGetComponent(out Interactable interactable))
+                if (hit.transform.TryGetComponent(out Interactable hitInteractable))
                 {
                     //Если нажата левая кнопка мыши
                     if (Input.GetMouseButtonDown(0))
                     {
-                        //Вызываем ф-ю взаимодействия с объектом
-                        interactable.Interact();
+                        hitInteractable.Interact();
                     }
                 }
 

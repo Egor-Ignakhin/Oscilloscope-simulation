@@ -11,20 +11,12 @@ namespace OscilloscopeSimulation.InteractableObjects
     internal sealed class WireSocketInteractable : Interactable, ILogicalValue
     {
         public Action<bool> ChangeValueEvent { get; set; }
-        /// <summary>
-        /// Место установки штекера провода
-        /// </summary>
+
         [SerializeField] private Transform positionForWireConnector;
 
-        /// <summary>
-        /// Подключенный провод
-        /// </summary>
         internal Wire ConnectedWire { get; private set; }
 
-        /// <summary>
-        /// Менеджер проводов
-        /// </summary>
-        private WiresManager wiresManager;
+        [SerializeField] private WiresManager wiresManager;
 
         [SerializeField] private TMPro.TextMeshPro valueText;
 
@@ -63,7 +55,6 @@ namespace OscilloscopeSimulation.InteractableObjects
             //dev
 
             //Находим при загрузке сцены менеджер проводов
-            wiresManager = FindObjectOfType<WiresManager>();
             Value = false;
 
             //Если сокет подключен к тумблеру            

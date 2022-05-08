@@ -11,12 +11,8 @@ namespace OscilloscopeSimulation.InteractableObjects
     {
         public Action<bool> ChangeValueEvent { get; set; }
 
-        /// <summary>
-        /// Положение тумблера во включенном и 
-        /// выключенных состояниих соответственно
-        /// </summary>
-        [SerializeField] private Vector3 enabledLocalEulersState;
-        [SerializeField] private Vector3 disabledLocalEulersState;
+        [SerializeField] private Vector3 angleOfRotationDuringOperation;
+        [SerializeField] private Vector3 angleOfRotationDuringRest;
 
         public bool Value { get; set; } = false;
 
@@ -43,7 +39,7 @@ namespace OscilloscopeSimulation.InteractableObjects
             Value = nextState;
 
             //Поворачиваем тумблер в зависимости от его состояния
-            transform.localEulerAngles = Value ? enabledLocalEulersState : disabledLocalEulersState;
+            transform.localEulerAngles = Value ? angleOfRotationDuringOperation : angleOfRotationDuringRest;
 
             ChangeValueEvent?.Invoke(Value);
         }
