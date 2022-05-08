@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace OscilloscopeSimulation
 {
-    sealed class LogicalTrigger : MonoBehaviour, ILogicalValue
+    internal sealed class LogicalTrigger : MonoBehaviour, ILogicalValue
     {
 
         [SerializeField] private GameObject SInGM;
@@ -44,19 +44,19 @@ namespace OscilloscopeSimulation
                 {(true, true, true), null},
             };
 
-        public bool Value
+        public bool LogicalValue
         {
-            get => value; set
+            get => logicalValue; set
             {
-                this.value = value;
+                logicalValue = value;
 
-                ChangeValueEvent?.Invoke(this.value);
+                ChangeValueEvent?.Invoke(logicalValue);
 
                 //Выводим текст, отображающий настоящее значение лог. переменной
-                text.SetText(this.value ? "1" : "0");
+                text.SetText(logicalValue ? "1" : "0");
             }
         }
-        private bool value;
+        private bool logicalValue;
         public Action<bool> ChangeValueEvent { get; set; }
 
         private void Start()
@@ -66,11 +66,11 @@ namespace OscilloscopeSimulation
             QOut = QOutGM.GetComponent<LogicalOperationsProcessingSystem>();
             invertedQOut = invertedQOutGM.GetComponent<LogicalOperationsProcessingSystem>();
 
-            Value = false;
+            LogicalValue = false;
         }
         private void Update()
         {
-            bool? truthTableV = truthTable[(SIn.Value, RIn.Value, Value)];
+            bool? truthTableV = truthTable[(SIn.LogicalValue, RIn.LogicalValue, LogicalValue)];
 
             if (truthTableV == null)
             {
@@ -79,11 +79,11 @@ namespace OscilloscopeSimulation
             }
             if (truthTableV == true)
             {
-                Value = true;
+                LogicalValue = true;
             }
             if (truthTableV == false)
             {
-                Value = false;
+                LogicalValue = false;
             }
         }
     }

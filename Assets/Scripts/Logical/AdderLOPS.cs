@@ -15,49 +15,53 @@ namespace OscilloscopeSimulation
         [SerializeField] private List<WireSocketInteractable> digitSockets = new List<WireSocketInteractable>();
 
         [SerializeField] private WireSocketInteractable invertedDigitSocket;
-        private void Add()
+        private void CalculateOutputValue()
         {
-            //Создаем значение суммы
-            int SValue = 0;
+            int sumValue = 0;
 
             //Проходимся по пред. сокетами и складываем их значения
             foreach (var bs in behindSockets)
             {
-                SValue += bs.Value ? 1 : 0;
+                sumValue += bs.LogicalValue ? 1 : 0;
             }
 
             //Преобразуем полученое десятичное значение в двоичное
-            string binaryCode = Convert.ToString(SValue, 2);
+            string binaryCode = Convert.ToString(sumValue, 2);
 
-            //Если длина строки - 1
             if (binaryCode.Length == 1)
             {
                 //Записываем в сумм-сокеты сумму
-                foreach(var ss in sumSockets)
-                    ss.Value = binaryCode[0] == '0' ? false : true;
+                foreach (var sS in sumSockets)
+                {
+                    sS.LogicalValue = binaryCode[0] == '0' ? false : true;
+                }
 
                 //Записываем в рязряд-сокеты нуль
-                foreach(var ds in digitSockets)
-                    ds.Value = false;
+                foreach (var dS in digitSockets)
+                {
+                    dS.LogicalValue = false;
+                }
             }
-            //Если же длина строки - 2
-            else if(binaryCode.Length == 2)
+            else if (binaryCode.Length == 2)
             {
                 //Записываем в сумм-сокеты сумму
-                foreach (var ss in sumSockets)
-                    ss.Value = binaryCode[1] == '0' ? false : true;
+                foreach (var sS in sumSockets)
+                {
+                    sS.LogicalValue = binaryCode[1] == '0' ? false : true;
+                }
 
                 //Записываем в рязряд-сокеты разряд
-                foreach (var ds in digitSockets)
-                    ds.Value = binaryCode[0] == '0' ? false : true;
+                foreach (var dS in digitSockets)
+                {
+                    dS.LogicalValue = binaryCode[0] == '0' ? false : true;
+                }
             }
 
-            //Записываем в инвертированный разряд-сокет значение
-            invertedDigitSocket.Value = !digitSockets[0].Value;
+            invertedDigitSocket.LogicalValue = !digitSockets[0].LogicalValue;
         }
         protected override void LateUpdate()
         {
-            Add();
+            CalculateOutputValue();
         }
     }
 }

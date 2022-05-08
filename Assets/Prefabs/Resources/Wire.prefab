@@ -173,4 +173,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9995db42d18239468dc95658c0418f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineRenderer: {fileID: 8535793039386033482}
+  lineRendererOfWire: {fileID: 8535793039386033482}

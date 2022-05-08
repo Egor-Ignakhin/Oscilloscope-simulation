@@ -29,7 +29,7 @@ namespace OscilloscopeSimulation
         [SerializeField] protected List<GameObject> aheadLogicalValuesGM = new List<GameObject>();
         protected readonly List<ILogicalValue> aheadLogicalValues = new List<ILogicalValue>();
 
-        public bool Value { get; set; }
+        public bool LogicalValue { get; set; }
 
         [SerializeField] protected List<WireSocketInteractable> behindSockets = new List<WireSocketInteractable>();
         [SerializeField] protected List<LogicalOperationsProcessingSystem> behindLOPS = new List<LogicalOperationsProcessingSystem>();
@@ -58,7 +58,7 @@ namespace OscilloscopeSimulation
         }
 
         /// <summary>
-        /// Метод обработки предыдущих логичских носителей
+        /// Метод обработки предыдущих логических носителей
         /// </summary>
         /// <param name="sysOperator"></param>
         /// <returns></returns>
@@ -70,7 +70,7 @@ namespace OscilloscopeSimulation
                     {
                         foreach (ILogicalValue blv in behindLogicalValues)
                         {
-                            if (!blv.Value)
+                            if (!blv.LogicalValue)
                             {
                                 return false;
                             }
@@ -82,7 +82,7 @@ namespace OscilloscopeSimulation
                     {
                         foreach (ILogicalValue blv in behindLogicalValues)
                         {
-                            if (blv.Value)
+                            if (blv.LogicalValue)
                             {
                                 return true;
                             }
@@ -113,11 +113,11 @@ namespace OscilloscopeSimulation
         /// </summary>
         protected virtual void LateUpdate()
         {
-            Value = OperateBehindLogicalValues(systemOperator);
+            LogicalValue = OperateBehindLogicalValues(systemOperator);
 
             foreach (ILogicalValue alv in aheadLogicalValues)
             {
-                alv.Value = Value;
+                alv.LogicalValue = LogicalValue;
             }
         }
         /// <summary>
@@ -131,10 +131,12 @@ namespace OscilloscopeSimulation
             foreach (var bs in behindSockets)
             {
                 if (bs.ConnectedWire)
+                {
                     return true;
+                }
             }
             //Проверяем, нет ли у каждого предущего сокета
-             //заполненного поля "предыдущий обработчик"
+            //заполненного поля "предыдущий обработчик"
             foreach (var bs2 in behindSockets)
             {
                 //Если нашелся обработчик
@@ -145,7 +147,9 @@ namespace OscilloscopeSimulation
                     {
                         //Если поле есть - вызываем эту же ф-ю рекурсивно в найденном обработчике
                         if (bs2.GetBehindLOPS().BehindSocketsHasAConnectedWire(this))
+                        {
                             return true;
+                        }
                     }
                 }
             }
@@ -153,7 +157,9 @@ namespace OscilloscopeSimulation
             foreach (var bLOPs in behindLOPS)
             {
                 if (bLOPs.BehindSocketsHasAConnectedWire())
+                {
                     return true;
+                }
             }
 
             return false;

@@ -14,19 +14,19 @@ namespace OscilloscopeSimulation.InteractableObjects
         [SerializeField] private Vector3 angleOfRotationDuringOperation;
         [SerializeField] private Vector3 angleOfRotationDuringRest;
 
-        public bool Value { get; set; } = false;
+        public bool LogicalValue { get; set; } = false;
 
         private void Start()
         {
             //Изначальное положение тумблера устанавливаем как FALSE
-            Switch(Value);
+            Switch(LogicalValue);
         }
 
         internal override void Interact()
         {
             //Переключаем значение тумблера на противоположное,
             //при взаимодействии с ним
-            Switch(!Value);
+            Switch(!LogicalValue);
         }
 
         /// <summary>
@@ -36,12 +36,12 @@ namespace OscilloscopeSimulation.InteractableObjects
         private void Switch(bool nextState)
         {
             //Устанавливаем в память объекта новое значение состояния тумблера
-            Value = nextState;
+            LogicalValue = nextState;
 
             //Поворачиваем тумблер в зависимости от его состояния
-            transform.localEulerAngles = Value ? angleOfRotationDuringOperation : angleOfRotationDuringRest;
+            transform.localEulerAngles = LogicalValue ? angleOfRotationDuringOperation : angleOfRotationDuringRest;
 
-            ChangeValueEvent?.Invoke(Value);
+            ChangeValueEvent?.Invoke(LogicalValue);
         }
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 namespace OscilloscopeSimulation
 {
-    sealed class ShowHideWiresButton : MonoBehaviour
+    internal sealed class ShowHideWiresButton : MonoBehaviour
     {
         [SerializeField] private WiresManager wiresManager;
 

@@ -36,10 +36,10 @@ namespace OscilloscopeSimulation
         /// Функция подключения провода к сокету, передаваемому аргументом.
         /// Возвращает подключаемый провод
         /// </summary>
-        /// <param name="positionForWireConnector"></param>
+        /// <param name="socket"></param>
         /// 
         /// <returns></returns>
-        internal Wire ConnectWire(WireSocketInteractable positionForWireConnector)
+        internal Wire ConnectWire(WireSocketInteractable socket)
         {
             //Если в данный момент нет активного провода
             if (!ActiveWire)
@@ -48,7 +48,7 @@ namespace OscilloscopeSimulation
                 Wire wire = GetFreeWire();
 
                 //Подключаем этот провод к сокету
-                wire.SetConnectorPosition(positionForWireConnector);
+                wire.InsertWireInTheSocket(socket);
                 //Назначаем активным проводом только что достанный
                 ActiveWire = wire;
 
@@ -59,7 +59,7 @@ namespace OscilloscopeSimulation
             {
                 //В случае, если уже есть активный провод
                 // Подключаем активный провод к передаваемому аргументом сокету
-                ActiveWire.SetConnectorPosition(positionForWireConnector);
+                ActiveWire.InsertWireInTheSocket(socket);
 
                 //Создаем и присваиваем буферному проводу ссылку на активный
                 //для того, чтобы оптимально его вернуть
@@ -95,7 +95,7 @@ namespace OscilloscopeSimulation
         /// <param name="currentWire"></param>
         internal void DisconnectWireFromPoint(WireSocketInteractable socket, Wire currentWire)
         {
-            currentWire.DisconnectFromPoint(socket);
+            currentWire.DisconnectFromTheSocket(socket);
 
             //Устанавливаем активным проводом тот, который был наполовину отключен
             ActiveWire = currentWire;
@@ -115,9 +115,9 @@ namespace OscilloscopeSimulation
         }
         private Wire GetFreeWire()
         {
-            foreach(var wire in allWires)
+            foreach (var wire in allWires)
             {
-                if (wire.GetIsAvailable())
+                if (wire.IsAvailable())
                 {
                     wire.SetAvailability(false);
 

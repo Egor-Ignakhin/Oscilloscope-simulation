@@ -9,43 +9,40 @@ namespace OscilloscopeSimulation
     /// </summary>
     internal sealed class Wire : MonoBehaviour
     {
-        /// <summary>
-        /// Визуальная составляющая провода
-        /// </summary>
-        [SerializeField] private LineRenderer lineRenderer;
+        [SerializeField] private LineRenderer lineRendererOfWire;
 
-        private WireSocketInteractable connector_1;
-        private WireSocketInteractable connector_2;
+        private WireSocketInteractable socket_1;
+        private WireSocketInteractable socket_2;
 
         private PlayerInteractive playerInteractive;
         private WiresManager wiresManager;
-        private bool IsAvailable = true;
+        private bool available = true;
 
         internal void Initialize(PlayerInteractive playerInteractive, WiresManager wiresManager)
         {
             //Устанавливаем необходимое кол-во вершин провода
-            lineRenderer.positionCount = 2;
+            lineRendererOfWire.positionCount = 2;
 
             this.playerInteractive = playerInteractive;
             this.wiresManager = wiresManager;
         }
 
         /// <summary>
-        /// Метод установки позиции коннектора
+        /// Метод вставки провода в сокет
         /// </summary>
-        /// <param name="positionForWireConnector"></param>
-        internal void SetConnectorPosition(WireSocketInteractable positionForWireConnector)
+        /// <param name="socket"></param>
+        internal void InsertWireInTheSocket(WireSocketInteractable socket)
         {
-            //Если коннектор 1 уже подключен к сокету
-            if (connector_1)
+            //Если провод уже подключен в сокет 1
+            if (socket_1)
             {
-                //Коннектор 2 подключается к сокету
-                connector_2 = positionForWireConnector;
+                //Провод подключается в сокет 2 концом
+                socket_2 = socket;
             }
             else
             {
-                //Коннектор 1 подключается к сокету
-                connector_1 = positionForWireConnector;
+                //Провод подключается в сокет 1 концом
+                socket_1 = socket;
             }
         }
 
@@ -54,31 +51,28 @@ namespace OscilloscopeSimulation
         /// </summary>
         private void Reconnect()
         {
-            //Если коннектор 1 не подключен
-            if (!connector_1)
+            //Если сокет 1 не подключен
+            if (!socket_1)
             {
                 //Заставляем вершины провода переместиться в начало координат
-                lineRenderer.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
+                lineRendererOfWire.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
 
                 return;
             }
 
-            //Если пользователь взаимодействует с проводом
+            //Если пользователь взаимодействует с настоящим проводом
+            //Устанавливаем вершины:
             if (wiresManager.ActiveWire == this)
             {
-                //Устанавливаем вершины:
-                // - коннетор 1
-                // - координаты точки соприкосновения луча оператора с физ. объектами сцены
-                lineRenderer.SetPositions(
-                    new Vector3[] { connector_1.GetPositionForWireConnector(), playerInteractive.LastHitPoint });
+                lineRendererOfWire.SetPositions(
+                    new Vector3[] { socket_1.GetPositionForWireConnector(),
+                        playerInteractive.LastRaycastPointPosition });
             }
             else
             {
-                //Устанавливаем вершины:
-                // - коннетор 1
-                // - коннетор 2
-                lineRenderer.SetPositions(
-                    new Vector3[] { connector_1.GetPositionForWireConnector(), connector_2.GetPositionForWireConnector() });
+                lineRendererOfWire.SetPositions(
+                    new Vector3[] { socket_1.GetPositionForWireConnector(),
+                        socket_2.GetPositionForWireConnector() });
             }
         }
 
@@ -88,48 +82,45 @@ namespace OscilloscopeSimulation
         }
 
         /// <summary>
-        /// Метод полного отключения провода от сокетов
+        /// Метод отключения провода от сокетов
         /// </summary>
         internal void Disconnect()
         {
-            connector_1 = null;
-            connector_2 = null;
+            socket_1 = null;
+            socket_2 = null;
         }
 
         /// <summary>
-        /// Метод частичного отключения провода от сокета. Параметр - сокет
+        /// Метод отключения провода от сокета
         /// </summary>
-        /// <param name="point"></param>
-        internal void DisconnectFromPoint(WireSocketInteractable point)
+        /// <param name="socket"></param>
+        internal void DisconnectFromTheSocket(WireSocketInteractable socket)
         {
-            //Если коннетор 1 - это сокет
-            if (connector_1.Equals(point))
+            //Если сокет 1 - это параметр
+            if (socket_1.Equals(socket))
             {
-                // Обнуляем коннектор 1
-                connector_1 = null;
+                // Обнуляем сокет 1
+                socket_1 = null;
             }
             else
             {
-                // Обнуляем коннектор 2
-                connector_2 = null;
+                // Обнуляем сокет 2
+                socket_2 = null;
             }
 
-            //Если коннетор 1 - пуст
-            if (connector_1 == null)
+            //Если сокет 1 пуст
+            if (socket_1 == null)
             {
-                //Переназначаем коннектор 2 на коннектор 1
-                connector_1 = connector_2;
-                //Коннетор 2 очищаем
-                connector_2 = null;
+                //Переназначаем сокет 2 на сокет 1
+                socket_1 = socket_2;
+                //Сокет 2 очищаем
+                socket_2 = null;
             }
         }
 
-        /// <summary>
-        /// Метод смены коннекторов индексами
-        /// </summary>
-        internal void SwapConnectors()
+        internal void SwapSockets()
         {
-            Extenions<WireSocketInteractable>.Swap(ref connector_1, ref connector_2);
+            Extenions<WireSocketInteractable>.Swap(ref socket_1, ref socket_2);
         }
 
         /// <summary>
@@ -138,23 +129,23 @@ namespace OscilloscopeSimulation
         /// <param name="allWiresIsVisible"></param>
         internal void SetVisible(bool allWiresIsVisible)
         {
-            lineRenderer.enabled = allWiresIsVisible;
+            lineRendererOfWire.enabled = allWiresIsVisible;
         }
         internal void SetAvailability(bool value)
         {
-            IsAvailable = value;
+            available = value;
         }
-        internal bool GetIsAvailable()
+        internal bool IsAvailable()
         {
-            return IsAvailable;
+            return available;
         }
-        internal WireSocketInteractable GetConnector_1()
+        internal WireSocketInteractable GetSocket_1()
         {
-            return connector_1;
+            return socket_1;
         }
-        internal WireSocketInteractable GetConnector_2()
+        internal WireSocketInteractable GetSocket_2()
         {
-            return connector_2;
+            return socket_2;
         }
     }
 }
