@@ -114,16 +114,16 @@ namespace OscilloscopeSimulation.InteractableObjects
             ConnectedWire = wiresManager.ConnectWire(this);
 
             //Если провод подключен обоими концами
-            if (ConnectedWire.Connector_1 && ConnectedWire.Connector_2)
+            if (ConnectedWire.GetConnector_1() && ConnectedWire.GetConnector_2())
             {
                 // Если в сокет подключен 2 коннектор                    
-                if (ConnectedWire.Connector_2 == this)
+                if (ConnectedWire.GetConnector_2() == this)
                 {
                     // Если настоящий сокет не подключен к тумблеру
                     if (!toggleSwitch)
                     {
                         // Значение сокета = значение коннектора 1
-                        Value = ConnectedWire.Connector_1.Value;
+                        Value = ConnectedWire.GetConnector_1().Value;
                     }
                     else
                     {
@@ -131,13 +131,13 @@ namespace OscilloscopeSimulation.InteractableObjects
                         //Меняем коннекторы местами
                         ConnectedWire.SwapConnectors();
                     }
-                    if (ConnectedWire.Connector_2 == this)
+                    if (ConnectedWire.GetConnector_2() == this)
                     {
-                        ConnectedWire.Connector_1.ChangeValueEvent += OnBehindSocketValueUpdate;
+                        ConnectedWire.GetConnector_1().ChangeValueEvent += OnBehindSocketValueUpdate;
                     }
                     else
                     {
-                        ChangeValueEvent += ConnectedWire.Connector_2.OnBehindSocketValueUpdate;
+                        ChangeValueEvent += ConnectedWire.GetConnector_2().OnBehindSocketValueUpdate;
 
                     }
                 }
@@ -149,9 +149,9 @@ namespace OscilloscopeSimulation.InteractableObjects
         /// </summary>
         public void DisconnectWireAbs()
         {
-            if (ConnectedWire.Connector_2 == this)
+            if (ConnectedWire.GetConnector_2() == this)
             {
-                ConnectedWire.Connector_1.ChangeValueEvent = null;
+                ConnectedWire.GetConnector_1().ChangeValueEvent = null;
             }
             else
             {
@@ -170,9 +170,9 @@ namespace OscilloscopeSimulation.InteractableObjects
         /// </summary>
         private void DisconnectWireFromThisPoint()
         {
-            if (ConnectedWire.Connector_2 == this)
+            if (ConnectedWire.GetConnector_2() == this)
             {
-                ConnectedWire.Connector_1.ChangeValueEvent = null;
+                ConnectedWire.GetConnector_1().ChangeValueEvent = null;
             }
             else
             {

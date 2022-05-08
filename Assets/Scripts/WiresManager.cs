@@ -12,6 +12,7 @@ namespace OscilloscopeSimulation
     internal sealed class WiresManager : MonoBehaviour
     {
         private bool allWiresAreVisible = true;
+        [SerializeField] private PlayerInteractive playerInteractive;
         private readonly List<Wire> allWires = new List<Wire>();
         /// <summary>
         /// Активный провод - тот провод, 
@@ -27,6 +28,7 @@ namespace OscilloscopeSimulation
             for (int i = 0; i < numberOfWiresBeingCreated; i++)
             {
                 Wire wire = Instantiate(Resources.Load<Wire>("Wire"), transform);
+                wire.Initialize(playerInteractive, this);
                 allWires.Add(wire);
             }
         }
