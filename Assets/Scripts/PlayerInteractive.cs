@@ -7,10 +7,7 @@ namespace OscilloscopeSimulation
     /// </summary>
     internal sealed class PlayerInteractive : MonoBehaviour
     {
-        /// <summary>
-        /// Главная камера
-        /// </summary>
-        [SerializeField] private Camera mcamera;
+        [SerializeField] private Camera mainCamera;
 
         /// <summary>
         /// Координаты точки соприкосновения с физ. объектами сцены
@@ -23,7 +20,7 @@ namespace OscilloscopeSimulation
         private void Update()
         {
             //Бросаем луч из камеры
-            Ray ray = mcamera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, float.PositiveInfinity, ~0, QueryTriggerInteraction.Ignore))
             {
                 //Если у объект коллайдера является интерактивным

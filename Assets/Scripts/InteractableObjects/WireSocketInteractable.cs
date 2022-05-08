@@ -39,14 +39,14 @@ namespace OscilloscopeSimulation.InteractableObjects
 
                 ChangeValueEvent?.Invoke(this.value);
 
-              //  if (toggleSwitch || ConnectedWire /*||
-                  //  (behindLOPS && behindLOPS.BehindSocketsHasAConnectedWire())*/)
+                if (toggleSwitch || ConnectedWire ||
+                    behindLOPS /*&& behindLOPS.BehindSocketsHasAConnectedWire())*/)
                 {
                     valueText.SetText(this.value ? "1" : "0");
                 }
-             //   else
+                else
                 {
-               //     valueText.SetText("");
+                    valueText.SetText("");
                 }
             }
         }

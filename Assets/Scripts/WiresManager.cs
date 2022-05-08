@@ -11,13 +11,8 @@ namespace OscilloscopeSimulation
     /// </summary>
     internal sealed class WiresManager : MonoBehaviour
     {
-        private bool allWiresIsVisible = true;
+        private bool allWiresAreVisible = true;
         private readonly List<Wire> allWires = new List<Wire>();
-        /// <summary>
-        /// Стек свободных проводов (не учитываются уже подключенные)
-        /// </summary>
-        private readonly Stack<Wire> freeWires = new Stack<Wire>();
-
         /// <summary>
         /// Активный провод - тот провод, 
         /// что подключен только в 1 сокет, и 2 конец тянется за указателем
@@ -27,16 +22,13 @@ namespace OscilloscopeSimulation
 
         private void Start()
         {
-            //Необходимое количество проводов для прибора. Создаются перед загрузкой сцены.
-            int countOfLoadableWires = 100;
+            int numberOfWiresBeingCreated = 100;
 
-            for (int i = 0; i < countOfLoadableWires; i++)
+            for (int i = 0; i < numberOfWiresBeingCreated; i++)
             {
                 Wire wire = Instantiate(Resources.Load<Wire>("Wire"), transform);
-                freeWires.Push(wire);
                 allWires.Add(wire);
             }
-
         }
         /// <summary>
         /// Функция подключения провода к сокету, передаваемому аргументом.
@@ -51,7 +43,7 @@ namespace OscilloscopeSimulation
             if (!ActiveWire)
             {
                 //"Достаем" свободный провод из стека
-                Wire wire = freeWires.Pop();
+                Wire wire = GetFreeWire();
 
                 //Подключаем этот провод к сокету
                 wire.SetConnectorPosition(positionForWireConnector);
@@ -88,7 +80,7 @@ namespace OscilloscopeSimulation
             currentWire.Disconnect();
 
             //Возвращаем в стек доступных проводов освободившийся
-            freeWires.Push(currentWire);
+            currentWire.SetAvailability(true);
 
             //Очищаем активный провод
             ActiveWire = null;
@@ -113,11 +105,25 @@ namespace OscilloscopeSimulation
         /// <param name="button"></param>
         internal void SetVisibilityToWires()
         {
-            allWiresIsVisible = !allWiresIsVisible;
+            allWiresAreVisible = !allWiresAreVisible;
             foreach (var w in allWires)
             {
-                w.SetVisible(allWiresIsVisible);
+                w.SetVisible(allWiresAreVisible);
             }
+        }
+        private Wire GetFreeWire()
+        {
+            foreach(var wire in allWires)
+            {
+                if (wire.GetIsAvailable())
+                {
+                    wire.SetAvailability(false);
+
+                    return wire;
+                }
+            }
+
+            return null;
         }
     }
 }

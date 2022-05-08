@@ -10,19 +10,10 @@ namespace OscilloscopeSimulation
     //Сумматор - обработчик
     internal sealed class AdderLOPS : LogicalOperationsProcessingSystem
     {
-        /// <summary>
-        /// Сумм-сокеты
-        /// </summary>
         [SerializeField] private List<WireSocketInteractable> sumSockets = new List<WireSocketInteractable>();
 
-        /// <summary>
-        /// Разряд-сокеты
-        /// </summary>
         [SerializeField] private List<WireSocketInteractable> digitSockets = new List<WireSocketInteractable>();
 
-        /// <summary>
-        /// Инвертированный разряд-сокет
-        /// </summary>
         [SerializeField] private WireSocketInteractable invertedDigitSocket;
         private void Add()
         {

@@ -19,6 +19,7 @@ namespace OscilloscopeSimulation
 
         private PlayerInteractive playerInteractive;
         private WiresManager wiresManager;
+        private bool IsAvailable;
 
         /// <summary>
         /// Ìועמה, גûחûגאולûי ןונוה ןונגûל גûחמגמל לועמהא Update
@@ -146,6 +147,14 @@ namespace OscilloscopeSimulation
         internal void SetVisible(bool allWiresIsVisible)
         {
             lineRenderer.enabled = allWiresIsVisible;
+        }
+        internal void SetAvailability(bool value)
+        {
+            IsAvailable = value;
+        }
+        internal bool GetIsAvailable()
+        {
+            return IsAvailable;
         }
     }
 }
