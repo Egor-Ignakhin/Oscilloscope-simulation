@@ -15,20 +15,21 @@ namespace OscilloscopeSimulation
         {
             //Бросаем луч из камеры
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, float.PositiveInfinity, ~0, QueryTriggerInteraction.Ignore))
+            if (!Physics.Raycast(ray, out RaycastHit hit, float.PositiveInfinity, ~0, QueryTriggerInteraction.Ignore))
             {
-                //Если у объекта коллайдер является интерактивным
-                if (hit.transform.TryGetComponent(out Interactable hitInteractable))
-                {
-                    //Если нажата левая кнопка мыши
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        hitInteractable.Interact();
-                    }
-                }
-
-                LastRaycastPointPosition = hit.point;
+                return;
             }
+            //Если у объекта коллайдер является интерактивным
+            if (hit.transform.TryGetComponent(out Interactable hitInteractable))
+            {
+                //Если нажата левая кнопка мыши
+                if (Input.GetMouseButtonDown(0))
+                {
+                    hitInteractable.Interact();
+                }
+            }
+
+            LastRaycastPointPosition = hit.point;
         }
     }
 }

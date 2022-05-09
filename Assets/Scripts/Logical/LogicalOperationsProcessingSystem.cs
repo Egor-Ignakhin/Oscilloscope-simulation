@@ -10,7 +10,9 @@ namespace OscilloscopeSimulation
 {
     internal class LogicalOperationsProcessingSystem : MonoBehaviour, ILogicalValue
     {
+        public bool LogicalValue { get; set; }
         public Action<bool> ChangeValueEvent { get; set; }
+
         /// <summary>
         /// Типы операций, которые может осуществлять система
         /// </summary>
@@ -28,8 +30,6 @@ namespace OscilloscopeSimulation
         //Последущие лог. носители
         [SerializeField] protected List<GameObject> aheadLogicalValuesGM = new List<GameObject>();
         protected readonly List<ILogicalValue> aheadLogicalValues = new List<ILogicalValue>();
-
-        public bool LogicalValue { get; set; }
 
         [SerializeField] protected List<WireSocketInteractable> behindSockets = new List<WireSocketInteractable>();
         [SerializeField] protected List<LogicalOperationsProcessingSystem> behindLOPS = new List<LogicalOperationsProcessingSystem>();
@@ -54,6 +54,21 @@ namespace OscilloscopeSimulation
                 {
                     throw new Exception("crashed link");
                 }
+            }
+        }
+
+        /// <summary>
+        /// В методе каждый кадр происходит пересчет значения из 
+        /// предыдущих лог. носителей выбранным оператором и затем 
+        /// присвоение полученного результата последующему лог. носителю
+        /// </summary>
+        protected virtual void LateUpdate()
+        {
+            LogicalValue = OperateBehindLogicalValues(systemOperator);
+
+            foreach (ILogicalValue alv in aheadLogicalValues)
+            {
+                alv.LogicalValue = LogicalValue;
             }
         }
 
@@ -107,27 +122,15 @@ namespace OscilloscopeSimulation
         }
 
         /// <summary>
-        /// В методе каждый кадр происходит пересчет значения из 
-        /// предыдущих лог. носителей выбранным оператором и затем 
-        /// присвоение полученного результата последующему лог. носителю
-        /// </summary>
-        protected virtual void LateUpdate()
-        {
-            LogicalValue = OperateBehindLogicalValues(systemOperator);
-
-            foreach (ILogicalValue alv in aheadLogicalValues)
-            {
-                alv.LogicalValue = LogicalValue;
-            }
-        }
-        /// <summary>
-        ///  Метод возвращает правду, если хотя у бы в одного из предыдущих сокетов вставлен провод
+        ///  Метод возвращает правду, если хотя у бы
+        ///  в одного из предыдущих сокетов вставлен провод
         /// </summary>
         /// <param name="behindCalledlops"></param>
         /// <returns></returns>
-        internal bool BehindSocketsHasAConnectedWire(LogicalOperationsProcessingSystem behindCalledlops = null)
+        internal bool BehindSocketsHasAConnectedWire
+            (LogicalOperationsProcessingSystem behindCalledlops = null)
         {
-            //Если это обычный обработчик, то проверяем у каждого предыдущего сокета провод
+            //Проверяем у каждого предыдущего сокета провод
             foreach (var bs in behindSockets)
             {
                 if (bs.ConnectedWire)
@@ -139,18 +142,20 @@ namespace OscilloscopeSimulation
             //заполненного поля "предыдущий обработчик"
             foreach (var bs2 in behindSockets)
             {
-                //Если нашелся обработчик
-                if (bs2.GetBehindLOPS() != null)
+                //Если не нашелся обработчик
+                if (bs2.GetBehindLOPS() == null)
                 {
-                    //Если найденный обработчик не указывает на обработчик предыдущий
-                    if (bs2.GetBehindLOPS() != behindCalledlops)
-                    {
-                        //Если поле есть - вызываем эту же ф-ю рекурсивно в найденном обработчике
-                        if (bs2.GetBehindLOPS().BehindSocketsHasAConnectedWire(this))
-                        {
-                            return true;
-                        }
-                    }
+                    continue;
+                }
+                //Если найденный обработчик указывает на обработчик предыдущий
+                if (bs2.GetBehindLOPS() == behindCalledlops)
+                {
+                    continue;
+                }
+                //Если поле есть - вызываем эту же ф-ю рекурсивно в найденном обработчике
+                if (bs2.GetBehindLOPS().BehindSocketsHasAConnectedWire(this))
+                {
+                    return true;
                 }
             }
             //Если это обработчик в цепи, имеющий индекс 0+, то вызываем настоящую ф-ю рекурсивно

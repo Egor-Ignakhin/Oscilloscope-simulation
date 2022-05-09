@@ -1,7 +1,7 @@
+using OscilloscopeSimulation.InteractableObjects;
+
 using System;
 using System.Collections.Generic;
-
-using OscilloscopeSimulation.InteractableObjects;
 
 using UnityEngine;
 
@@ -15,7 +15,27 @@ namespace OscilloscopeSimulation
         [SerializeField] private List<WireSocketInteractable> digitSockets = new List<WireSocketInteractable>();
 
         [SerializeField] private WireSocketInteractable invertedDigitSocket;
-        private void CalculateOutputValue()
+
+        protected override void LateUpdate()
+        {
+            string binarySumValue = ConvertSumValueFromDegToBin();
+            bool sumLogicalValue = CalculateSumLogicalValue(binarySumValue);
+            bool digitLogicalValue = CalculateDigitLogicalValue(binarySumValue);
+
+
+            foreach (var sS in sumSockets)
+            {
+                sS.LogicalValue = sumLogicalValue;
+            }
+
+            foreach (var dS in digitSockets)
+            {
+                dS.LogicalValue = digitLogicalValue;
+            }
+            invertedDigitSocket.LogicalValue = !digitLogicalValue;
+        }
+
+        private string ConvertSumValueFromDegToBin()
         {
             int sumValue = 0;
 
@@ -26,42 +46,42 @@ namespace OscilloscopeSimulation
             }
 
             //Преобразуем полученое десятичное значение в двоичное
-            string binaryCode = Convert.ToString(sumValue, 2);
-
-            if (binaryCode.Length == 1)
-            {
-                //Записываем в сумм-сокеты сумму
-                foreach (var sS in sumSockets)
-                {
-                    sS.LogicalValue = binaryCode[0] == '0' ? false : true;
-                }
-
-                //Записываем в рязряд-сокеты нуль
-                foreach (var dS in digitSockets)
-                {
-                    dS.LogicalValue = false;
-                }
-            }
-            else if (binaryCode.Length == 2)
-            {
-                //Записываем в сумм-сокеты сумму
-                foreach (var sS in sumSockets)
-                {
-                    sS.LogicalValue = binaryCode[1] == '0' ? false : true;
-                }
-
-                //Записываем в рязряд-сокеты разряд
-                foreach (var dS in digitSockets)
-                {
-                    dS.LogicalValue = binaryCode[0] == '0' ? false : true;
-                }
-            }
-
-            invertedDigitSocket.LogicalValue = !digitSockets[0].LogicalValue;
+            return Convert.ToString(sumValue, 2);
         }
-        protected override void LateUpdate()
+
+        private bool CalculateSumLogicalValue(string binarySumValue)
         {
-            CalculateOutputValue();
+            bool sumLogicalValue = false;
+
+            if (binarySumValue.Length == 1)
+            {
+                if (binarySumValue[0] == '1')
+                {
+                    sumLogicalValue = true;
+                }
+            }
+            else if (binarySumValue.Length == 2)
+            {
+                if (binarySumValue[1] == '1')
+                {
+                    sumLogicalValue = true;
+                }
+            }
+            return sumLogicalValue;
+        }
+
+        private bool CalculateDigitLogicalValue(string binarySumValue)
+        {
+            bool digitLogicalValue = false;
+
+            if (binarySumValue.Length == 2)
+            {
+                if (binarySumValue[0] == '1')
+                {
+                    digitLogicalValue = true;
+                }
+            }
+            return digitLogicalValue;
         }
     }
 }
