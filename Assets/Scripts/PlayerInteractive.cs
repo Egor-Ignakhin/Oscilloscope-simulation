@@ -13,9 +13,9 @@ namespace OscilloscopeSimulation
 
         private void Update()
         {
-            //Бросаем луч из камеры
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            if (!Physics.Raycast(ray, out RaycastHit hit, float.PositiveInfinity, ~0, QueryTriggerInteraction.Ignore))
+            if (!Physics.Raycast(ray, out RaycastHit hit,
+                float.PositiveInfinity, ~0, QueryTriggerInteraction.Ignore))
             {
                 return;
             }

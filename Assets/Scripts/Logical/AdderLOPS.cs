@@ -10,9 +10,11 @@ namespace OscilloscopeSimulation
     //Сумматор - обработчик
     internal sealed class AdderLOPS : LogicalOperationsProcessingSystem
     {
-        [SerializeField] private List<WireSocketInteractable> sumSockets = new List<WireSocketInteractable>();
+        [SerializeField] private List<WireSocketInteractable> sumSockets =
+            new List<WireSocketInteractable>();
 
-        [SerializeField] private List<WireSocketInteractable> digitSockets = new List<WireSocketInteractable>();
+        [SerializeField] private List<WireSocketInteractable> digitSockets =
+            new List<WireSocketInteractable>();
 
         [SerializeField] private WireSocketInteractable invertedDigitSocket;
 
@@ -40,9 +42,9 @@ namespace OscilloscopeSimulation
             int sumValue = 0;
 
             //Проходимся по пред. сокетами и складываем их значения
-            foreach (var bs in behindSockets)
+            foreach (var behindSocket in behindSockets)
             {
-                sumValue += bs.LogicalValue ? 1 : 0;
+                sumValue += behindSocket.LogicalValue ? 1 : 0;
             }
 
             //Преобразуем полученое десятичное значение в двоичное

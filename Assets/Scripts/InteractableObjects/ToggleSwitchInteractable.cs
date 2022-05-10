@@ -22,7 +22,6 @@ namespace OscilloscopeSimulation.InteractableObjects
 
         internal override void Interact()
         {
-            //Переключаем значение тумблера на противоположное,
             Switch(!LogicalValue);
         }
 
@@ -31,7 +30,8 @@ namespace OscilloscopeSimulation.InteractableObjects
             LogicalValue = state;
 
             //Поворачиваем тумблер в зависимости от его состояния
-            transform.localEulerAngles = LogicalValue ? angleOfRotationDuringOperation : angleOfRotationDuringRest;
+            transform.localEulerAngles = LogicalValue ?
+                angleOfRotationDuringOperation : angleOfRotationDuringRest;
 
             ChangeValueEvent?.Invoke(LogicalValue);
         }

@@ -7,7 +7,7 @@ using UnityEngine;
 namespace OscilloscopeSimulation
 {
     /// <summary>
-    /// ћенеджер активов - проводов, соедни€ющих сокеты стенда
+    /// ћенеджер проводов, соедин€ющих сокеты стенда
     /// </summary>
     internal sealed class WiresManager : MonoBehaviour
     {

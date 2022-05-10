@@ -17,21 +17,20 @@ namespace OscilloscopeSimulation
         /// Типы операций, которые может осуществлять система
         /// </summary>
         protected enum Operators { And, Or, NOR, NAND, Add }
-
         /// <summary>
-        /// Выбранная операция из доступных для системы
+        /// TODO: рефакторинг
         /// </summary>
         [SerializeField] protected Operators systemOperator;
 
-        //Предыдущие лог. носители
         [SerializeField] private List<GameObject> behindLogicalValuesGM = new List<GameObject>();
-        private readonly List<ILogicalValue> behindLogicalValues = new List<ILogicalValue>();
+        private readonly List<ILogicalValue> behindLogicalHolders = new List<ILogicalValue>();
 
-        //Последущие лог. носители
         [SerializeField] protected List<GameObject> aheadLogicalValuesGM = new List<GameObject>();
-        protected readonly List<ILogicalValue> aheadLogicalValues = new List<ILogicalValue>();
+        protected readonly List<ILogicalValue> aheadLogicalHolders = new List<ILogicalValue>();
 
-        [SerializeField] protected List<WireSocketInteractable> behindSockets = new List<WireSocketInteractable>();
+        [SerializeField] protected List<WireSocketInteractable> behindSockets =
+            new List<WireSocketInteractable>();
+
         [SerializeField] protected List<LogicalOperationsProcessingSystem> behindLOPS
             = new List<LogicalOperationsProcessingSystem>();
 
@@ -39,9 +38,9 @@ namespace OscilloscopeSimulation
         {
             for (int i = 0; i < behindLogicalValuesGM.Count; i++)
             {
-                behindLogicalValues.Add(behindLogicalValuesGM[i].GetComponent<ILogicalValue>());
+                behindLogicalHolders.Add(behindLogicalValuesGM[i].GetComponent<ILogicalValue>());
 
-                if (behindLogicalValues[i] == null)
+                if (behindLogicalHolders[i] == null)
                 {
                     throw new Exception("crashed link");
                 }
@@ -49,9 +48,9 @@ namespace OscilloscopeSimulation
 
             for (int i = 0; i < aheadLogicalValuesGM.Count; i++)
             {
-                aheadLogicalValues.Add(aheadLogicalValuesGM[i].GetComponent<ILogicalValue>());
+                aheadLogicalHolders.Add(aheadLogicalValuesGM[i].GetComponent<ILogicalValue>());
 
-                if (aheadLogicalValues[i] == null)
+                if (aheadLogicalHolders[i] == null)
                 {
                     throw new Exception("crashed link");
                 }
@@ -60,14 +59,11 @@ namespace OscilloscopeSimulation
 
         protected virtual void LateUpdate()
         {
-            //Перерасчет значения из
-            //предыдущих лог. носителей выбранным оператором
             LogicalValue = OperateBehindLogicalValues(systemOperator);
 
-            //Присвоение полученного результата последующим лог.носителям
-            foreach (ILogicalValue alv in aheadLogicalValues)
+            foreach (ILogicalValue aheadLogicalHolder in aheadLogicalHolders)
             {
-                alv.LogicalValue = LogicalValue;
+                aheadLogicalHolder.LogicalValue = LogicalValue;
             }
         }
 
@@ -77,7 +73,7 @@ namespace OscilloscopeSimulation
             {
                 case Operators.And:
                     {
-                        foreach (ILogicalValue blv in behindLogicalValues)
+                        foreach (ILogicalValue blv in behindLogicalHolders)
                         {
                             if (!blv.LogicalValue)
                             {
@@ -89,7 +85,7 @@ namespace OscilloscopeSimulation
 
                 case Operators.Or:
                     {
-                        foreach (ILogicalValue blv in behindLogicalValues)
+                        foreach (ILogicalValue blv in behindLogicalHolders)
                         {
                             if (blv.LogicalValue)
                             {
@@ -100,60 +96,17 @@ namespace OscilloscopeSimulation
                     }
                 case Operators.NOR:
                     {
-                        bool orOp = OperateBehindLogicalValues(Operators.Or);
-                        return !orOp;
+                        return !OperateBehindLogicalValues(Operators.Or);
                     }
                 case Operators.NAND:
                     {
-                        bool andOp = OperateBehindLogicalValues(Operators.And);
-                        return !andOp;
+                        return !OperateBehindLogicalValues(Operators.And);
                     }
                 default:
                     {
                         throw new Exception("");
                     }
             }
-        }
-
-        internal bool BehindSocketsHasAConnectedWire
-            (LogicalOperationsProcessingSystem behindCalledlops = null)
-        {
-            foreach (var bs in behindSockets)
-            {
-                if (bs.ConnectedWire)
-                {
-                    return true;
-                }
-            }
-            //Проверяем, нет ли у каждого предущего сокета
-            //заполненного поля "предыдущий обработчик"
-            foreach (var bs2 in behindSockets)
-            {
-                if (bs2.GetBehindLOPS() == null)
-                {
-                    continue;
-                }
-                //Если найденный обработчик указывает на обработчик предыдущий
-                if (bs2.GetBehindLOPS() == behindCalledlops)
-                {
-                    continue;
-                }
-                //Если поле есть - вызываем эту же ф-ю рекурсивно в найденном обработчике
-                if (bs2.GetBehindLOPS().BehindSocketsHasAConnectedWire(this))
-                {
-                    return true;
-                }
-            }
-            //Если это обработчик в цепи, имеющий индекс 0+, то вызываем настоящую ф-ю рекурсивно
-            foreach (var bLOPs in behindLOPS)
-            {
-                if (bLOPs.BehindSocketsHasAConnectedWire())
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

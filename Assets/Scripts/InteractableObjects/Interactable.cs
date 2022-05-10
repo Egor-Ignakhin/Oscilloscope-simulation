@@ -8,7 +8,7 @@ namespace OscilloscopeSimulation
     internal abstract class Interactable : MonoBehaviour
     {
         /// <summary>
-        /// Базовый метод взаимодействия. Следует переопределить.
+        /// Базовый метод взаимодействия.
         /// Вызывается из <see cref="PlayerInteractive"/>
         /// </summary>
         internal abstract void Interact();

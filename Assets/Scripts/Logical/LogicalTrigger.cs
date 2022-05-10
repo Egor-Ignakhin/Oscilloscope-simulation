@@ -7,7 +7,6 @@ namespace OscilloscopeSimulation
 {
     internal sealed class LogicalTrigger : MonoBehaviour, ILogicalValue
     {
-
         [SerializeField] private GameObject SInGM;
         private ILogicalValue SIn;
 
@@ -20,11 +19,7 @@ namespace OscilloscopeSimulation
         [SerializeField] private GameObject invertedQOutGM;
         private ILogicalValue invertedQOut;
 
-        [SerializeField] private TMPro.TextMeshPro text;
-        [SerializeField]
-        private List<LogicalOperationsProcessingSystem> behindLOPSs
-            = new List<LogicalOperationsProcessingSystem>();
-        private Dictionary<(bool S, bool R, bool Qlast), bool?> truthTable
+        private readonly Dictionary<(bool S, bool R, bool Qlast), bool?> truthTable
             = new Dictionary<(bool S, bool R, bool Qlast), bool?>()
             {
                 //’ранение
@@ -46,14 +41,12 @@ namespace OscilloscopeSimulation
 
         public bool LogicalValue
         {
-            get => logicalValue; set
+            get => logicalValue;
+            set
             {
                 logicalValue = value;
 
                 ChangeValueEvent?.Invoke(logicalValue);
-
-                //¬ыводим текст, отображающий насто€щее значение лог. переменной
-                text.SetText(logicalValue ? "1" : "0");
             }
         }
         private bool logicalValue;
@@ -74,7 +67,6 @@ namespace OscilloscopeSimulation
 
             if (truthTableV == null)
             {
-                text.SetText("Crash");
                 throw new Exception("Crash");
             }
             if (truthTableV == true)

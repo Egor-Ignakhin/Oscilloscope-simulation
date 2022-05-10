@@ -15,17 +15,19 @@ namespace OscilloscopeSimulation
         private WireSocketInteractable socket_2;
 
         private PlayerInteractive playerInteractive;
+
         private WiresManager wiresManager;
+        
         private bool available = true;
 
         internal void Initialize(PlayerInteractive playerInteractive, WiresManager wiresManager)
         {
-            //Устанавливаем необходимое кол-во вершин провода
             lineRendererOfWire.positionCount = 2;
 
             this.playerInteractive = playerInteractive;
             this.wiresManager = wiresManager;
         }
+
         private void LateUpdate()
         {
             SetupWireVertexPositions();
