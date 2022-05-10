@@ -23,7 +23,6 @@ namespace OscilloscopeSimulation.InteractableObjects
         internal override void Interact()
         {
             //Переключаем значение тумблера на противоположное,
-            //при взаимодействии с ним
             Switch(!LogicalValue);
         }
 

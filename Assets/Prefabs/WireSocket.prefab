@@ -180,7 +180,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8020828016275848831}
   m_Layer: 0
-  m_Name: PositionForWireConnector
+  m_Name: WireConnectorSetupPlace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -341,7 +341,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01bdd3bba9fadd54585cbefb7af9cf84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionForWireConnector: {fileID: 8020828016275848831}
+  wireConnectorSetupPlace: {fileID: 8020828016275848831}
+  wiresManager: {fileID: 0}
   valueText: {fileID: 7483449633988977319}
   toggleSwitch: {fileID: 0}
+  behindLOPS: {fileID: 0}
   isInvertedSignal: 0

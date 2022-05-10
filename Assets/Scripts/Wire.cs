@@ -5,7 +5,7 @@ using UnityEngine;
 namespace OscilloscopeSimulation
 {
     /// <summary>
-    /// Провод, соединяющий сокеты установки
+    /// Провод, соединяющий сокеты стенда
     /// </summary>
     internal sealed class Wire : MonoBehaviour
     {
@@ -31,68 +31,37 @@ namespace OscilloscopeSimulation
             SetupWireVertexPositions();
         }
 
-        /// <summary>
-        /// Метод вставки провода в сокет
-        /// </summary>
-        /// <param name="socket"></param>
         internal void InsertWire(WireSocketInteractable socket)
         {
-            //Если провод уже подключен в сокет 1
             if (socket_1)
             {
-                //Провод подключается в сокет 2 концом
                 socket_2 = socket;
             }
             else
             {
-                //Провод подключается в сокет 1 концом
                 socket_1 = socket;
             }
         }
 
         private void SetupWireVertexPositions()
         {
-            //Если сокет 1 не подключен
             if (!socket_1)
             {
-                //Заставляем вершины провода переместиться в начало координат
+                //Перемещаем вершины провода в начало координат
                 lineRendererOfWire.SetPositions
                     (new Vector3[] { Vector3.zero, Vector3.zero });
 
                 return;
             }
+            lineRendererOfWire.SetPosition(0, socket_1.GetWireConnectorSetupPosition());
+            lineRendererOfWire.SetPosition(1, wiresManager.ActiveWire == this ?
+                playerInteractive.LastRaycastPointPosition :
+                socket_2.GetWireConnectorSetupPosition());
 
-            //Если пользователь взаимодействует с настоящим проводом
-            if (wiresManager.ActiveWire == this)
-            {
-                lineRendererOfWire.SetPositions(
-                    new Vector3[] { socket_1.GetPositionForWireConnector(),
-                        playerInteractive.LastRaycastPointPosition });
-            }
-            else
-            {
-                lineRendererOfWire.SetPositions(
-                    new Vector3[] { socket_1.GetPositionForWireConnector(),
-                        socket_2.GetPositionForWireConnector() });
-            }
         }
 
-        /// <summary>
-        /// Метод отключения провода от сокетов
-        /// </summary>
-        internal void DisconnectAbs()
-        {
-            socket_1 = null;
-            socket_2 = null;
-        }
-
-        /// <summary>
-        /// Метод отключения провода от сокета
-        /// </summary>
-        /// <param name="socket"></param>
         internal void DisconnectWire(WireSocketInteractable socket)
         {
-            //Если сокет 1 - это параметр
             if (socket_1.Equals(socket))
             {
                 socket_1 = null;
@@ -102,24 +71,27 @@ namespace OscilloscopeSimulation
                 socket_2 = null;
             }
 
+            if ((socket_1 == null) && (socket_2 == null))
+            {
+                wiresManager.ReleaseWire(this);
+
+                return;
+            }
+
             if (socket_1 == null)
             {
-                //Переназначаем сокет 2 на сокет 1
                 socket_1 = socket_2;
-                //Сокет 2 очищаем
                 socket_2 = null;
             }
+
+            wiresManager.SetActiveWire(this);
         }
 
-        internal void SwapSockets()
+        internal void SwapSocketReferences()
         {
             Extenions<WireSocketInteractable>.Swap(ref socket_1, ref socket_2);
         }
 
-        /// <summary>
-        /// Установка видимости провода
-        /// </summary>
-        /// <param name="visibility"></param>
         internal void SetVisible(bool visibility)
         {
             lineRendererOfWire.enabled = visibility;
@@ -129,20 +101,25 @@ namespace OscilloscopeSimulation
         {
             available = availability;
         }
-        
+
         internal bool IsAvailable()
         {
             return available;
         }
-        
+
         internal WireSocketInteractable GetSocket_1()
         {
             return socket_1;
         }
-        
+
         internal WireSocketInteractable GetSocket_2()
         {
             return socket_2;
+        }
+
+        internal bool IsFullyConnected()
+        {
+            return socket_1 && socket_2;
         }
     }
 }

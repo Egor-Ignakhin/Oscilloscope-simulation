@@ -19,7 +19,6 @@ namespace OscilloscopeSimulation
             {
                 return;
             }
-            //Если у объекта коллайдер является интерактивным
             if (hit.transform.TryGetComponent(out Interactable hitInteractable))
             {
                 //Если нажата левая кнопка мыши

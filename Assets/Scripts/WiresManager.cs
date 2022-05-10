@@ -7,18 +7,14 @@ using UnityEngine;
 namespace OscilloscopeSimulation
 {
     /// <summary>
-    /// Менеджер активов - проводов, соеднияющих сокеты прибора
+    /// Менеджер активов - проводов, соеднияющих сокеты стенда
     /// </summary>
     internal sealed class WiresManager : MonoBehaviour
     {
         private readonly List<Wire> allWires = new List<Wire>();
         private bool allWiresAreVisible = true;
 
-        /// <summary>
-        /// Активный провод - тот провод, 
-        /// что подключен только в 1 сокет, и 2 конец тянется за указателем
-        /// </summary>
-        public Wire ActiveWire { get; private set; }
+        internal Wire ActiveWire { get; private set; }
 
         [SerializeField] private PlayerInteractive playerInteractive;
 
@@ -36,36 +32,27 @@ namespace OscilloscopeSimulation
 
         internal Wire ConnectWire(WireSocketInteractable socket)
         {
-            //Если в данный момент нет активного провода
-            if (!ActiveWire)
+            if (ActiveWire)
             {
-                Wire wire = GetFreeWire();
-
-                //Подключаем свободный провод к сокету
-                wire.InsertWire(socket);
-                //Назначаем активным проводом только что достанный
-                ActiveWire = wire;
-
-                return ActiveWire;
-            }
-            else
-            {
-                //В случае, если уже есть активный провод
-                // Подключаем активный провод к передаваемому аргументом сокету
                 ActiveWire.InsertWire(socket);
 
-                //Создаем и присваиваем буферному проводу ссылку на активный
-                //для того, чтобы оптимально его вернуть
                 Wire bufferWire = ActiveWire;
-
-                //Очищаем активный провод
                 ActiveWire = null;
 
                 return bufferWire;
             }
+            else
+            {
+                Wire wire = FindFreeWire();
+
+                wire.InsertWire(socket);
+                ActiveWire = wire;
+
+                return ActiveWire;
+            }
         }
 
-        private Wire GetFreeWire()
+        private Wire FindFreeWire()
         {
             foreach (var wire in allWires)
             {
@@ -80,18 +67,10 @@ namespace OscilloscopeSimulation
             return null;
         }
 
-        /// <summary>
-        /// Метод полного отключения провода от сокетов
-        /// </summary>
-        /// <param name="wire"></param>
-        internal void DisconnectWireAbs(Wire wire)
+        internal void ReleaseWire(Wire wire)
         {
-            wire.DisconnectAbs();
-
-            // Устанавливаем проводу положительную доступность
             wire.SetAvailability(true);
 
-            //Очищаем активный провод
             ActiveWire = null;
         }
 
@@ -100,10 +79,6 @@ namespace OscilloscopeSimulation
             ActiveWire = wire;
         }
 
-        /// <summary>
-        /// Установка видимости всем проводам на сцене
-        /// </summary>
-        /// <param name="button"></param>
         internal void SetVisibilityToWires()
         {
             allWiresAreVisible = !allWiresAreVisible;

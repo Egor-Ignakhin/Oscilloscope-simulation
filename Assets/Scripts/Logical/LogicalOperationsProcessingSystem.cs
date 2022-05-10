@@ -32,7 +32,8 @@ namespace OscilloscopeSimulation
         protected readonly List<ILogicalValue> aheadLogicalValues = new List<ILogicalValue>();
 
         [SerializeField] protected List<WireSocketInteractable> behindSockets = new List<WireSocketInteractable>();
-        [SerializeField] protected List<LogicalOperationsProcessingSystem> behindLOPS = new List<LogicalOperationsProcessingSystem>();
+        [SerializeField] protected List<LogicalOperationsProcessingSystem> behindLOPS
+            = new List<LogicalOperationsProcessingSystem>();
 
         private void Start()
         {
@@ -57,26 +58,19 @@ namespace OscilloscopeSimulation
             }
         }
 
-        /// <summary>
-        /// В методе каждый кадр происходит пересчет значения из 
-        /// предыдущих лог. носителей выбранным оператором и затем 
-        /// присвоение полученного результата последующему лог. носителю
-        /// </summary>
         protected virtual void LateUpdate()
         {
+            //Перерасчет значения из
+            //предыдущих лог. носителей выбранным оператором
             LogicalValue = OperateBehindLogicalValues(systemOperator);
 
+            //Присвоение полученного результата последующим лог.носителям
             foreach (ILogicalValue alv in aheadLogicalValues)
             {
                 alv.LogicalValue = LogicalValue;
             }
         }
 
-        /// <summary>
-        /// Метод обработки предыдущих логических носителей
-        /// </summary>
-        /// <param name="sysOperator"></param>
-        /// <returns></returns>
         protected bool OperateBehindLogicalValues(Operators sysOperator)
         {
             switch (sysOperator)
@@ -121,16 +115,9 @@ namespace OscilloscopeSimulation
             }
         }
 
-        /// <summary>
-        ///  Метод возвращает правду, если хотя у бы
-        ///  в одного из предыдущих сокетов вставлен провод
-        /// </summary>
-        /// <param name="behindCalledlops"></param>
-        /// <returns></returns>
         internal bool BehindSocketsHasAConnectedWire
             (LogicalOperationsProcessingSystem behindCalledlops = null)
         {
-            //Проверяем у каждого предыдущего сокета провод
             foreach (var bs in behindSockets)
             {
                 if (bs.ConnectedWire)
@@ -142,7 +129,6 @@ namespace OscilloscopeSimulation
             //заполненного поля "предыдущий обработчик"
             foreach (var bs2 in behindSockets)
             {
-                //Если не нашелся обработчик
                 if (bs2.GetBehindLOPS() == null)
                 {
                     continue;
