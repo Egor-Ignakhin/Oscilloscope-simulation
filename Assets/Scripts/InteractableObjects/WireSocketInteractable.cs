@@ -28,6 +28,7 @@ namespace OscilloscopeSimulation.InteractableObjects
         [SerializeField] private Transform wireConnectorSetupPlace;
 
         internal Wire ConnectedWire { get; private set; }
+        internal Wire_V2 ConnectedWire_V2 { get; private set; }
 
         [SerializeField] private WiresManager wiresManager;
 
@@ -36,7 +37,7 @@ namespace OscilloscopeSimulation.InteractableObjects
         [SerializeField] private ToggleSwitchInteractable toggleSwitch;
 
         [SerializeField] private LogicalOperationsProcessingSystem behindLOPS;
-        
+
         [SerializeField] private bool isInvertedSignal;
 
         private void WriteLogicalValueInText()
@@ -73,10 +74,12 @@ namespace OscilloscopeSimulation.InteractableObjects
             if (ConnectedWire)
             {
                 DisconnectWire();
+                DisconnectWire_V2();
             }
             else
             {
                 ConnectWire();
+                ConnectWire_V2();
             }
         }
 
@@ -92,6 +95,26 @@ namespace OscilloscopeSimulation.InteractableObjects
             }
             ConnectedWire.DisconnectWire(this);
             ConnectedWire = null;
+
+            if (HasAToggleSwitch())
+            {
+                return;
+            }
+
+            LogicalValue = false;
+        }
+        private void DisconnectWire_V2()
+        {
+            if (ConnectedWire_V2.GetSocket_2() == this)
+            {
+                ConnectedWire_V2.GetSocket_1().ChangeValueEvent = null;
+            }
+            else
+            {
+                ChangeValueEvent = null;
+            }
+            ConnectedWire_V2.DisconnectWire(this);
+            ConnectedWire_V2 = null;
 
             if (HasAToggleSwitch())
             {
@@ -129,6 +152,37 @@ namespace OscilloscopeSimulation.InteractableObjects
             else
             {
                 ChangeValueEvent += ConnectedWire.
+                    GetSocket_2().OnBehindSocketValueUpdate;
+            }
+        }
+        public void ConnectWire_V2()
+        {
+            ConnectedWire_V2 = wiresManager.ConnectWire_V2(this);
+
+            if (!ConnectedWire_V2.IsFullyConnected())
+            {
+                return;
+            }
+            if (ConnectedWire_V2.GetSocket_2() != this)
+            {
+                return;
+            }
+            if (!HasAToggleSwitch())
+            {
+                LogicalValue = ConnectedWire_V2.GetSocket_1().LogicalValue;
+            }
+            else
+            {
+                ConnectedWire_V2.SwapSocketReferences();
+            }
+            if (ConnectedWire_V2.GetSocket_2() == this)
+            {
+                ConnectedWire_V2.GetSocket_1().
+                    ChangeValueEvent += OnBehindSocketValueUpdate;
+            }
+            else
+            {
+                ChangeValueEvent += ConnectedWire_V2.
                     GetSocket_2().OnBehindSocketValueUpdate;
             }
         }
