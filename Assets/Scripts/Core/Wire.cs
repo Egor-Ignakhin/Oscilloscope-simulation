@@ -1,31 +1,36 @@
+using Obi;
 
 using OscilloscopeSimulation.InteractableObjects;
 
 using UnityEngine;
+
 namespace OscilloscopeSimulation
 {
+
     /// <summary>
-    /// Провод, соединяющий сокеты стенда
+    /// Провод, соединяющий сокеты стенда 3D
     /// </summary>
     internal sealed class Wire : MonoBehaviour
     {
-        [SerializeField] private LineRenderer lineRendererOfWire;
-
+        [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private ObiRope obiRope;
+        [SerializeField] private Transform startWirePoint;
+        [SerializeField] private Transform endWirePoint;
         private WireSocketInteractable socket_1;
         private WireSocketInteractable socket_2;
 
         private PlayerInteractive playerInteractive;
 
         private WiresManager wiresManager;
-        
+
         private bool available = true;
 
         internal void Initialize(PlayerInteractive playerInteractive, WiresManager wiresManager)
         {
-            lineRendererOfWire.positionCount = 2;
-
             this.playerInteractive = playerInteractive;
             this.wiresManager = wiresManager;
+
+            obiRope.AddToSolver();
         }
 
         private void LateUpdate()
@@ -49,17 +54,13 @@ namespace OscilloscopeSimulation
         {
             if (!socket_1)
             {
-                //Перемещаем вершины провода в начало координат
-                lineRendererOfWire.SetPositions
-                    (new Vector3[] { Vector3.zero, Vector3.zero });
-
                 return;
             }
-            lineRendererOfWire.SetPosition(0, socket_1.GetWireConnectorSetupPosition());
-            lineRendererOfWire.SetPosition(1, wiresManager.ActiveWire == this ?
-                playerInteractive.LastRaycastPointPosition :
-                socket_2.GetWireConnectorSetupPosition());
 
+            startWirePoint.position = socket_1.GetWireConnectorSetupPosition();
+            endWirePoint.position = wiresManager.ActiveWire == this ?
+               playerInteractive.LastRaycastPointPosition :
+             socket_2.GetWireConnectorSetupPosition();
         }
 
         internal void DisconnectWire(WireSocketInteractable socket)
@@ -96,7 +97,7 @@ namespace OscilloscopeSimulation
 
         internal void SetVisible(bool visibility)
         {
-            lineRendererOfWire.enabled = visibility;
+            meshRenderer.enabled = visibility;
         }
 
         internal void SetAvailability(bool availability)
