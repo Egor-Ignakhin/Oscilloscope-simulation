@@ -14,7 +14,7 @@ namespace OscilloscopeSimulation
         private readonly List<Wire> allWires = new List<Wire>();
         private bool allWiresAreVisible = true;
         [SerializeField] private Transform wiresParent;
-             
+
         internal Wire ActiveWire { get; private set; }
 
         [SerializeField] private PlayerInteractive playerInteractive;
@@ -29,7 +29,12 @@ namespace OscilloscopeSimulation
                 wire.transform.localScale = Vector3.one;
                 wire.Initialize(playerInteractive, this);
                 allWires.Add(wire);
+                wire.name = $"Wire_{i}";
                 wire.gameObject.SetActive(false);
+
+                WireRenderer wireRenderer = wire.GetWireRenderer();
+                Color randColor = GenerateRandomWireColor();
+                wireRenderer.SetMaterialColor(randColor);
             }
         }
 
@@ -69,7 +74,7 @@ namespace OscilloscopeSimulation
             }
 
             return null;
-        }
+        }       
 
         internal void ReleaseWire(Wire wire)
         {
@@ -88,10 +93,31 @@ namespace OscilloscopeSimulation
         internal void SetVisibilityToWires()
         {
             allWiresAreVisible = !allWiresAreVisible;
-            foreach (var w in allWires)
+            foreach (var wire in allWires)
             {
-                w.SetVisible(allWiresAreVisible);
+                WireRenderer wireRenderer = wire.GetWireRenderer();
+                wireRenderer.SetVisible(allWiresAreVisible);
             }
+        }
+
+        private Color GenerateRandomWireColor()
+        {
+            List<Color> colors = new List<Color>
+            {
+                Color.yellow,
+                Color.blue,
+                Color.green,
+                Color.gray,
+                Color.red
+            };
+            int randIndex = Random.Range(0, colors.Count);
+
+            return colors[randIndex];
+        }
+
+        internal List<Wire> GetWires()
+        {
+            return allWires;
         }
     }
 }

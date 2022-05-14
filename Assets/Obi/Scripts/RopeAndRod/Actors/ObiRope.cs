@@ -349,7 +349,6 @@ namespace Obi
                 elements.Add(e);
             }
         }
-
         public override void RebuildConstraintsFromElements()
         {
             // regenerate constraints from elements:

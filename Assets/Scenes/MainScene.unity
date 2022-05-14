@@ -6133,7 +6133,7 @@ MonoBehaviour:
   material: {fileID: 11400000, guid: 56297c6e785b44eb28e469b62cedc016, type: 2}
   filter: -65535
   m_SourceCollider: {fileID: 223974258}
-  m_DistanceField: {fileID: 0}
+  m_DistanceField: {fileID: 11400000, guid: 908e27a12086caa4fb2e6d60ddbf2af0, type: 2}
 --- !u!1001 &224794091
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19792,6 +19792,7 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -19877,6 +19878,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 963194227}
+  wireInteractiveHand: {fileID: 2800000, guid: 31b038bf020a074498065ed6bbea9435, type: 3}
+  obiSolver: {fileID: 1578137047}
+  wiresManager: {fileID: 89346798}
+  obiParticlePicker: {fileID: 963194230}
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db4318b9b044a420ba02ad5138d542e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  solver: {fileID: 1578137047}
+  radiusScale: 0.1
+  OnParticleAcrossing:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 963194229}
+        m_TargetAssemblyTypeName: OscilloscopeSimulation.PlayerInteractive, Core
+        m_MethodName: OnObiParticleAcross
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnParticlePicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnParticleHeld:
+    m_PersistentCalls:
+      m_Calls: []
+  OnParticleDragged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnParticleReleased:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &967775332
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28943,7 +28989,7 @@ MonoBehaviour:
   m_Backend: 0
   parameters:
     mode: 0
-    interpolation: 0
+    interpolation: 1
     gravity: {x: 0, y: -9.81, z: 0}
     damping: 0
     maxAnisotropy: 3
@@ -28969,10 +29015,10 @@ MonoBehaviour:
     SORFactor: 1
     enabled: 1
   particleCollisionConstraintParameters:
-    evaluationOrder: 0
+    evaluationOrder: 1
     iterations: 1
     SORFactor: 1
-    enabled: 0
+    enabled: 1
   particleFrictionConstraintParameters:
     evaluationOrder: 1
     iterations: 1

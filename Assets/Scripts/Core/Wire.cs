@@ -12,7 +12,7 @@ namespace OscilloscopeSimulation
     /// </summary>
     internal sealed class Wire : MonoBehaviour
     {
-        [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private WireRenderer wireRenderer;
         [SerializeField] private ObiRope obiRope;
         [SerializeField] private Transform startWirePoint;
         [SerializeField] private Transform endWirePoint;
@@ -95,11 +95,6 @@ namespace OscilloscopeSimulation
             Extenions<WireSocketInteractable>.Swap(ref socket_1, ref socket_2);
         }
 
-        internal void SetVisible(bool visibility)
-        {
-            meshRenderer.enabled = visibility;
-        }
-
         internal void SetAvailability(bool availability)
         {
             available = availability;
@@ -123,6 +118,16 @@ namespace OscilloscopeSimulation
         internal bool IsFullyConnected()
         {
             return socket_1 && socket_2;
+        }
+
+        internal WireRenderer GetWireRenderer()
+        {
+            return wireRenderer;
+        }
+
+        internal ObiRope GetObiRope()
+        {
+            return obiRope;
         }
     }
 }
