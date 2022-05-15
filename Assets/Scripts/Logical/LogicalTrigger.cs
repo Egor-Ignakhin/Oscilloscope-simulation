@@ -67,13 +67,13 @@ namespace OscilloscopeSimulation
 
             if (truthTableV == null)
             {
-                throw new Exception("Crash");
+                //throw new Exception("Crash");
             }
-            if (truthTableV == true)
+            else if (truthTableV == true)
             {
                 LogicalValue = true;
             }
-            if (truthTableV == false)
+            else if (truthTableV == false)
             {
                 LogicalValue = false;
             }

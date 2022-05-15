@@ -47,7 +47,7 @@ namespace OscilloscopeSimulation
             else
             {
                 socket_1 = socket;
-            }
+            }            
         }
 
         private void SetupWireVertexPositions()

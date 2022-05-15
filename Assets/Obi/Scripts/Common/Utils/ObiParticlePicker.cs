@@ -29,6 +29,7 @@ namespace Obi
         public float radiusScale = 1;
 
         public ParticlePickUnityEvent OnParticleAcrossing;
+        public ParticlePickUnityEvent OnParticleNone;
         public ParticlePickUnityEvent OnParticlePicked;
         public ParticlePickUnityEvent OnParticleHeld;
         public ParticlePickUnityEvent OnParticleDragged;
@@ -191,6 +192,14 @@ namespace Obi
                 {
                     worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, pickedParticleDepth));
                     OnParticleAcrossing.Invoke(new ParticlePickEventArgs(pickedParticleIndex, worldPosition));
+                }
+            }
+            else
+            {
+                if (OnParticleNone != null)
+                {
+                    worldPosition = Vector3.zero;
+                    OnParticleNone.Invoke(new ParticlePickEventArgs(pickedParticleIndex, worldPosition));
                 }
             }
         }

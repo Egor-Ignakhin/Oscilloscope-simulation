@@ -180,6 +180,7 @@ GameObject:
   - component: {fileID: 5166030180134298815}
   - component: {fileID: 7412394050426738589}
   - component: {fileID: -7024186915757590313}
+  - component: {fileID: -482350032856967940}
   m_Layer: 0
   m_Name: Wire
   m_TagString: Untagged
@@ -437,3 +438,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 5166030180134298813}
+--- !u!114 &-482350032856967940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5166030180134298758}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8b45ebbf86be4df6b0e6cd933812af2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  render: 1
+  shader: {fileID: 4800000, guid: 801733041f66b49e1b3c2101471db877, type: 3}
+  particleColor: {r: 1, g: 1, b: 1, a: 1}
+  radiusScale: 0.5

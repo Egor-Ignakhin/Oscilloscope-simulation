@@ -2560,6 +2560,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wiresParent: {fileID: 1578137045}
   playerInteractive: {fileID: 963194229}
+  obiSolver: {fileID: 0}
 --- !u!1 &89927195
 GameObject:
   m_ObjectHideFlags: 0
@@ -19901,7 +19902,22 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 963194229}
         m_TargetAssemblyTypeName: OscilloscopeSimulation.PlayerInteractive, Core
-        m_MethodName: OnObiParticleAcross
+        m_MethodName: OnWireParticleAcross
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnParticleNone:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 963194229}
+        m_TargetAssemblyTypeName: OscilloscopeSimulation.PlayerInteractive, Core
+        m_MethodName: OnParticleNone
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

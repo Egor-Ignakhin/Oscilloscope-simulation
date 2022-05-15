@@ -20,8 +20,25 @@ namespace OscilloscopeSimulation
         int pickedParticleIndex = -1;
         [SerializeField] private WiresManager wiresManager;
         [SerializeField] private ObiParticlePicker obiParticlePicker;
+        public bool RayIsAcrossingTheParticle
+        {
+            get => rayIsAcrossingTheParticle; set
+            {
+                rayIsAcrossingTheParticle = value;
+                if (rayIsAcrossingTheParticle)
+                {
+                    SetWireInteractiveCursor();
+                }
+                else
+                {
+                    SetDefaultCursor();
+                }
+            }
+        }
+        private bool rayIsAcrossingTheParticle;
+        private Vector3 mousePositionInBehindFrame;
 
-        private void Update()
+        private void LateUpdate()
         {
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             if (!Physics.Raycast(ray, out RaycastHit hit,
@@ -39,52 +56,83 @@ namespace OscilloscopeSimulation
             }
             LastRaycastPointPosition = hit.point;
 
-            if (pickedParticleIndex != -1)
+            if (pickedParticleIndex == -1)
             {
-                if (!Input.GetMouseButton(0))
-                {
-                    obiSolver.invMasses[pickedParticleIndex] = 1;
-                    pickedParticleIndex = -1;
+                return;
+            }
 
-                    return;
-                }
+            if (Input.GetMouseButton(0))
+            {
                 MovePickedParticle();
             }
             else
-                SetDefaultCursor();
+            {
+                obiSolver.invMasses[pickedParticleIndex] = 100000;
+                pickedParticleIndex = -1;
+            }
+            mousePositionInBehindFrame = Input.mousePosition;
         }
 
-        public void SetDefaultCursor()
+        private void SetDefaultCursor()
         {
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         }
 
-        public void OnObiParticleAcross()
+        private void SetWireInteractiveCursor()
         {
+            Cursor.SetCursor(wireInteractiveHand, Vector2.zero, CursorMode.Auto);
+        }
+
+        public void OnWireParticleAcross()
+        {
+            ObiRope wireRope = null;
             foreach (var wire in wiresManager.GetWires())
             {
-                if (wire.GetObiRope().solverIndices.Contains(obiParticlePicker.GetPickedParticleIndex()))
+                wireRope = wire.GetObiRope();
+                if (wireRope.solverIndices.Contains(obiParticlePicker.GetPickedParticleIndex()))
                 {
-                    if (wire.GetSocket_2() == null)
+                    if ((wire.GetSocket_2() == null))
+                    {
                         return;
-
+                    }
                     break;
                 }
             }
 
-            Cursor.SetCursor(wireInteractiveHand, Vector2.zero, CursorMode.Auto);
+            //Сейчас мы должны проверить, является ли выделенная вершмина  - точкой start или end отрезка провода
+            var ppi = obiParticlePicker.GetPickedParticleIndex();
+            var firstParticleElement = wireRope.GetElementAt(0, out float elementMu);
+            var endParticleElement = wireRope.GetElementAt(wireRope.particleCount - 1, out float elementMu2);
+            int firstParticleIndex = firstParticleElement.particle1; // first particle in the rope
+            int endParticleIndex = endParticleElement.particle2;
+            bool particleBelongsToInnerInterval = (ppi != firstParticleIndex) &&
+                (ppi != endParticleIndex);
+
+            if (!particleBelongsToInnerInterval)
+            {
+                return;
+            }
+            RayIsAcrossingTheParticle = true;
 
             if (Input.GetMouseButtonDown(0))
             {
                 pickedParticleIndex = obiParticlePicker.GetPickedParticleIndex();
+                obiSolver.invMasses[pickedParticleIndex] = 0;
+                obiSolver.velocities[pickedParticleIndex] = Vector3.zero;
             }
         }
 
         private void MovePickedParticle()
         {
-            obiSolver.velocities[pickedParticleIndex] = Vector4.zero;
-            obiSolver.invMasses[pickedParticleIndex] = 0;
-            obiSolver.positions[pickedParticleIndex] = LastRaycastPointPosition;
+            //Мы сдвигаем вершину на вектор изменения курсора
+            Vector3 vChange = Input.mousePosition - mousePositionInBehindFrame;
+
+            obiSolver.positions[pickedParticleIndex] += Mathf.Sin(Mathf.PI/2 - Mathf.Deg2Rad * mainCamera.transform.localEulerAngles.x) * Time.deltaTime * new Vector4(vChange.y, 0, -vChange.x, 0);
+        }
+
+        public void OnParticleNone()
+        {
+            RayIsAcrossingTheParticle = false;
         }
     }
 }

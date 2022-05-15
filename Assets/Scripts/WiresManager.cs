@@ -18,6 +18,7 @@ namespace OscilloscopeSimulation
         internal Wire ActiveWire { get; private set; }
 
         [SerializeField] private PlayerInteractive playerInteractive;
+        [SerializeField] private Obi.ObiSolver obiSolver;
 
         private void Start()
         {
@@ -74,7 +75,7 @@ namespace OscilloscopeSimulation
             }
 
             return null;
-        }       
+        }
 
         internal void ReleaseWire(Wire wire)
         {
