@@ -25,7 +25,7 @@ namespace OscilloscopeSimulation
             get => rayIsAcrossingTheParticle; set
             {
                 rayIsAcrossingTheParticle = value;
-                if (rayIsAcrossingTheParticle)
+                if (rayIsAcrossingTheParticle || (pickedParticleIndex != -1))
                 {
                     SetWireInteractiveCursor();
                 }
