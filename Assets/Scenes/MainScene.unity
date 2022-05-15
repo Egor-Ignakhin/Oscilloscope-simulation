@@ -2559,7 +2559,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wiresParent: {fileID: 1578137045}
-  playerInteractive: {fileID: 963194229}
   obiSolver: {fileID: 0}
 --- !u!1 &89927195
 GameObject:
@@ -19881,8 +19880,8 @@ MonoBehaviour:
   mainCamera: {fileID: 963194227}
   wireInteractiveHand: {fileID: 2800000, guid: 31b038bf020a074498065ed6bbea9435, type: 3}
   obiSolver: {fileID: 1578137047}
-  wiresManager: {fileID: 89346798}
   obiParticlePicker: {fileID: 963194230}
+  wiresManager: {fileID: 89346798}
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19899,34 +19898,10 @@ MonoBehaviour:
   radiusScale: 0.1
   OnParticleAcrossing:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 963194229}
-        m_TargetAssemblyTypeName: OscilloscopeSimulation.PlayerInteractive, Core
-        m_MethodName: OnWireParticleAcross
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnParticleNone:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 963194229}
-        m_TargetAssemblyTypeName: OscilloscopeSimulation.PlayerInteractive, Core
-        m_MethodName: OnParticleNone
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnParticlePicked:
     m_PersistentCalls:
       m_Calls: []

@@ -181,6 +181,7 @@ GameObject:
   - component: {fileID: 7412394050426738589}
   - component: {fileID: -7024186915757590313}
   - component: {fileID: -482350032856967940}
+  - component: {fileID: -964613054589131295}
   m_Layer: 0
   m_Name: Wire
   m_TagString: Untagged
@@ -423,6 +424,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wireRenderer: {fileID: -7024186915757590313}
   obiRope: {fileID: 5166030180134298812}
+  wireRope: {fileID: -964613054589131295}
   startWirePoint: {fileID: 5166030178926594264}
   endWirePoint: {fileID: 5166030179819662595}
 --- !u!114 &-7024186915757590313
@@ -454,3 +456,16 @@ MonoBehaviour:
   shader: {fileID: 4800000, guid: 801733041f66b49e1b3c2101471db877, type: 3}
   particleColor: {r: 1, g: 1, b: 1, a: 1}
   radiusScale: 0.5
+--- !u!114 &-964613054589131295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5166030180134298758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d70be332adbd0054a9fe4cc149eb4f43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obiRope: {fileID: 5166030180134298812}

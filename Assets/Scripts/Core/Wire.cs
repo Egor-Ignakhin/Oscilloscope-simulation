@@ -2,6 +2,8 @@ using Obi;
 
 using OscilloscopeSimulation.InteractableObjects;
 
+using System;
+
 using UnityEngine;
 
 namespace OscilloscopeSimulation
@@ -14,20 +16,18 @@ namespace OscilloscopeSimulation
     {
         [SerializeField] private WireRenderer wireRenderer;
         [SerializeField] private ObiRope obiRope;
+        [SerializeField] private WireRope wireRope;
         [SerializeField] private Transform startWirePoint;
         [SerializeField] private Transform endWirePoint;
         private WireSocketInteractable socket_1;
         private WireSocketInteractable socket_2;
 
-        private PlayerInteractive playerInteractive;
-
         private WiresManager wiresManager;
 
         private bool available = true;
 
-        internal void Initialize(PlayerInteractive playerInteractive, WiresManager wiresManager)
+        internal void Initialize(WiresManager wiresManager)
         {
-            this.playerInteractive = playerInteractive;
             this.wiresManager = wiresManager;
 
             obiRope.AddToSolver();
@@ -59,7 +59,7 @@ namespace OscilloscopeSimulation
 
             startWirePoint.position = socket_1.GetWireConnectorSetupPosition();
             endWirePoint.position = wiresManager.ActiveWire == this ?
-               playerInteractive.LastRaycastPointPosition :
+               PlayerInteractive.GetLastRaycastPointPosition() :
              socket_2.GetWireConnectorSetupPosition();
         }
 
@@ -123,6 +123,11 @@ namespace OscilloscopeSimulation
         internal WireRenderer GetWireRenderer()
         {
             return wireRenderer;
+        }
+
+        internal WireRope GetWireRope()
+        {
+            return wireRope;
         }
 
         internal ObiRope GetObiRope()

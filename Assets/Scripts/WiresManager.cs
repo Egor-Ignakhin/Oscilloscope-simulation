@@ -17,7 +17,6 @@ namespace OscilloscopeSimulation
 
         internal Wire ActiveWire { get; private set; }
 
-        [SerializeField] private PlayerInteractive playerInteractive;
         [SerializeField] private Obi.ObiSolver obiSolver;
 
         private void Start()
@@ -28,7 +27,7 @@ namespace OscilloscopeSimulation
             {
                 Wire wire = Instantiate(Resources.Load<Wire>("Wire"), wiresParent);
                 wire.transform.localScale = Vector3.one;
-                wire.Initialize(playerInteractive, this);
+                wire.Initialize(this);
                 allWires.Add(wire);
                 wire.name = $"Wire_{i}";
                 wire.gameObject.SetActive(false);
