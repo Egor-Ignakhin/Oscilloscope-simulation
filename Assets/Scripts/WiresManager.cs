@@ -33,7 +33,8 @@ namespace OscilloscopeSimulation
                 wire.gameObject.SetActive(false);
 
                 WireRenderer wireRenderer = wire.GetWireRenderer();
-                Color randColor = GenerateRandomWireColor();
+                Color randColor = Extenions<WiresManager>.
+                    GenerateRandomColor(Color.yellow, Color.blue, Color.green, Color.gray, Color.red);
                 wireRenderer.SetMaterialColor(randColor);
             }
         }
@@ -98,21 +99,6 @@ namespace OscilloscopeSimulation
                 WireRenderer wireRenderer = wire.GetWireRenderer();
                 wireRenderer.SetVisible(allWiresAreVisible);
             }
-        }
-
-        private Color GenerateRandomWireColor()
-        {
-            List<Color> colors = new List<Color>
-            {
-                Color.yellow,
-                Color.blue,
-                Color.green,
-                Color.gray,
-                Color.red
-            };
-            int randIndex = Random.Range(0, colors.Count);
-
-            return colors[randIndex];
         }
 
         internal List<Wire> GetWires()

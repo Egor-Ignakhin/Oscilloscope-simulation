@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+
+using UnityEngine;
+
 namespace OscilloscopeSimulation
 {
     public sealed class Extenions<T>
@@ -8,6 +12,13 @@ namespace OscilloscopeSimulation
 
             obj1 = obj2;
             obj2 = obj1Buffer;
+        }
+
+        internal static Color GenerateRandomColor(params Color[] colors)
+        {            
+            int randIndex = Random.Range(0, colors.Length);
+
+            return colors[randIndex];
         }
     }
 }
