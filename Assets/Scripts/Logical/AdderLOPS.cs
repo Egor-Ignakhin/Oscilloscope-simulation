@@ -27,14 +27,14 @@ namespace OscilloscopeSimulation
 
             foreach (var sS in sumSockets)
             {
-                sS.LogicalValue = sumLogicalValue;
+                sS.SetLogicalValue(sumLogicalValue);
             }
 
             foreach (var dS in digitSockets)
             {
-                dS.LogicalValue = digitLogicalValue;
+                dS.SetLogicalValue(digitLogicalValue);
             }
-            invertedDigitSocket.LogicalValue = !digitLogicalValue;
+            invertedDigitSocket.SetLogicalValue(!digitLogicalValue);
         }
 
         private string ConvertSumValueFromDegToBin()
@@ -44,7 +44,7 @@ namespace OscilloscopeSimulation
             //Проходимся по пред. сокетами и складываем их значения
             foreach (var behindSocket in behindSockets)
             {
-                sumValue += behindSocket.LogicalValue ? 1 : 0;
+                sumValue += behindSocket.GetLogicalValue() ? 1 : 0;
             }
 
             //Преобразуем полученое десятичное значение в двоичное

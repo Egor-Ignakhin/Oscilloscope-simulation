@@ -7,6 +7,9 @@ namespace OscilloscopeSimulation
 {
     internal sealed class LogicalTrigger : MonoBehaviour, ILogicalValue
     {
+        private bool logicalValue;
+        public Action<bool> ChangeValueEvent { get; set; }
+
         [SerializeField] private GameObject SInGM;
         private ILogicalValue SIn;
 
@@ -37,20 +40,7 @@ namespace OscilloscopeSimulation
                 //Запрет
                 {(true, true, false), null},
                 {(true, true, true), null},
-            };
-
-        public bool LogicalValue
-        {
-            get => logicalValue;
-            set
-            {
-                logicalValue = value;
-
-                ChangeValueEvent?.Invoke(logicalValue);
-            }
-        }
-        private bool logicalValue;
-        public Action<bool> ChangeValueEvent { get; set; }
+            };        
 
         private void Start()
         {
@@ -59,11 +49,12 @@ namespace OscilloscopeSimulation
             QOut = QOutGM.GetComponent<LogicalOperationsProcessingSystem>();
             invertedQOut = invertedQOutGM.GetComponent<LogicalOperationsProcessingSystem>();
 
-            LogicalValue = false;
+
+            logicalValue = false;
         }
         private void Update()
         {
-            bool? truthTableV = truthTable[(SIn.LogicalValue, RIn.LogicalValue, LogicalValue)];
+            bool? truthTableV = truthTable[(SIn.GetLogicalValue(), RIn.GetLogicalValue(), logicalValue)];
 
             if (truthTableV == null)
             {
@@ -71,12 +62,24 @@ namespace OscilloscopeSimulation
             }
             else if (truthTableV == true)
             {
-                LogicalValue = true;
+                logicalValue = true;
             }
             else if (truthTableV == false)
             {
-                LogicalValue = false;
+                logicalValue = false;
             }
+
+            ChangeValueEvent?.Invoke(logicalValue);
+        }
+
+        public bool GetLogicalValue()
+        {
+            return logicalValue;
+        }
+
+        public void SetLogicalValue(bool value)
+        {
+            logicalValue = value;
         }
     }
 }

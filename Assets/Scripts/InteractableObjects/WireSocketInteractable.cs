@@ -10,24 +10,12 @@ namespace OscilloscopeSimulation.InteractableObjects
     /// </summary>
     internal sealed class WireSocketInteractable : Interactable, ILogicalValue
     {
-        public bool LogicalValue
-        {
-            get => logicalValue;
-            set
-            {
-                logicalValue = isInvertedSignal ? !value : value;
+        internal Wire ConnectedWire { get; private set; }
 
-                ChangeValueEvent?.Invoke(logicalValue);
-
-                WriteLogicalValueInText();
-            }
-        }
         private bool logicalValue;
         public Action<bool> ChangeValueEvent { get; set; }
 
         [SerializeField] private Transform wireConnectorSetupPlace;
-
-        internal Wire ConnectedWire { get; private set; }
 
         [SerializeField] private WiresManager wiresManager;
 
@@ -57,13 +45,13 @@ namespace OscilloscopeSimulation.InteractableObjects
             GetComponent<MeshRenderer>().enabled = false;
             //dev
 
-            LogicalValue = false;
+            SetLogicalValue(false);
 
             if (HasAToggleSwitch())
             {
                 toggleSwitch.ChangeValueEvent += (bool v) =>
                 {
-                    LogicalValue = v;
+                    SetLogicalValue(v);
                 };
             }
         }
@@ -98,7 +86,7 @@ namespace OscilloscopeSimulation.InteractableObjects
                 return;
             }
 
-            LogicalValue = false;
+            SetLogicalValue(false);
         }
         public void ConnectWire()
         {
@@ -114,7 +102,7 @@ namespace OscilloscopeSimulation.InteractableObjects
             }
             if (!HasAToggleSwitch())
             {
-                LogicalValue = ConnectedWire.GetSocket_1().LogicalValue;
+                SetLogicalValue(ConnectedWire.GetSocket_1().GetLogicalValue());
             }
             else
             {
@@ -137,9 +125,9 @@ namespace OscilloscopeSimulation.InteractableObjects
             return wireConnectorSetupPlace.position;
         }
 
-        private void OnBehindSocketValueUpdate(bool v)
+        private void OnBehindSocketValueUpdate(bool value)
         {
-            LogicalValue = v;
+            SetLogicalValue(value);
         }
 
         internal LogicalOperationsProcessingSystem GetBehindLOPS()
@@ -150,6 +138,20 @@ namespace OscilloscopeSimulation.InteractableObjects
         private bool HasAToggleSwitch()
         {
             return toggleSwitch;
+        }
+
+        public bool GetLogicalValue()
+        {
+            return logicalValue;
+        }
+
+        public void SetLogicalValue(bool value)
+        {
+            logicalValue = isInvertedSignal ? !value : value;
+
+            ChangeValueEvent?.Invoke(logicalValue);
+
+            WriteLogicalValueInText();
         }
     }
 }

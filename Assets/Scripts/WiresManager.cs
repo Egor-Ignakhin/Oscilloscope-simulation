@@ -12,11 +12,12 @@ namespace OscilloscopeSimulation
     internal sealed class WiresManager : MonoBehaviour
     {
         private readonly List<Wire> allWires = new List<Wire>();
-        private bool allWiresAreVisible = true;
-        [SerializeField] private Transform wiresParent;
 
         internal Wire ActiveWire { get; private set; }
 
+        private bool allWiresAreVisible = true;
+        [SerializeField] private Transform wiresParent;
+        
         [SerializeField] private Obi.ObiSolver obiSolver;
 
         private void Start()

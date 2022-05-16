@@ -5,7 +5,8 @@ using System;
 /// </summary>
 public interface ILogicalValue
 {
-    public bool LogicalValue { get; set; }
+    bool GetLogicalValue();    
+    void SetLogicalValue(bool value);
 
     public Action<bool> ChangeValueEvent { get; set; }
 }

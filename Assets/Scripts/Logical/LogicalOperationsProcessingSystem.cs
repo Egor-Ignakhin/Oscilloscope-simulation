@@ -1,8 +1,8 @@
 
+using OscilloscopeSimulation.InteractableObjects;
+
 using System;
 using System.Collections.Generic;
-
-using OscilloscopeSimulation.InteractableObjects;
 
 using UnityEngine;
 
@@ -10,7 +10,7 @@ namespace OscilloscopeSimulation
 {
     internal class LogicalOperationsProcessingSystem : MonoBehaviour, ILogicalValue
     {
-        public bool LogicalValue { get; set; }
+        private bool logicalValue;
         public Action<bool> ChangeValueEvent { get; set; }
 
         /// <summary>
@@ -28,10 +28,12 @@ namespace OscilloscopeSimulation
         [SerializeField] protected List<GameObject> aheadLogicalValuesGM = new List<GameObject>();
         protected readonly List<ILogicalValue> aheadLogicalHolders = new List<ILogicalValue>();
 
-        [SerializeField] protected List<WireSocketInteractable> behindSockets =
+        [SerializeField]
+        protected List<WireSocketInteractable> behindSockets =
             new List<WireSocketInteractable>();
 
-        [SerializeField] protected List<LogicalOperationsProcessingSystem> behindLOPS
+        [SerializeField]
+        protected List<LogicalOperationsProcessingSystem> behindLOPS
             = new List<LogicalOperationsProcessingSystem>();
 
         private void Start()
@@ -59,11 +61,11 @@ namespace OscilloscopeSimulation
 
         protected virtual void LateUpdate()
         {
-            LogicalValue = OperateBehindLogicalValues(systemOperator);
+            logicalValue = OperateBehindLogicalValues(systemOperator);
 
             foreach (ILogicalValue aheadLogicalHolder in aheadLogicalHolders)
             {
-                aheadLogicalHolder.LogicalValue = LogicalValue;
+                aheadLogicalHolder.SetLogicalValue(logicalValue);
             }
         }
 
@@ -75,7 +77,7 @@ namespace OscilloscopeSimulation
                     {
                         foreach (ILogicalValue blv in behindLogicalHolders)
                         {
-                            if (!blv.LogicalValue)
+                            if (!blv.GetLogicalValue())
                             {
                                 return false;
                             }
@@ -87,7 +89,7 @@ namespace OscilloscopeSimulation
                     {
                         foreach (ILogicalValue blv in behindLogicalHolders)
                         {
-                            if (blv.LogicalValue)
+                            if (blv.GetLogicalValue())
                             {
                                 return true;
                             }
@@ -107,6 +109,16 @@ namespace OscilloscopeSimulation
                         throw new Exception("");
                     }
             }
+        }
+
+        public bool GetLogicalValue()
+        {
+            return logicalValue;
+        }
+
+        public void SetLogicalValue(bool value)
+        {
+            logicalValue = value;
         }
     }
 }

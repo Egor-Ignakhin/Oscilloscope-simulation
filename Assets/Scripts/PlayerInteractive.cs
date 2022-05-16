@@ -9,6 +9,9 @@ namespace OscilloscopeSimulation
     /// </summary>
     internal sealed class PlayerInteractive : MonoBehaviour
     {
+        private static Vector3 lastRaycastPointPosition;
+        private static Vector3 mousePositionInBehindFrame;
+
         [SerializeField] private Camera mainCamera;
 
         [SerializeField] private Texture2D wireInteractiveCursor;
@@ -16,10 +19,7 @@ namespace OscilloscopeSimulation
         [SerializeField] private ObiSolver obiSolver;
         [SerializeField] private ObiParticlePicker obiParticlePicker;
 
-        [SerializeField] private WiresManager wiresManager;
-
-        private static Vector3 lastRaycastPointPosition;
-        private static Vector3 mousePositionInBehindFrame;        
+        [SerializeField] private WiresManager wiresManager;        
 
         private InteractiveWiredParticleMotionOperator wireParticlesMover;
 

@@ -19878,7 +19878,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 963194227}
-  wireInteractiveHand: {fileID: 2800000, guid: 31b038bf020a074498065ed6bbea9435, type: 3}
+  wireInteractiveCursor: {fileID: 0}
   obiSolver: {fileID: 1578137047}
   obiParticlePicker: {fileID: 963194230}
   wiresManager: {fileID: 89346798}

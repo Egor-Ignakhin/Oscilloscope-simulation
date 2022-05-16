@@ -11,12 +11,12 @@ namespace OscilloscopeSimulation
     {
         private readonly ObiSolver solver;
 
-        private int pickedParticleIndex = -1;
-        private bool RayIsAcrossingTheParticle;
-
         private readonly WiresManager wiresManager;
 
         private readonly Texture2D wireInteractiveCursor;
+
+        private int pickedParticleIndex = -1;
+        private bool RayIsAcrossingTheParticle;        
 
         public InteractiveWiredParticleMotionOperator(ObiSolver solver, ObiParticlePicker particlePicker,
             WiresManager wiresManager, Texture2D wireInteractiveCursor)

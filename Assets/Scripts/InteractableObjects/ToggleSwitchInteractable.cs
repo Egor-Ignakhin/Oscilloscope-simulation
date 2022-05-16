@@ -9,7 +9,7 @@ namespace OscilloscopeSimulation.InteractableObjects
     /// </summary>
     internal sealed class ToggleSwitchInteractable : Interactable, ILogicalValue
     {
-        public bool LogicalValue { get; set; } = false;
+        private bool logicalValue = false;
         public Action<bool> ChangeValueEvent { get; set; }
 
         [SerializeField] private Vector3 angleOfRotationDuringOperation;
@@ -22,18 +22,28 @@ namespace OscilloscopeSimulation.InteractableObjects
 
         internal override void Interact()
         {
-            Switch(!LogicalValue);
+            Switch(!logicalValue);
         }
 
         private void Switch(bool state)
         {
-            LogicalValue = state;
+            logicalValue = state;
 
             //Поворачиваем тумблер в зависимости от его состояния
-            transform.localEulerAngles = LogicalValue ?
+            transform.localEulerAngles = logicalValue ?
                 angleOfRotationDuringOperation : angleOfRotationDuringRest;
 
-            ChangeValueEvent?.Invoke(LogicalValue);
+            ChangeValueEvent?.Invoke(logicalValue);
+        }
+
+        bool ILogicalValue.GetLogicalValue()
+        {
+            return logicalValue;
+        }
+
+        public void SetLogicalValue(bool value)
+        {
+            logicalValue = value;
         }
     }
 }
