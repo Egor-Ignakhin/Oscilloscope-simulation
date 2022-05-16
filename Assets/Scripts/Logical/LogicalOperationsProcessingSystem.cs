@@ -13,14 +13,8 @@ namespace OscilloscopeSimulation
         private bool logicalValue;
         public Action<bool> ChangeValueEvent { get; set; }
 
-        /// <summary>
-        /// Типы операций, которые может осуществлять система
-        /// </summary>
-        protected enum Operators { And, Or, NOR, NAND, Add }
-        /// <summary>
-        /// TODO: рефакторинг
-        /// </summary>
-        [SerializeField] protected Operators systemOperator;
+        protected enum Operations { And, Or, NOR, NAND, Add }
+        [SerializeField] protected Operations selectedOperator;
 
         [SerializeField] private List<GameObject> behindLogicalValuesGM = new List<GameObject>();
         private readonly List<ILogicalValue> behindLogicalHolders = new List<ILogicalValue>();
@@ -61,7 +55,7 @@ namespace OscilloscopeSimulation
 
         protected virtual void LateUpdate()
         {
-            logicalValue = OperateBehindLogicalValues(systemOperator);
+            logicalValue = OperateBehindLogicalValues(selectedOperator);
 
             foreach (ILogicalValue aheadLogicalHolder in aheadLogicalHolders)
             {
@@ -69,11 +63,11 @@ namespace OscilloscopeSimulation
             }
         }
 
-        protected bool OperateBehindLogicalValues(Operators sysOperator)
+        protected bool OperateBehindLogicalValues(Operations sOperator)
         {
-            switch (sysOperator)
+            switch (sOperator)
             {
-                case Operators.And:
+                case Operations.And:
                     {
                         foreach (ILogicalValue blv in behindLogicalHolders)
                         {
@@ -85,7 +79,7 @@ namespace OscilloscopeSimulation
                         return true;
                     }
 
-                case Operators.Or:
+                case Operations.Or:
                     {
                         foreach (ILogicalValue blv in behindLogicalHolders)
                         {
@@ -96,13 +90,13 @@ namespace OscilloscopeSimulation
                         }
                         return false;
                     }
-                case Operators.NOR:
+                case Operations.NOR:
                     {
-                        return !OperateBehindLogicalValues(Operators.Or);
+                        return !OperateBehindLogicalValues(Operations.Or);
                     }
-                case Operators.NAND:
+                case Operations.NAND:
                     {
-                        return !OperateBehindLogicalValues(Operators.And);
+                        return !OperateBehindLogicalValues(Operations.And);
                     }
                 default:
                     {
@@ -115,7 +109,6 @@ namespace OscilloscopeSimulation
         {
             return logicalValue;
         }
-
         public void SetLogicalValue(bool value)
         {
             logicalValue = value;

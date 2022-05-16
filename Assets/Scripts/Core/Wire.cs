@@ -47,7 +47,9 @@ namespace OscilloscopeSimulation
             else
             {
                 socket_1 = socket;
-            }            
+            }
+
+            gameObject.SetActive(true);
         }
 
         private void SetupWireVertexPositions()
@@ -58,7 +60,7 @@ namespace OscilloscopeSimulation
             }
 
             startWirePoint.position = socket_1.GetWireConnectorSetupPosition();
-            endWirePoint.position = wiresManager.ActiveWire == this ?
+            endWirePoint.position = wiresManager.EqualsWithActiveWire(this) ?
                PlayerInteractive.GetLastRaycastPointPosition() :
              socket_2.GetWireConnectorSetupPosition();
         }
@@ -98,6 +100,8 @@ namespace OscilloscopeSimulation
         internal void SetAvailability(bool availability)
         {
             available = availability;
+
+            gameObject.SetActive(false);
         }
 
         internal bool IsAvailable()

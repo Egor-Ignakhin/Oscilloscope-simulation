@@ -14,5 +14,10 @@ namespace OscilloscopeSimulation
         {
             meshRenderer.material.color = color;
         }
+
+        internal bool IsVisible()
+        {
+            return meshRenderer.enabled;
+        }
     }
 }
