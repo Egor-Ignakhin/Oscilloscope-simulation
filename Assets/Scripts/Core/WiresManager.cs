@@ -16,8 +16,8 @@ namespace OscilloscopeSimulation
 
         private void Start()
         {
-            WiresBuilder wiresBuilder = new WiresBuilder();
-            List<Wire> wires = wiresBuilder.Build(wiresInfo.GetWiresParent(), this, 100);
+            WiresBuilder wiresBuilder = new WiresBuilder(wiresInfo.GetWiresParent(), this);
+            List<Wire> wires = wiresBuilder.Build(100);
             wiresInfo.SetWires(wires);
         }
 
