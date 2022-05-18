@@ -5,15 +5,17 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-namespace OscilloscopeSimulation
+namespace OscilloscopeSimulation.Logical.LOPS
 {
     //Сумматор - обработчик
     internal sealed class AdderLOPS : LogicalOperationsProcessingSystem
     {
-        [SerializeField] private List<WireSocketInteractable> sumSockets =
+        [SerializeField]
+        private List<WireSocketInteractable> sumSockets =
             new List<WireSocketInteractable>();
 
-        [SerializeField] private List<WireSocketInteractable> digitSockets =
+        [SerializeField]
+        private List<WireSocketInteractable> digitSockets =
             new List<WireSocketInteractable>();
 
         [SerializeField] private WireSocketInteractable invertedDigitSocket;
@@ -84,6 +86,11 @@ namespace OscilloscopeSimulation
                 }
             }
             return digitLogicalValue;
+        }
+
+        protected override bool OperateBehindLogicalValues()
+        {
+            throw new NotImplementedException();
         }
     }
 }

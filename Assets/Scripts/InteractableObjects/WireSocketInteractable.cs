@@ -1,4 +1,6 @@
 
+using OscilloscopeSimulation.Logical.LOPS;
+
 using System;
 
 using UnityEngine;

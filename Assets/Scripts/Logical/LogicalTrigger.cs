@@ -1,3 +1,5 @@
+using OscilloscopeSimulation.Logical.LOPS;
+
 using System;
 using System.Collections.Generic;
 
@@ -58,7 +60,6 @@ namespace OscilloscopeSimulation
 
             if (truthTableV == null)
             {
-                //throw new Exception("Crash");
             }
             else if (truthTableV == true)
             {
