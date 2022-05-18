@@ -70,17 +70,17 @@ namespace OscilloscopeSimulation.InteractableObjects
             }
         }
 
-        private void DisconnectWire()
+        internal void DisconnectWire()
         {
-            if (ConnectedWire.GetSocket_2() == this)
+            if (ConnectedWire.GetSocketEnd() == this)
             {
-                ConnectedWire.GetSocket_1().ChangeValueEvent = null;
+                ConnectedWire.GetSocketStart().ChangeValueEvent = null;
             }
             else
             {
                 ChangeValueEvent = null;
             }
-            ConnectedWire.DisconnectWire(this);
+            ConnectedWire.DisconnectWireFromSocket(this);
             ConnectedWire = null;
 
             if (HasAToggleSwitch())
@@ -98,27 +98,27 @@ namespace OscilloscopeSimulation.InteractableObjects
             {
                 return;
             }
-            if (ConnectedWire.GetSocket_2() != this)
+            if (ConnectedWire.GetSocketEnd() != this)
             {
                 return;
             }
             if (!HasAToggleSwitch())
             {
-                SetLogicalValue(ConnectedWire.GetSocket_1().GetLogicalValue());
+                SetLogicalValue(ConnectedWire.GetSocketStart().GetLogicalValue());
             }
             else
             {
                 ConnectedWire.SwapSocketReferences();
             }
-            if (ConnectedWire.GetSocket_2() == this)
+            if (ConnectedWire.GetSocketEnd() == this)
             {
-                ConnectedWire.GetSocket_1().
+                ConnectedWire.GetSocketStart().
                     ChangeValueEvent += OnBehindSocketValueUpdate;
             }
             else
             {
                 ChangeValueEvent += ConnectedWire.
-                    GetSocket_2().OnBehindSocketValueUpdate;
+                    GetSocketEnd().OnBehindSocketValueUpdate;
             }
         }
 

@@ -4,14 +4,23 @@ using UnityEngine;
 
 namespace OscilloscopeSimulation
 {
-    internal sealed class WireRope : MonoBehaviour
+    [System.Serializable]
+    internal sealed class WireRope
     {
         [SerializeField] private Obi.ObiRope obiRope;
 
+        internal void Initialize()
+        {
+            obiRope.AddToSolver();
+        }
+
         internal bool ContainsSolverIndices(int particleIndex)
         {
+            if (obiRope.solverIndices == null)
+            {
+                return false;
+            }
             return obiRope.solverIndices.Contains(particleIndex);
-
         }
 
         private bool ParticleBelongToInnerInterval(int particleIndex)

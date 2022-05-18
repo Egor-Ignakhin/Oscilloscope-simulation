@@ -16,7 +16,8 @@ namespace OscilloscopeSimulation
         private readonly Texture2D wireInteractiveCursor;
 
         private int pickedParticleIndex = -1;
-        private bool RayIsAcrossingTheParticle;        
+        private int particleIndexUnderCursor = -1;
+        private bool doesTheBeamIntersectTheParticle;
 
         public InteractiveWiredParticleMotionOperator(ObiSolver solver, ObiParticlePicker particlePicker,
             WiresManager wiresManager, Texture2D wireInteractiveCursor)
@@ -56,14 +57,16 @@ namespace OscilloscopeSimulation
 
         private void OnWireParticleAcrossing(ObiParticlePicker.ParticlePickEventArgs eventArgs)
         {
-            if (!CanInteractWithWire(eventArgs))
+            particleIndexUnderCursor = eventArgs.particleIndex;
+
+            if (!CanInteractWithWire())
                 return;
 
             SetRayIsAcrossingTheParticle(true);
 
             if (Input.GetMouseButtonDown(0))
             {
-                GrabTheParticle(eventArgs);
+                GrabTheParticle();
             }
         }
         private void OnParticleNone(ObiParticlePicker.ParticlePickEventArgs eventArgs)
@@ -71,43 +74,39 @@ namespace OscilloscopeSimulation
             SetRayIsAcrossingTheParticle(false);
         }
 
-        private bool CanInteractWithWire(ObiParticlePicker.ParticlePickEventArgs eventArgs)
+        private bool CanInteractWithWire()
         {
             foreach (var wire in wiresManager.GetWires())
             {
                 WireRope wireRope = wire.GetWireRope();
-                int ppi = eventArgs.particleIndex;
 
-                if (!wireRope.ContainsSolverIndices(ppi))
+                if (wireRope.ContainsSolverIndices(particleIndexUnderCursor))
                 {
-                    continue;
+                    if (!wire.IsFullyConnected())
+                    {
+                        break;
+                    }
+                    if (wireRope.PossibleToMoveTheParticle(particleIndexUnderCursor))
+                    {
+                        return true;
+                    }
+                    break;
                 }
-
-                if (wire.GetSocket_2() == null)
-                {
-                    return false;
-                }
-
-                if (!wireRope.PossibleToMoveTheParticle(ppi))
-                {
-                    return false;
-                }
-
-                break;
             }
-            return true;
+
+            return false;
         }
 
-        private void GrabTheParticle(ObiParticlePicker.ParticlePickEventArgs eventArgs)
+        private void GrabTheParticle()
         {
-            pickedParticleIndex = eventArgs.particleIndex;
+            pickedParticleIndex = particleIndexUnderCursor;
             solver.invMasses[pickedParticleIndex] = 0;
             solver.velocities[pickedParticleIndex] = Vector3.zero;
         }
 
         private void SetRayIsAcrossingTheParticle(bool value)
-        {                       
-            RayIsAcrossingTheParticle = value;
+        {
+            doesTheBeamIntersectTheParticle = value;
 
             SetCursorType();
         }
@@ -116,12 +115,22 @@ namespace OscilloscopeSimulation
         {
             Texture2D cursorTexture = null;
 
-            if (RayIsAcrossingTheParticle || (pickedParticleIndex != -1))
+            if (doesTheBeamIntersectTheParticle || (pickedParticleIndex != -1))
             {
                 cursorTexture = wireInteractiveCursor;
             }
 
             Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.Auto);
+        }
+
+        internal bool DoesTheBeamIntersectTheParticle()
+        {
+            return doesTheBeamIntersectTheParticle;
+        }
+
+        internal int GetParticleIndexUnderCursor()
+        {
+            return particleIndexUnderCursor;
         }
     }
 }

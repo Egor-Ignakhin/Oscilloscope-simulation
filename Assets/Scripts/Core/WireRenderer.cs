@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace OscilloscopeSimulation
 {
-    internal sealed class WireRenderer : MonoBehaviour
+    [System.Serializable]
+    internal sealed class WireRenderer
     {
         [SerializeField] private MeshRenderer meshRenderer;
         internal void SetVisible(bool visibility)

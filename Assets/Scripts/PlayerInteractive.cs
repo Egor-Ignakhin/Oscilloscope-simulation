@@ -1,4 +1,3 @@
-
 using Obi;
 
 using UnityEngine;
@@ -19,22 +18,27 @@ namespace OscilloscopeSimulation
         [SerializeField] private ObiSolver obiSolver;
         [SerializeField] private ObiParticlePicker obiParticlePicker;
 
-        [SerializeField] private WiresManager wiresManager;        
+        [SerializeField] private WiresManager wiresManager;
 
-        private InteractiveWiredParticleMotionOperator wireParticlesMover;
+        private InteractiveWiredParticleMotionOperator interactiveWiresParticleMotionOperator;
 
         private void Start()
         {
-            wireParticlesMover = new InteractiveWiredParticleMotionOperator(obiSolver, obiParticlePicker, wiresManager, wireInteractiveCursor);            
+            interactiveWiresParticleMotionOperator = new InteractiveWiredParticleMotionOperator(obiSolver, obiParticlePicker, wiresManager, wireInteractiveCursor);
         }
 
         private void LateUpdate()
         {
             ThrowRayFromMouse();
 
-            wireParticlesMover.Update();
-            
+            interactiveWiresParticleMotionOperator.Update();
+
             mousePositionInBehindFrame = Input.mousePosition;
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                DeleteWireIfPossible();
+            }
         }
 
         private void ThrowRayFromMouse()
@@ -54,6 +58,38 @@ namespace OscilloscopeSimulation
                 }
             }
             lastRaycastPointPosition = hit.point;
+        }
+
+        private void DeleteWireIfPossible()
+        {
+            if (HasWireUnderCursor())
+            {
+                DeleteWireIfItIsUnderCursor();
+            }
+            else if (wiresManager.HasActiveWire())
+            {
+                wiresManager.DeleteActiveWire();
+            }
+        }
+
+        private void DeleteWireIfItIsUnderCursor()
+        {
+            if (HasWireUnderCursor())
+            {
+                DeleteWireUnderCursor();
+            }
+        }
+
+        private bool HasWireUnderCursor()
+        {
+            return interactiveWiresParticleMotionOperator.DoesTheBeamIntersectTheParticle();
+        }
+
+        private void DeleteWireUnderCursor()
+        {
+            int particleIndexUnderCursor = interactiveWiresParticleMotionOperator.GetParticleIndexUnderCursor();
+            Wire wire = wiresManager.GetWireByParticleIndex(particleIndexUnderCursor);
+            wire.DeleteWire();
         }
 
         internal static Vector3 GetLastRaycastPointPosition()

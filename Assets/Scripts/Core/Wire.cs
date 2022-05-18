@@ -1,8 +1,4 @@
-using Obi;
-
 using OscilloscopeSimulation.InteractableObjects;
-
-using System;
 
 using UnityEngine;
 
@@ -15,22 +11,21 @@ namespace OscilloscopeSimulation
     internal sealed class Wire : MonoBehaviour
     {
         [SerializeField] private WireRenderer wireRenderer;
-        [SerializeField] private ObiRope obiRope;
         [SerializeField] private WireRope wireRope;
         [SerializeField] private Transform startWirePoint;
         [SerializeField] private Transform endWirePoint;
-        private WireSocketInteractable socket_1;
-        private WireSocketInteractable socket_2;
+        private WireSocketInteractable socketStart;
+        private WireSocketInteractable socketEnd;
 
         private WiresManager wiresManager;
 
-        private bool available = true;
+        private bool isAvailableToUse = true;
 
         internal void Initialize(WiresManager wiresManager)
         {
             this.wiresManager = wiresManager;
 
-            obiRope.AddToSolver();
+            wireRope.Initialize();
         }
 
         private void LateUpdate()
@@ -40,13 +35,13 @@ namespace OscilloscopeSimulation
 
         internal void InsertWire(WireSocketInteractable socket)
         {
-            if (socket_1)
+            if (socketStart)
             {
-                socket_2 = socket;
+                socketEnd = socket;
             }
             else
             {
-                socket_1 = socket;
+                socketStart = socket;
             }
 
             gameObject.SetActive(true);
@@ -54,74 +49,90 @@ namespace OscilloscopeSimulation
 
         private void SetupWireVertexPositions()
         {
-            if (!socket_1)
+            if (!socketStart)
             {
                 return;
             }
 
-            startWirePoint.position = socket_1.GetWireConnectorSetupPosition();
+            startWirePoint.position = socketStart.GetWireConnectorSetupPosition();
             endWirePoint.position = wiresManager.EqualsWithActiveWire(this) ?
                PlayerInteractive.GetLastRaycastPointPosition() :
-             socket_2.GetWireConnectorSetupPosition();
+             socketEnd.GetWireConnectorSetupPosition();
         }
 
-        internal void DisconnectWire(WireSocketInteractable socket)
+        internal void DisconnectWireFromSocket(WireSocketInteractable socket)
         {
-            if (socket_1.Equals(socket))
+            if (socketStart.Equals(socket))
             {
-                socket_1 = null;
+                socketStart = null;
             }
             else
             {
-                socket_2 = null;
+                socketEnd = null;
             }
 
-            if ((socket_1 == null) && (socket_2 == null))
+            if ((socketStart == null) && (socketEnd == null))
             {
                 wiresManager.ReleaseWire(this);
 
                 return;
             }
 
-            if (socket_1 == null)
+            if (socketStart == null)
             {
-                socket_1 = socket_2;
-                socket_2 = null;
+                socketStart = socketEnd;
+                socketEnd = null;
             }
 
             wiresManager.SetActiveWire(this);
         }
 
-        internal void SwapSocketReferences()
+        internal void DeleteWire()
         {
-            Extenions<WireSocketInteractable>.Swap(ref socket_1, ref socket_2);
+            if (socketEnd != null)
+            {
+                socketEnd.DisconnectWire();
+                socketEnd = null;
+            }
+            if (socketStart != null)
+            {
+                socketStart.DisconnectWire();
+                socketStart = null;
+            }
+
+            wiresManager.ReleaseWire(this);
         }
 
-        internal void SetAvailability(bool availability)
+        internal void SwapSocketReferences()
         {
-            available = availability;
+            Extenions<WireSocketInteractable>.Swap(ref socketStart, ref socketEnd);
+        }
+
+        internal void SetUsageAvailability(bool availability)
+        {
+            isAvailableToUse = availability;
 
             gameObject.SetActive(false);
         }
 
-        internal bool IsAvailable()
+        internal bool IsAvailableToUse()
         {
-            return available;
+            return isAvailableToUse;
         }
 
-        internal WireSocketInteractable GetSocket_1()
+        internal WireSocketInteractable GetSocketStart()
         {
-            return socket_1;
+            return socketStart;
         }
 
-        internal WireSocketInteractable GetSocket_2()
+        internal WireSocketInteractable GetSocketEnd()
         {
-            return socket_2;
+            return socketEnd;
         }
 
         internal bool IsFullyConnected()
         {
-            return socket_1 && socket_2;
+            return socketStart && socketEnd;
         }
 
         internal WireRenderer GetWireRenderer()
@@ -132,11 +143,6 @@ namespace OscilloscopeSimulation
         internal WireRope GetWireRope()
         {
             return wireRope;
-        }
-
-        internal ObiRope GetObiRope()
-        {
-            return obiRope;
         }
     }
 }

@@ -44,13 +44,13 @@ namespace OscilloscopeSimulation
 
         private Wire FindFreeWire()
         {
-            foreach (var wire_V2 in wiresInfo.GetWires())
+            foreach (var wire in wiresInfo.GetWires())
             {
-                if (wire_V2.IsAvailable())
+                if (wire.IsAvailableToUse())
                 {
-                    wire_V2.SetAvailability(false);
+                    wire.SetUsageAvailability(false);
 
-                    return wire_V2;
+                    return wire;
                 }
             }
 
@@ -59,11 +59,15 @@ namespace OscilloscopeSimulation
 
         internal void ReleaseWire(Wire wire)
         {
-            wire.SetAvailability(true);
+            wire.SetUsageAvailability(true);
 
             wiresInfo.SetActiveWire(null);
         }
 
+        internal bool HasActiveWire()
+        {
+            return wiresInfo.GetActiveWire() != null;
+        }
         internal void SetActiveWire(Wire wire)
         {
             wiresInfo.SetActiveWire(wire);
@@ -86,6 +90,30 @@ namespace OscilloscopeSimulation
         internal bool EqualsWithActiveWire(Wire wire)
         {
             return wiresInfo.GetActiveWire() == wire;
+        }
+
+        internal Wire GetWireByParticleIndex(int index)
+        {
+            var wires = wiresInfo.GetWires();            
+            foreach(var wire in wires)
+            {
+                WireRope wireRope = wire.GetWireRope();
+                if (!wireRope.ContainsSolverIndices(index))
+                {
+                    continue;
+                }
+
+                return wire;
+            }
+
+            return null;
+        }
+
+        internal void DeleteActiveWire()
+        {
+            Wire activeWire = wiresInfo.GetActiveWire();
+            activeWire.DeleteWire();
+            wiresInfo.SetActiveWire(null);
         }
     }
 }
