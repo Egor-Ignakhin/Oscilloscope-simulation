@@ -422,7 +422,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wireRenderer:
     meshRenderer: {fileID: 5166030180134298813}
-  obiRope: {fileID: 5166030180134298812}
   wireRope:
     obiRope: {fileID: 5166030180134298812}
   startWirePoint: {fileID: 5166030178926594264}

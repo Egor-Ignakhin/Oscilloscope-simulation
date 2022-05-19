@@ -27,7 +27,7 @@ namespace OscilloscopeSimulation
             this.wireInteractiveCursor = wireInteractiveCursor;
 
             particlePicker.OnParticleAcrossing.AddListener(OnWireParticleAcrossing);
-            particlePicker.OnParticleNone.AddListener(OnParticleNone);
+            particlePicker.OnParticleNone.AddListener(OnParticleNone);            
         }
 
         internal void Update()
