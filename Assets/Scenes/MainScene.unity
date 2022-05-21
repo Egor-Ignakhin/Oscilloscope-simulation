@@ -30337,7 +30337,7 @@ MonoBehaviour:
   bendingConstraintParameters:
     evaluationOrder: 1
     iterations: 1
-    SORFactor: 0.5
+    SORFactor: 0.75
     enabled: 1
   particleCollisionConstraintParameters:
     evaluationOrder: 1
