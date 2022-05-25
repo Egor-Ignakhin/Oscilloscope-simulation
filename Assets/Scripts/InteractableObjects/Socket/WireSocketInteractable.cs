@@ -1,6 +1,3 @@
-
-using OscilloscopeSimulation.Logical.LOPS;
-
 using System;
 
 using UnityEngine;
@@ -8,7 +5,7 @@ using UnityEngine;
 namespace OscilloscopeSimulation.InteractableObjects
 {
     /// <summary>
-    /// Сокет для подключения провода
+    /// Socket for wire connection
     /// </summary>
     internal sealed class WireSocketInteractable : Interactable, ILogicalValue
     {
@@ -21,41 +18,34 @@ namespace OscilloscopeSimulation.InteractableObjects
 
         [SerializeField] private WiresManager wiresManager;
 
-        [SerializeField] private TMPro.TextMeshPro valueText;
+        [SerializeField] private SocketText socketText;
 
         [SerializeField] private ToggleSwitchInteractable toggleSwitch;
 
-        [SerializeField] private LogicalOperationsProcessingSystem behindLOPS;
-
         [SerializeField] private bool isInvertedSignal;
+
+        [SerializeField] private bool itsOutSocket;
 
         private void WriteLogicalValueInText()
         {
-            if (HasAToggleSwitch() || ConnectedWire || behindLOPS)
-            {
-                valueText.SetText(logicalValue ? "1" : "0");
-            }
-            else
-            {
-                valueText.SetText("");
-            }
+            socketText.Write(logicalValue ? "1" : "0");
         }
 
         private void Start()
         {
-            //dev
             GetComponent<MeshRenderer>().enabled = false;
-            //dev
 
             SetLogicalValue(false);
 
-            if (HasAToggleSwitch())
+            if (toggleSwitch)
             {
                 toggleSwitch.ChangeValueEvent += (bool v) =>
                 {
                     SetLogicalValue(v);
                 };
             }
+
+            socketText.Initialize(itsOutSocket || toggleSwitch);
         }
 
         internal override void Interact()
@@ -83,7 +73,7 @@ namespace OscilloscopeSimulation.InteractableObjects
             ConnectedWire.DisconnectWireFromSocket(this);
             ConnectedWire = null;
 
-            if (HasAToggleSwitch())
+            if (toggleSwitch)
             {
                 return;
             }
@@ -102,13 +92,13 @@ namespace OscilloscopeSimulation.InteractableObjects
             {
                 return;
             }
-            if (!HasAToggleSwitch())
+            if (toggleSwitch)
             {
-                SetLogicalValue(ConnectedWire.GetSocketStart().GetLogicalValue());
+                ConnectedWire.SwapSocketReferences();
             }
             else
             {
-                ConnectedWire.SwapSocketReferences();
+                SetLogicalValue(ConnectedWire.GetSocketStart().GetLogicalValue());
             }
             if (ConnectedWire.GetSocketEnd() == this)
             {
@@ -132,27 +122,16 @@ namespace OscilloscopeSimulation.InteractableObjects
             SetLogicalValue(value);
         }
 
-        internal LogicalOperationsProcessingSystem GetBehindLOPS()
-        {
-            return behindLOPS;
-        }
-
-        private bool HasAToggleSwitch()
-        {
-            return toggleSwitch;
-        }
-
         public bool GetLogicalValue()
         {
             return logicalValue;
         }
-
         public void SetLogicalValue(bool value)
         {
             logicalValue = isInvertedSignal ? !value : value;
 
             ChangeValueEvent?.Invoke(logicalValue);
-
+            
             WriteLogicalValueInText();
         }
     }
