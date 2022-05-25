@@ -1,7 +1,8 @@
 using Obi;
 
 using UnityEngine;
-namespace OscilloscopeSimulation
+
+namespace OscilloscopeSimulation.Player
 {
     /// <summary>
     /// Оператор взаимодействия пользовательского ввода
@@ -20,18 +21,30 @@ namespace OscilloscopeSimulation
 
         [SerializeField] private WiresManager wiresManager;
 
-        private InteractiveWiredParticleMotionOperator interactiveWiresParticleMotionOperator;
+        private WiredParticleMotionOperator wiresParticleMotionOperator;
+
+        internal enum WireInteractiveModes
+        {
+            Inserting,
+            Moving
+        }
+        private WireInteractiveModes mode;
 
         private void Start()
         {
-            interactiveWiresParticleMotionOperator = new InteractiveWiredParticleMotionOperator(obiSolver, obiParticlePicker, wiresManager, wireInteractiveCursor);
+            wiresParticleMotionOperator = new WiredParticleMotionOperator(obiSolver, obiParticlePicker, wiresManager, wireInteractiveCursor, this);
         }
 
         private void LateUpdate()
         {
-            ThrowRayFromMouse();
+            mode = Input.GetKey(KeyCode.LeftControl) ? WireInteractiveModes.Moving : WireInteractiveModes.Inserting;
 
-            interactiveWiresParticleMotionOperator.Update();
+            if (mode == WireInteractiveModes.Inserting)
+            {
+                ThrowRayFromMouseAndTryToInteract();
+            }
+
+            wiresParticleMotionOperator.Update();
 
             mousePositionInBehindFrame = Input.mousePosition;
 
@@ -41,7 +54,7 @@ namespace OscilloscopeSimulation
             }
         }
 
-        private void ThrowRayFromMouse()
+        private void ThrowRayFromMouseAndTryToInteract()
         {
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             if (!Physics.Raycast(ray, out RaycastHit hit,
@@ -82,12 +95,12 @@ namespace OscilloscopeSimulation
 
         private bool HasWireUnderCursor()
         {
-            return interactiveWiresParticleMotionOperator.DoesTheBeamIntersectTheParticle();
+            return wiresParticleMotionOperator.DoesTheBeamIntersectTheParticle();
         }
 
         private void DeleteWireUnderCursor()
         {
-            int particleIndexUnderCursor = interactiveWiresParticleMotionOperator.GetParticleIndexUnderCursor();
+            int particleIndexUnderCursor = wiresParticleMotionOperator.GetParticleIndexUnderCursor();
             Wire wire = wiresManager.GetWireByParticleIndex(particleIndexUnderCursor);
             wire.DeleteWire();
         }
@@ -100,6 +113,11 @@ namespace OscilloscopeSimulation
         internal static Vector3 GetMousePositionInBehindFrame()
         {
             return mousePositionInBehindFrame;
+        }
+
+        internal WireInteractiveModes GetWireInteractiveMode()
+        {
+            return mode;
         }
     }
 }

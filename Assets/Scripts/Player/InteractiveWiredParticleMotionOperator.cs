@@ -2,12 +2,11 @@ using Obi;
 
 using UnityEngine;
 
-namespace OscilloscopeSimulation
+using static OscilloscopeSimulation.Player.PlayerInteractive;
+
+namespace OscilloscopeSimulation.Player
 {
-    /// <summary>
-    /// ќператор движени€ интерактивных частиц провода
-    /// </summary>
-    internal sealed class InteractiveWiredParticleMotionOperator
+    internal sealed class WiredParticleMotionOperator
     {
         private readonly ObiSolver solver;
 
@@ -19,32 +18,36 @@ namespace OscilloscopeSimulation
         private int particleIndexUnderCursor = -1;
         private bool doesTheBeamIntersectTheParticle;
 
-        public InteractiveWiredParticleMotionOperator(ObiSolver solver, ObiParticlePicker particlePicker,
-            WiresManager wiresManager, Texture2D wireInteractiveCursor)
+        private readonly PlayerInteractive playerInteractive;
+
+        public WiredParticleMotionOperator(ObiSolver solver, ObiParticlePicker particlePicker,
+            WiresManager wiresManager, Texture2D wireInteractiveCursor, PlayerInteractive playerInteractive)
         {
             this.solver = solver;
             this.wiresManager = wiresManager;
             this.wireInteractiveCursor = wireInteractiveCursor;
+            this.playerInteractive = playerInteractive;
 
             particlePicker.OnParticleAcrossing.AddListener(OnWireParticleAcrossing);
-            particlePicker.OnParticleNone.AddListener(OnParticleNone);            
+            particlePicker.OnParticleNone.AddListener(OnParticleNone);
         }
 
         internal void Update()
-        {
+        {         
             if (pickedParticleIndex == -1)
             {
                 return;
             }
 
-            if (Input.GetMouseButton(0))
-            {
-                MovePickedParticle();
-            }
-            else
+            var wireInteractiveMode = playerInteractive.GetWireInteractiveMode();
+            if ((wireInteractiveMode == WireInteractiveModes.Inserting) || (!Input.GetMouseButton(0)))
             {
                 solver.invMasses[pickedParticleIndex] = 100000;
                 pickedParticleIndex = -1;
+            }
+            else if (wireInteractiveMode == WireInteractiveModes.Moving)
+            {
+                MovePickedParticle();
             }
         }
         private void MovePickedParticle()
@@ -115,7 +118,8 @@ namespace OscilloscopeSimulation
         {
             Texture2D cursorTexture = null;
 
-            if (doesTheBeamIntersectTheParticle || (pickedParticleIndex != -1))
+            if ((doesTheBeamIntersectTheParticle || (pickedParticleIndex != -1)) &&
+                (playerInteractive.GetWireInteractiveMode() == WireInteractiveModes.Moving))
             {
                 cursorTexture = wireInteractiveCursor;
             }

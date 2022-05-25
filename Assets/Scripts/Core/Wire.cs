@@ -1,4 +1,5 @@
 using OscilloscopeSimulation.InteractableObjects;
+using OscilloscopeSimulation.Player;
 
 using UnityEngine;
 
