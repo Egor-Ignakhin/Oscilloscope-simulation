@@ -5,7 +5,7 @@
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
-!/[Bb]uild/
+/[Bb]uild/
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
@@ -50,8 +50,8 @@ ExportedObj/
 
 # Unity3D generated file on crash reports
 sysinfo.txt
-!Build.rar
-!Build.zip
+Build.rar
+Build.zip
 
 # Builds
 *.apk
