@@ -2,6 +2,8 @@ using Obi;
 
 using UnityEngine;
 
+using static OscilloscopeSimulation.Player.CameraModesOperator;
+
 namespace OscilloscopeSimulation.Player
 {
     /// <summary>
@@ -30,13 +32,21 @@ namespace OscilloscopeSimulation.Player
         }
         private WireInteractiveModes mode;
 
+        private bool isLockedInput;
+        [SerializeField] private GameObject FreeFlyCameraGM;
+
         private void Start()
         {
-            wiresParticleMotionOperator = new WiredParticleMotionOperator(obiSolver, obiParticlePicker, wiresManager, wireInteractiveCursor, this);
+            wiresParticleMotionOperator = new WiredParticleMotionOperator(obiSolver, obiParticlePicker,
+                wiresManager, wireInteractiveCursor, this);
+
+            OnCameraModesChanged += OnChangeCameraMode;
         }
 
         private void LateUpdate()
         {
+            if (isLockedInput)
+                return;
             mode = Input.GetKey(KeyCode.LeftControl) ? WireInteractiveModes.Moving : WireInteractiveModes.Inserting;
 
             if (mode == WireInteractiveModes.Inserting)
@@ -118,6 +128,23 @@ namespace OscilloscopeSimulation.Player
         internal WireInteractiveModes GetWireInteractiveMode()
         {
             return mode;
+        }
+
+        private void OnChangeCameraMode(CameraModes cameraMode)
+        {
+            switch (cameraMode)
+            {
+                case CameraModes.TechInteraction:
+                    mainCamera.enabled = true;
+                    isLockedInput = false;
+                    FreeFlyCameraGM.SetActive(false);
+                    break;
+                case CameraModes.FreeFly:
+                    mainCamera.enabled = false;
+                    isLockedInput = true;
+                    FreeFlyCameraGM.SetActive(true);
+                    break;
+            }
         }
     }
 }

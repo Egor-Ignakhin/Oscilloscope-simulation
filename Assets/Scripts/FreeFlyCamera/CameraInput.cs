@@ -1,4 +1,6 @@
 
+using OscilloscopeSimulation.Player;
+
 using UnityEngine;
 
 namespace OscilloscopeSimulation.FreeFlyCamera
@@ -17,12 +19,22 @@ namespace OscilloscopeSimulation.FreeFlyCamera
 
         private void Update()
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             rotationX += Input.GetAxis("Mouse X") * lookSensitivity * Time.deltaTime * 100;
             rotationY += Input.GetAxis("Mouse Y") * lookSensitivity * Time.deltaTime * 100;
             rotationY = Mathf.Clamp(rotationY, -90, 90);
 
             canFlyUp = Input.GetKey(KeyCode.E);
             canFlyDown = Input.GetKey(KeyCode.Q);
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                CameraModesOperator.SetPlayerMode(CameraModesOperator.CameraModes.TechInteraction);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                return;
+            }
 
             cameraMotion.Update();
         }
