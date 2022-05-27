@@ -2,17 +2,15 @@ using Obi;
 
 using UnityEngine;
 
-using static OscilloscopeSimulation.Player.CameraModesOperator;
-
 namespace OscilloscopeSimulation.Player
 {
-    /// <summary>
-    /// Оператор взаимодействия пользовательского ввода
-    /// </summary>
     internal sealed class PlayerInteractive : MonoBehaviour
     {
-        private static Vector3 lastRaycastPointPosition;
         private static Vector3 mousePositionInBehindFrame;
+
+        [SerializeField] private PlayerRaycast playerRaycast;
+
+        [Space(15)]
 
         [SerializeField] private Camera mainCamera;
 
@@ -25,33 +23,31 @@ namespace OscilloscopeSimulation.Player
 
         private WiredParticleMotionOperator wiresParticleMotionOperator;
 
-        internal enum WireInteractiveModes
-        {
-            Inserting,
-            Moving
-        }
-        private WireInteractiveModes mode;
+        private PlayerInteractiveModes playerInteractiveMode;
 
-        private bool isLockedInput;
         [SerializeField] private GameObject FreeFlyCameraGM;
+
+        [SerializeField] private GameObject UI;        
 
         private void Start()
         {
             wiresParticleMotionOperator = new WiredParticleMotionOperator(obiSolver, obiParticlePicker,
                 wiresManager, wireInteractiveCursor, this);
-
-            OnCameraModesChanged += OnChangeCameraMode;
         }
 
         private void LateUpdate()
         {
-            if (isLockedInput)
-                return;
-            mode = Input.GetKey(KeyCode.LeftControl) ? WireInteractiveModes.Moving : WireInteractiveModes.Inserting;
-
-            if (mode == WireInteractiveModes.Inserting)
+            if (playerInteractiveMode == PlayerInteractiveModes.FreeFlight)
             {
-                ThrowRayFromMouseAndTryToInteract();
+                OperateFreeFlightMode();
+                return;
+            }
+
+            playerInteractiveMode = CalculatePIM();
+
+            if (playerInteractiveMode == PlayerInteractiveModes.InsertingWires)
+            {
+                playerRaycast.Update();
             }
 
             wiresParticleMotionOperator.Update();
@@ -60,64 +56,21 @@ namespace OscilloscopeSimulation.Player
 
             if (Input.GetMouseButtonDown(1))
             {
-                DeleteWireIfPossible();
+                wiresParticleMotionOperator.DeleteWireIfPossible();
             }
         }
 
-        private void ThrowRayFromMouseAndTryToInteract()
+        private void OperateFreeFlightMode()
         {
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            if (!Physics.Raycast(ray, out RaycastHit hit,
-                float.PositiveInfinity, ~0, QueryTriggerInteraction.Ignore))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                return;
-            }
-            if (hit.transform.TryGetComponent(out Interactable hitInteractable))
-            {
-                //Если нажата левая кнопка мыши
-                if (Input.GetMouseButtonDown(0))
-                {
-                    hitInteractable.Interact();
-                }
-            }
-            lastRaycastPointPosition = hit.point;
-        }
-
-        private void DeleteWireIfPossible()
-        {
-            if (HasWireUnderCursor())
-            {
-                DeleteWireIfItIsUnderCursor();
-            }
-            else if (wiresManager.HasActiveWire())
-            {
-                wiresManager.DeleteActiveWire();
+                SetPIM(PlayerInteractiveModes.InsertingWires);
             }
         }
 
-        private void DeleteWireIfItIsUnderCursor()
+        private PlayerInteractiveModes CalculatePIM()
         {
-            if (HasWireUnderCursor())
-            {
-                DeleteWireUnderCursor();
-            }
-        }
-
-        private bool HasWireUnderCursor()
-        {
-            return wiresParticleMotionOperator.DoesTheBeamIntersectTheParticle();
-        }
-
-        private void DeleteWireUnderCursor()
-        {
-            int particleIndexUnderCursor = wiresParticleMotionOperator.GetParticleIndexUnderCursor();
-            Wire wire = wiresManager.GetWireByParticleIndex(particleIndexUnderCursor);
-            wire.DeleteWire();
-        }
-
-        internal static Vector3 GetLastRaycastPointPosition()
-        {
-            return lastRaycastPointPosition;
+            return Input.GetKey(KeyCode.LeftControl) ? PlayerInteractiveModes.MovingWires : PlayerInteractiveModes.InsertingWires;
         }
 
         internal static Vector3 GetMousePositionInBehindFrame()
@@ -125,26 +78,42 @@ namespace OscilloscopeSimulation.Player
             return mousePositionInBehindFrame;
         }
 
-        internal WireInteractiveModes GetWireInteractiveMode()
+        internal PlayerInteractiveModes GetPlayerInteractiveMode()
         {
-            return mode;
+            return playerInteractiveMode;
         }
 
-        private void OnChangeCameraMode(CameraModes cameraMode)
+        internal void SetPIM(PlayerInteractiveModes mode)
         {
-            switch (cameraMode)
+            playerInteractiveMode = mode;
+
+            switch (mode)
             {
-                case CameraModes.TechInteraction:
-                    mainCamera.enabled = true;
-                    isLockedInput = false;
-                    FreeFlyCameraGM.SetActive(false);
+                case PlayerInteractiveModes.FreeFlight:
+                    SetupFreeFlightPIM();
                     break;
-                case CameraModes.FreeFly:
-                    mainCamera.enabled = false;
-                    isLockedInput = true;
-                    FreeFlyCameraGM.SetActive(true);
+                default:
+                    SetupMovingInsertingWiresPIM();
                     break;
             }
+
+            UI.SetActive(playerInteractiveMode != PlayerInteractiveModes.FreeFlight);
+        }
+
+        private void SetupFreeFlightPIM()
+        {
+            mainCamera.enabled = false;
+            FreeFlyCameraGM.SetActive(true);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+        private void SetupMovingInsertingWiresPIM()
+        {
+            mainCamera.enabled = true;
+            FreeFlyCameraGM.SetActive(false);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 }

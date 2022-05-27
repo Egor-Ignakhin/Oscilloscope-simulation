@@ -8,7 +8,7 @@ namespace OscilloscopeSimulation.Menu
     {
         public void OnButtonClick()
         {
-            SocketText.InvertGeneralVisibility();
+            WireSocketText.InvertGeneralVisibility();
         }
     }
 }

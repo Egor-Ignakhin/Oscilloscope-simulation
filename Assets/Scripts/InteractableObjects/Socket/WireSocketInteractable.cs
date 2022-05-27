@@ -18,7 +18,7 @@ namespace OscilloscopeSimulation.InteractableObjects
 
         [SerializeField] private WiresManager wiresManager;
 
-        [SerializeField] private SocketText socketText;
+        [SerializeField] private WireSocketText socketText;
 
         [SerializeField] private ToggleSwitchInteractable toggleSwitch;
 

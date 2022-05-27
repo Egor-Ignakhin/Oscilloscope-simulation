@@ -6,9 +6,10 @@ namespace OscilloscopeSimulation.Menu
 {
     internal sealed class FreeFlyCameraEntranceButton : MonoBehaviour
     {
+        [SerializeField] private PlayerInteractive playerInteractive;
         public void OnButtonClick()
         {
-            CameraModesOperator.SetPlayerMode(CameraModesOperator.CameraModes.FreeFly);
+            playerInteractive.SetPIM(PlayerInteractiveModes.FreeFlight);
         }
     }
 }

@@ -2,10 +2,9 @@ using UnityEngine;
 
 namespace OscilloscopeSimulation.FreeFlyCamera
 {
-    [System.Serializable]
-    internal sealed class CameraMotion
+    internal sealed class FreeFlyCameraMotion : MonoBehaviour
     {
-        [SerializeField] private CameraInput cameraInput;
+        [SerializeField] private FreeFlyCameraInput cameraInput;
 
         [SerializeField] private Rigidbody mRigidbody;
 
@@ -16,11 +15,16 @@ namespace OscilloscopeSimulation.FreeFlyCamera
 
         internal void Update()
         {
-            speed = Input.GetKey(KeyCode.LeftShift) ? defaultSpeed * 2 : defaultSpeed;
+            speed = CalculateSpeed();
 
             RotateCamera();
 
-            MoveCameraByVelocity();
+            MoveCamera();
+        }
+
+        private float CalculateSpeed()
+        {
+            return Input.GetKey(KeyCode.LeftShift) ? defaultSpeed * 2 : defaultSpeed;
         }
 
         private void RotateCamera()
@@ -29,7 +33,7 @@ namespace OscilloscopeSimulation.FreeFlyCamera
             cameraTransform.localRotation *= Quaternion.AngleAxis(cameraInput.GetRotationY(), Vector3.left);
         }
 
-        private void MoveCameraByVelocity()
+        private void MoveCamera()
         {
             mRigidbody.velocity = Vector3.zero;
             mRigidbody.velocity += 100 * Input.GetAxis("Vertical") * speed * Time.deltaTime * cameraTransform.forward;

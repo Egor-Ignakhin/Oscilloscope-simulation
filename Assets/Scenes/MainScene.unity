@@ -16272,6 +16272,11 @@ Transform:
   m_Father: {fileID: 273341726}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &747271263 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 4777273213555871266, guid: 11073cc9e0794214c82fc977e38bebf7, type: 3}
+  m_PrefabInstance: {fileID: 1401723018}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &761203303
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21368,12 +21373,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5942247b03d95c48998d5436cbb518e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerRaycast:
+    techCamera: {fileID: 963194227}
+  freeFlyCameraInput:
+    lookSensitivity: 3
+  freeFlyCameraMotion:
+    cameraInput:
+      lookSensitivity: 3
+    mRigidbody: {fileID: 747271263}
+    defaultSpeed: 1
+    cameraTransform: {fileID: 1401723019}
   mainCamera: {fileID: 963194227}
   wireInteractiveCursor: {fileID: 2800000, guid: 31b038bf020a074498065ed6bbea9435, type: 3}
   obiSolver: {fileID: 1578137047}
   obiParticlePicker: {fileID: 963194230}
   wiresManager: {fileID: 89346798}
   FreeFlyCameraGM: {fileID: 1895629479}
+  UI: {fileID: 1782435248}
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22174,6 +22190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UI: {fileID: 1782435248}
+  playerInteractive: {fileID: 0}
 --- !u!1001 &1012006791
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22724,6 +22741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4652549972301154491bb8c67fa1e6fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInteractive: {fileID: 963194229}
 --- !u!114 &1041767979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29401,8 +29419,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4777273213555871265, guid: 11073cc9e0794214c82fc977e38bebf7, type: 3}
       propertyPath: lookSensitivity
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4777273213555871265, guid: 11073cc9e0794214c82fc977e38bebf7, type: 3}
+      propertyPath: playerInteractive
+      value: 
+      objectReference: {fileID: 963194229}
     - target: {fileID: 4777273213555871265, guid: 11073cc9e0794214c82fc977e38bebf7, type: 3}
       propertyPath: cameraMotion.transform
       value: 
@@ -29471,7 +29493,8 @@ PrefabInstance:
       propertyPath: near clip plane
       value: 0.03
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4777273213555871265, guid: 11073cc9e0794214c82fc977e38bebf7, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 11073cc9e0794214c82fc977e38bebf7, type: 3}
 --- !u!4 &1401723019 stripped
 Transform:
@@ -37356,7 +37379,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1895629480}
   m_Layer: 0
-  m_Name: FreeFlyCamera
+  m_Name: FreeFlyCameraParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

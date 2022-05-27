@@ -5,17 +5,12 @@ using UnityEngine;
 namespace OscilloscopeSimulation.InteractableObjects
 {
     [Serializable]
-    internal sealed class SocketText
+    internal sealed class WireSocketText
     {
-        private static bool generalVisibility;
+        private static bool generalVisibility = true;
         private static event Action GeneralVisibilityUpdate;
 
         [SerializeField] private TMPro.TextMeshPro textMeshPro;
-
-        static SocketText()
-        {
-            InvertGeneralVisibility();
-        }
 
         internal void Initialize(bool itsOutOrToggleSwitchSocket)
         {
@@ -44,7 +39,7 @@ namespace OscilloscopeSimulation.InteractableObjects
             textMeshPro.enabled = generalVisibility;
         }
 
-        ~SocketText()
+        ~WireSocketText()
         {
             GeneralVisibilityUpdate -= OnGeneralVisibilityUpdate;
         }

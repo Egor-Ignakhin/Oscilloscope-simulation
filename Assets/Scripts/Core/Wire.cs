@@ -57,7 +57,7 @@ namespace OscilloscopeSimulation
 
             startWirePoint.position = socketStart.GetWireConnectorSetupPosition();
             endWirePoint.position = wiresManager.EqualsWithActiveWire(this) ?
-               PlayerInteractive.GetLastRaycastPointPosition() :
+               PlayerRaycast.GetLastHitPosition() :
              socketEnd.GetWireConnectorSetupPosition();
         }
 

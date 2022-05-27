@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4777273213555871294}
   - component: {fileID: 4777273213555871295}
-  - component: {fileID: 4777273213555871265}
   - component: {fileID: 4777273213555871266}
   - component: {fileID: 4777273213555871267}
+  - component: {fileID: 3774600595113860517}
+  - component: {fileID: 1482436564705294295}
   m_Layer: 0
   m_Name: FreeFlyCamera
   m_TagString: MainCamera
@@ -77,24 +78,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &4777273213555871265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4777273213555871268}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96a5935fe41e71549a74370270164641, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lookSensitivity: 5
-  cameraMotion:
-    cameraInput: {fileID: 4777273213555871265}
-    mRigidbody: {fileID: 4777273213555871266}
-    defaultSpeed: 3
-    transform: {fileID: 4777273213555871294}
 --- !u!54 &4777273213555871266
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -124,3 +107,32 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3774600595113860517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4777273213555871268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a5935fe41e71549a74370270164641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lookSensitivity: 3
+--- !u!114 &1482436564705294295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4777273213555871268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b57a4502d8b3944dad7c562fdacfc77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraInput: {fileID: 3774600595113860517}
+  mRigidbody: {fileID: 4777273213555871266}
+  defaultSpeed: 1
+  cameraTransform: {fileID: 4777273213555871294}
