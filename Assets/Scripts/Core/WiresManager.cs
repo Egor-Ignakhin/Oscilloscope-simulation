@@ -115,5 +115,10 @@ namespace OscilloscopeSimulation
             activeWire.DeleteWire();
             wiresInfo.SetActiveWire(null);
         }
+
+        internal Wire GetActiveWire()
+        {
+            return wiresInfo.GetActiveWire();
+        }
     }
 }

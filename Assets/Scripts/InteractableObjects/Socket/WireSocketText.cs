@@ -10,17 +10,16 @@ namespace OscilloscopeSimulation.InteractableObjects
         private static bool generalVisibility = true;
         private static event Action GeneralVisibilityUpdate;
 
+        private bool canVisibility = false;
+
         [SerializeField] private TMPro.TextMeshPro textMeshPro;
 
-        internal void Initialize(bool itsOutOrToggleSwitchSocket)
+        internal void Initialize()
         {
             textMeshPro.enabled = false;
 
-            if (itsOutOrToggleSwitchSocket)
-            {
-                GeneralVisibilityUpdate += OnGeneralVisibilityUpdate;
-                OnGeneralVisibilityUpdate();
-            }
+            GeneralVisibilityUpdate += OnGeneralVisibilityUpdate;
+            OnGeneralVisibilityUpdate();
         }
 
         internal void Write(string text)
@@ -36,7 +35,13 @@ namespace OscilloscopeSimulation.InteractableObjects
 
         private void OnGeneralVisibilityUpdate()
         {
-            textMeshPro.enabled = generalVisibility;
+            textMeshPro.enabled = generalVisibility && canVisibility;
+        }
+
+        internal void SetCanVisibility(bool value)
+        {
+            canVisibility = value;
+            OnGeneralVisibilityUpdate();
         }
 
         ~WireSocketText()

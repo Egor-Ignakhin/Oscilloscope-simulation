@@ -45,7 +45,8 @@ namespace OscilloscopeSimulation.InteractableObjects
                 };
             }
 
-            socketText.Initialize(itsOutSocket || toggleSwitch);
+            socketText.Initialize();
+            socketText.SetCanVisibility(itsOutSocket || toggleSwitch);
         }
 
         internal override void Interact()
@@ -56,12 +57,16 @@ namespace OscilloscopeSimulation.InteractableObjects
             }
             else
             {
-                ConnectWire();
+                if (CanConnectWire())
+                {
+                    ConnectWire();
+                }
             }
         }
 
         internal void DisconnectWire()
         {
+            socketText.SetCanVisibility(itsOutSocket || toggleSwitch);
             if (ConnectedWire.GetSocketEnd() == this)
             {
                 ConnectedWire.GetSocketStart().ChangeValueEvent = null;
@@ -80,9 +85,25 @@ namespace OscilloscopeSimulation.InteractableObjects
 
             SetLogicalValue(false);
         }
+        private bool CanConnectWire()
+        {
+            Wire activeWire = wiresManager.GetActiveWire();
+
+            if(activeWire != null)
+            {
+                var socketStart = activeWire.GetSocketStart();
+                if (socketStart.HaveToggleSwitch())
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
         public void ConnectWire()
         {
             ConnectedWire = wiresManager.ConnectWire(this);
+            socketText.SetCanVisibility(true);
 
             if (!ConnectedWire.IsFullyConnected())
             {
@@ -131,8 +152,13 @@ namespace OscilloscopeSimulation.InteractableObjects
             logicalValue = isInvertedSignal ? !value : value;
 
             ChangeValueEvent?.Invoke(logicalValue);
-            
+
             WriteLogicalValueInText();
+        }
+
+        internal bool HaveToggleSwitch()
+        {
+            return toggleSwitch != null;
         }
     }
 }
