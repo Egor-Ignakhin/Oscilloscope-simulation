@@ -69,17 +69,22 @@ namespace OscilloscopeSimulation.InteractableObjects
             socketText.SetCanVisibility(itsOutSocket || toggleSwitch);
             if (ConnectedWire.GetSocketEnd() == this)
             {
-                ConnectedWire.GetSocketStart().ChangeValueEvent = null;
+                ConnectedWire.GetSocketStart().ChangeValueEvent = null;                
             }
             else
             {
                 ChangeValueEvent = null;
+
+                if (ConnectedWire.GetSocketEnd())
+                {
+                    ConnectedWire.GetSocketEnd().SetLogicalValue(false);
+                }
             }
             ConnectedWire.DisconnectWireFromSocket(this);
             ConnectedWire = null;
 
             if (toggleSwitch)
-            {
+            {                
                 return;
             }
 
@@ -92,7 +97,8 @@ namespace OscilloscopeSimulation.InteractableObjects
             if(activeWire != null)
             {
                 var socketStart = activeWire.GetSocketStart();
-                if (socketStart.HaveToggleSwitch())
+                if (socketStart.HaveToggleSwitch() &&
+                    HaveToggleSwitch())
                 {
                     return false;
                 }
@@ -114,7 +120,8 @@ namespace OscilloscopeSimulation.InteractableObjects
                 return;
             }
             if (toggleSwitch)
-            {
+            {                
+                ConnectedWire.GetSocketStart().SetLogicalValue(GetLogicalValue());
                 ConnectedWire.SwapSocketReferences();
             }
             else
@@ -124,7 +131,7 @@ namespace OscilloscopeSimulation.InteractableObjects
             if (ConnectedWire.GetSocketEnd() == this)
             {
                 ConnectedWire.GetSocketStart().
-                    ChangeValueEvent += OnBehindSocketValueUpdate;
+                    ChangeValueEvent += OnBehindSocketValueUpdate;                
             }
             else
             {
