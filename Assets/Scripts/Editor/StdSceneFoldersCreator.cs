@@ -3,16 +3,16 @@ using UnityEditor;
 
 #endif
 using UnityEngine;
-namespace Society.Editor
+namespace OscilloscopeSimulation.Editor
 {
-    internal sealed class StdFoldersCreator
+    public sealed class StdSceneFoldersCreator
     {
+        public static readonly string[] Folders = { "Common", "Enviroment", "Scene", "Camera", "Characters", "UI", "Other" };
 #if UNITY_EDITOR
         [MenuItem("Tools/ Create Standard Folders")]
-        private static void CreateStdFolders()
+        public static void CreateStdFolders()
         {
-            string[] folders = new string[] { "Common", "Enviroment", "Scene", "Camera", "Characters", "UI", "Other" };
-            foreach (var f in folders)
+            foreach (var f in Folders)
             {
                 GameObject go = GameObject.Find(f);
                 if (!go)
