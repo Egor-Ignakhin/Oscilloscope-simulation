@@ -75,9 +75,11 @@ namespace OscilloscopeSimulation.InteractableObjects
             {
                 ChangeValueEvent = null;
 
-                if (ConnectedWire.GetSocketEnd())
+                var socketEnd = ConnectedWire.GetSocketEnd();
+
+                if (socketEnd)
                 {
-                    ConnectedWire.GetSocketEnd().SetLogicalValue(false);
+                    socketEnd.SetLogicalValue(false);
                 }
             }
             ConnectedWire.DisconnectWireFromSocket(this);
