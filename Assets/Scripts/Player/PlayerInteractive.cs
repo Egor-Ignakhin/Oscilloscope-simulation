@@ -3,6 +3,7 @@ using Obi;
 using OscilloscopeSimulation.Wires;
 
 using System;
+using System.Runtime.InteropServices;
 
 using UnityEngine;
 
@@ -30,9 +31,12 @@ namespace OscilloscopeSimulation.Player
         private static PlayerInteractiveModes playerInteractiveMode;
         private static event EventHandler PIMChanged;
 
-        [SerializeField] private GameObject FreeFlyCameraGM;
-
         [SerializeField] private GameObject UI;
+
+        [Space(15)]
+
+        [SerializeField] private FreeFlyCamera.FreeFlyCameraInput mainCameraFFCInput;
+        [SerializeField] private FreeFlyCamera.FreeFlyCameraMotion mainCameraFFCMotion;
 
         private void Start()
         {
@@ -40,13 +44,15 @@ namespace OscilloscopeSimulation.Player
                 wiresManager, wireInteractiveCursor, this);
 
             PIMChanged += OnPIMChanged;
+            
+            SetPIM(PlayerInteractiveModes.FreeFlight);
         }
 
         private void LateUpdate()
         {
             if (playerInteractiveMode == PlayerInteractiveModes.FreeFlight)
             {
-                OperateFreeFlightMode();
+                OperateFreeFlight();
                 return;
             }
 
@@ -65,11 +71,16 @@ namespace OscilloscopeSimulation.Player
             {
                 wiresParticleMotionOperator.DeleteWireIfPossible();
             }
+
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                SetPIM(PlayerInteractiveModes.FreeFlight);
+            }
         }
 
-        private void OperateFreeFlightMode()
+        private void OperateFreeFlight()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 SetPIM(PlayerInteractiveModes.InsertingWires);
             }
@@ -103,28 +114,36 @@ namespace OscilloscopeSimulation.Player
                 case PlayerInteractiveModes.FreeFlight:
                     SetupFreeFlightPIM();
                     break;
+
                 default:
                     SetupMovingInsertingWiresPIM();
                     break;
             }
 
+            mainCameraFFCInput.SetInputIsLocked(playerInteractiveMode != PlayerInteractiveModes.FreeFlight);
+            mainCameraFFCMotion.SetInputIsLocked(playerInteractiveMode != PlayerInteractiveModes.FreeFlight);
             UI.SetActive(playerInteractiveMode != PlayerInteractiveModes.FreeFlight);
         }
 
         private void SetupFreeFlightPIM()
         {
-            mainCamera.enabled = false;
-            FreeFlyCameraGM.SetActive(true);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            mainCameraFFCMotion.enabled = true;
+            mainCameraFFCInput.enabled = true;
         }
 
         private void SetupMovingInsertingWiresPIM()
         {
-            mainCamera.enabled = true;
-            FreeFlyCameraGM.SetActive(false);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+
+            mainCameraFFCMotion.enabled = false;
+            mainCameraFFCInput.enabled = false;
+
+            mainCameraFFCMotion.StopMotion();
+            mainCameraFFCInput.ResetInput();
         }
 
         public static PlayerInteractiveModes GetPlayerInteractiveModes()

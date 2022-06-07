@@ -6,6 +6,7 @@ namespace OscilloscopeSimulation.Player
     internal sealed class PlayerRaycast
     {
         private static Vector3 lastRaycastPointPosition;
+        private static RaycastHit lastRaycasHit;
 
         [SerializeField] private Camera techCamera;
 
@@ -31,11 +32,17 @@ namespace OscilloscopeSimulation.Player
                 }
             }
             lastRaycastPointPosition = hit.point;
+            lastRaycasHit = hit;
         }
 
         internal static Vector3 GetLastHitPosition()
         {
             return lastRaycastPointPosition;
+        }
+
+        internal static RaycastHit GetLastRaycastHit()
+        {
+            return lastRaycasHit;
         }
     }
 }

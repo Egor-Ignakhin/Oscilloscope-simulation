@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CoverageReport scope="Summary">
   <Summary>
-    <Generatedon>6/7/2022 - 11:43:37 AM</Generatedon>
+    <Generatedon>6/7/2022 - 2:07:40 PM</Generatedon>
     <Parser>MultiReportParser (2x OpenCoverParser)</Parser>
     <Assemblies>1</Assemblies>
     <Classes>27</Classes>
     <Files>27</Files>
-    <Coveredlines>69</Coveredlines>
-    <Uncoveredlines>722</Uncoveredlines>
+    <Coveredlines>84</Coveredlines>
+    <Uncoveredlines>707</Uncoveredlines>
     <Coverablelines>791</Coverablelines>
     <Totallines>1570</Totallines>
-    <Linecoverage>8.7</Linecoverage>
+    <Linecoverage>10.6</Linecoverage>
     <Coveredbranches>0</Coveredbranches>
     <Totalbranches>0</Totalbranches>
-    <Coveredmethods>26</Coveredmethods>
+    <Coveredmethods>30</Coveredmethods>
     <Totalmethods>154</Totalmethods>
-    <Methodcoverage>16.8</Methodcoverage>
+    <Methodcoverage>19.4</Methodcoverage>
   </Summary>
   <Coverage>
-    <Assembly name="Core" classes="27" coverage="8.7" coveredlines="69" coverablelines="791" totallines="1570" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="26" totalmethods="154" methodcoverage="16.8">
+    <Assembly name="Core" classes="27" coverage="10.6" coveredlines="84" coverablelines="791" totallines="1570" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="30" totalmethods="154" methodcoverage="19.4">
       <Class name="OscilloscopeSimulation.Editor.StdSceneFoldersCreator" coverage="100" coveredlines="12" coverablelines="12" totallines="27" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="2" totalmethods="2" methodcoverage="100" />
       <Class name="OscilloscopeSimulation.Extenions[T]" coverage="100" coveredlines="12" coverablelines="12" totallines="27" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="2" totalmethods="2" methodcoverage="100" />
       <Class name="OscilloscopeSimulation.FreeFlyCamera.FreeFlyCameraInput" coverage="13.6" coveredlines="3" coverablelines="22" totallines="44" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="6" methodcoverage="16.6" />
       <Class name="OscilloscopeSimulation.FreeFlyCamera.FreeFlyCameraMotion" coverage="3.8" coveredlines="1" coverablelines="26" totallines="52" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="5" methodcoverage="20" />
       <Class name="OscilloscopeSimulation.InteractableObjects.ToggleSwitchInteractable" coverage="5.2" coveredlines="1" coverablelines="19" totallines="49" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="8" methodcoverage="12.5" />
       <Class name="OscilloscopeSimulation.InteractableObjects.WireSocketInteractable" coverage="0" coveredlines="0" coverablelines="104" totallines="173" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="15" methodcoverage="0" />
-      <Class name="OscilloscopeSimulation.InteractableObjects.WireSocketText" coverage="37.5" coveredlines="9" coverablelines="24" totallines="52" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="6" totalmethods="10" methodcoverage="60" />
+      <Class name="OscilloscopeSimulation.InteractableObjects.WireSocketText" coverage="100" coveredlines="24" coverablelines="24" totallines="52" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="10" totalmethods="10" methodcoverage="100" />
       <Class name="OscilloscopeSimulation.Logical.LOPS.AdderLOPS" coverage="3.6" coveredlines="2" coverablelines="55" totallines="96" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="6" methodcoverage="16.6" />
       <Class name="OscilloscopeSimulation.Logical.LOPS.LogicalOperationsProcessingSystem" coverage="16.6" coveredlines="6" coverablelines="36" totallines="74" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="7" methodcoverage="14.2" />
       <Class name="OscilloscopeSimulation.Logical.LOPS.Operations.ANDLOPSOperation" coverage="0" coveredlines="0" coverablelines="9" totallines="17" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="1" methodcoverage="0" />

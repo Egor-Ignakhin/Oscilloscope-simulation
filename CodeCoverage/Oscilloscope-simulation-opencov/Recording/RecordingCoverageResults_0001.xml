@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CoverageSession xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="0.0.0.0">
-  <Summary numSequencePoints="841" visitedSequencePoints="78" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="9.27" branchCoverage="0.0" maxCyclomaticComplexity="5" minCyclomaticComplexity="1" maxCrapScore="30" minCrapScore="1" visitedClasses="14" numClasses="27" visitedMethods="26" numMethods="155" />
+  <Summary numSequencePoints="841" visitedSequencePoints="93" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="11.06" branchCoverage="0.0" maxCyclomaticComplexity="5" minCyclomaticComplexity="1" maxCrapScore="30" minCrapScore="1" visitedClasses="14" numClasses="27" visitedMethods="30" numMethods="155" />
   <Modules>
     <Module>
-      <Summary numSequencePoints="841" visitedSequencePoints="78" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="9.27" branchCoverage="0.0" maxCyclomaticComplexity="5" minCyclomaticComplexity="1" maxCrapScore="30" minCrapScore="1" visitedClasses="14" numClasses="27" visitedMethods="26" numMethods="155" />
+      <Summary numSequencePoints="841" visitedSequencePoints="93" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="11.06" branchCoverage="0.0" maxCyclomaticComplexity="5" minCyclomaticComplexity="1" maxCrapScore="30" minCrapScore="1" visitedClasses="14" numClasses="27" visitedMethods="30" numMethods="155" />
       <ModuleTime>0001-01-01T00:00:00</ModuleTime>
       <ModuleName>Core</ModuleName>
       <Files>
@@ -2015,7 +2015,7 @@
           </Methods>
         </Class>
         <Class>
-          <Summary numSequencePoints="28" visitedSequencePoints="13" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="46.43" branchCoverage="0.0" maxCyclomaticComplexity="3" minCyclomaticComplexity="1" maxCrapScore="12" minCrapScore="1" visitedClasses="1" numClasses="1" visitedMethods="6" numMethods="10" />
+          <Summary numSequencePoints="28" visitedSequencePoints="28" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="100.0" branchCoverage="0.0" maxCyclomaticComplexity="3" minCyclomaticComplexity="1" maxCrapScore="3" minCrapScore="1" visitedClasses="1" numClasses="1" visitedMethods="10" numMethods="10" />
           <FullName>OscilloscopeSimulation.InteractableObjects.WireSocketText</FullName>
           <Methods>
             <Method visited="true" cyclomaticComplexity="1" nPathComplexity="0" sequenceCoverage="100.0" branchCoverage="0" crapScore="1" isConstructor="false" isStatic="true" isGetter="true" isSetter="false">
@@ -2024,7 +2024,7 @@
               <Name>static System.Boolean OscilloscopeSimulation.InteractableObjects.WireSocketText::get_GeneralVisibility()</Name>
               <FileRef uid="23" />
               <SequencePoints>
-                <SequencePoint vc="3" uspid="731" ordinal="0" offset="0" sl="10" sc="48" el="10" ec="48" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="5" uspid="731" ordinal="0" offset="0" sl="10" sc="48" el="10" ec="48" bec="0" bev="0" fileid="23" />
               </SequencePoints>
               <BranchPoints />
             </Method>
@@ -2038,29 +2038,29 @@
               </SequencePoints>
               <BranchPoints />
             </Method>
-            <Method visited="false" cyclomaticComplexity="1" nPathComplexity="0" sequenceCoverage="0.0" branchCoverage="0" crapScore="2" isConstructor="false" isStatic="false" isGetter="false" isSetter="false">
-              <Summary numSequencePoints="5" visitedSequencePoints="0" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="0.0" branchCoverage="0" maxCyclomaticComplexity="1" minCyclomaticComplexity="1" maxCrapScore="2" minCrapScore="2" visitedClasses="0" numClasses="0" visitedMethods="0" numMethods="1" />
+            <Method visited="true" cyclomaticComplexity="1" nPathComplexity="0" sequenceCoverage="100.0" branchCoverage="0" crapScore="1" isConstructor="false" isStatic="false" isGetter="false" isSetter="false">
+              <Summary numSequencePoints="5" visitedSequencePoints="5" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="100.0" branchCoverage="0" maxCyclomaticComplexity="1" minCyclomaticComplexity="1" maxCrapScore="1" minCrapScore="1" visitedClasses="0" numClasses="0" visitedMethods="1" numMethods="1" />
               <MetadataToken>100663451</MetadataToken>
               <Name>System.Void OscilloscopeSimulation.InteractableObjects.WireSocketText::Initialize()</Name>
               <FileRef uid="23" />
               <SequencePoints>
-                <SequencePoint vc="0" uspid="733" ordinal="0" offset="0" sl="18" sc="0" el="18" ec="0" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="0" uspid="734" ordinal="0" offset="1" sl="19" sc="0" el="19" ec="0" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="0" uspid="735" ordinal="0" offset="14" sl="21" sc="0" el="21" ec="0" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="0" uspid="736" ordinal="0" offset="32" sl="22" sc="0" el="22" ec="0" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="0" uspid="737" ordinal="0" offset="39" sl="23" sc="0" el="23" ec="0" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="1" uspid="733" ordinal="0" offset="0" sl="18" sc="9" el="18" ec="9" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="1" uspid="734" ordinal="0" offset="1" sl="19" sc="13" el="19" ec="13" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="1" uspid="735" ordinal="0" offset="14" sl="21" sc="13" el="21" ec="13" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="1" uspid="736" ordinal="0" offset="32" sl="22" sc="13" el="22" ec="13" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="1" uspid="737" ordinal="0" offset="39" sl="23" sc="9" el="23" ec="9" bec="0" bev="0" fileid="23" />
               </SequencePoints>
               <BranchPoints />
             </Method>
-            <Method visited="false" cyclomaticComplexity="1" nPathComplexity="0" sequenceCoverage="0.0" branchCoverage="0" crapScore="2" isConstructor="false" isStatic="false" isGetter="false" isSetter="false">
-              <Summary numSequencePoints="3" visitedSequencePoints="0" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="0.0" branchCoverage="0" maxCyclomaticComplexity="1" minCyclomaticComplexity="1" maxCrapScore="2" minCrapScore="2" visitedClasses="0" numClasses="0" visitedMethods="0" numMethods="1" />
+            <Method visited="true" cyclomaticComplexity="1" nPathComplexity="0" sequenceCoverage="100.0" branchCoverage="0" crapScore="1" isConstructor="false" isStatic="false" isGetter="false" isSetter="false">
+              <Summary numSequencePoints="3" visitedSequencePoints="3" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="100.0" branchCoverage="0" maxCyclomaticComplexity="1" minCyclomaticComplexity="1" maxCrapScore="1" minCrapScore="1" visitedClasses="0" numClasses="0" visitedMethods="1" numMethods="1" />
               <MetadataToken>100663452</MetadataToken>
               <Name>System.Void OscilloscopeSimulation.InteractableObjects.WireSocketText::Write(System.String)</Name>
               <FileRef uid="23" />
               <SequencePoints>
-                <SequencePoint vc="0" uspid="738" ordinal="0" offset="0" sl="26" sc="0" el="26" ec="0" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="0" uspid="739" ordinal="0" offset="1" sl="27" sc="0" el="27" ec="0" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="0" uspid="740" ordinal="0" offset="15" sl="28" sc="0" el="28" ec="0" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="1" uspid="738" ordinal="0" offset="0" sl="26" sc="9" el="26" ec="9" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="1" uspid="739" ordinal="0" offset="1" sl="27" sc="13" el="27" ec="13" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="1" uspid="740" ordinal="0" offset="15" sl="28" sc="9" el="28" ec="9" bec="0" bev="0" fileid="23" />
               </SequencePoints>
               <BranchPoints />
             </Method>
@@ -2077,28 +2077,28 @@
               </SequencePoints>
               <BranchPoints />
             </Method>
-            <Method visited="false" cyclomaticComplexity="3" nPathComplexity="0" sequenceCoverage="0.0" branchCoverage="0" crapScore="12" isConstructor="false" isStatic="false" isGetter="false" isSetter="false">
-              <Summary numSequencePoints="3" visitedSequencePoints="0" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="0.0" branchCoverage="0" maxCyclomaticComplexity="3" minCyclomaticComplexity="3" maxCrapScore="12" minCrapScore="12" visitedClasses="0" numClasses="0" visitedMethods="0" numMethods="1" />
+            <Method visited="true" cyclomaticComplexity="3" nPathComplexity="0" sequenceCoverage="100.0" branchCoverage="0" crapScore="3" isConstructor="false" isStatic="false" isGetter="false" isSetter="false">
+              <Summary numSequencePoints="3" visitedSequencePoints="3" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="100.0" branchCoverage="0" maxCyclomaticComplexity="3" minCyclomaticComplexity="3" maxCrapScore="3" minCrapScore="3" visitedClasses="0" numClasses="0" visitedMethods="1" numMethods="1" />
               <MetadataToken>100663454</MetadataToken>
               <Name>System.Void OscilloscopeSimulation.InteractableObjects.WireSocketText::OnGeneralVisibilityUpdate()</Name>
               <FileRef uid="23" />
               <SequencePoints>
-                <SequencePoint vc="0" uspid="745" ordinal="0" offset="0" sl="37" sc="0" el="37" ec="0" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="0" uspid="746" ordinal="0" offset="1" sl="38" sc="0" el="38" ec="0" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="0" uspid="747" ordinal="0" offset="29" sl="39" sc="0" el="39" ec="0" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="2" uspid="745" ordinal="0" offset="0" sl="37" sc="9" el="37" ec="9" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="2" uspid="746" ordinal="0" offset="1" sl="38" sc="13" el="38" ec="13" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="2" uspid="747" ordinal="0" offset="29" sl="39" sc="9" el="39" ec="9" bec="0" bev="0" fileid="23" />
               </SequencePoints>
               <BranchPoints />
             </Method>
-            <Method visited="false" cyclomaticComplexity="1" nPathComplexity="0" sequenceCoverage="0.0" branchCoverage="0" crapScore="2" isConstructor="false" isStatic="false" isGetter="false" isSetter="false">
-              <Summary numSequencePoints="4" visitedSequencePoints="0" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="0.0" branchCoverage="0" maxCyclomaticComplexity="1" minCyclomaticComplexity="1" maxCrapScore="2" minCrapScore="2" visitedClasses="0" numClasses="0" visitedMethods="0" numMethods="1" />
+            <Method visited="true" cyclomaticComplexity="1" nPathComplexity="0" sequenceCoverage="100.0" branchCoverage="0" crapScore="1" isConstructor="false" isStatic="false" isGetter="false" isSetter="false">
+              <Summary numSequencePoints="4" visitedSequencePoints="4" numBranchPoints="0" visitedBranchPoints="0" sequenceCoverage="100.0" branchCoverage="0" maxCyclomaticComplexity="1" minCyclomaticComplexity="1" maxCrapScore="1" minCrapScore="1" visitedClasses="0" numClasses="0" visitedMethods="1" numMethods="1" />
               <MetadataToken>100663455</MetadataToken>
               <Name>System.Void OscilloscopeSimulation.InteractableObjects.WireSocketText::SetCanVisibility(System.Boolean)</Name>
               <FileRef uid="23" />
               <SequencePoints>
-                <SequencePoint vc="0" uspid="748" ordinal="0" offset="0" sl="42" sc="0" el="42" ec="0" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="0" uspid="749" ordinal="0" offset="1" sl="43" sc="0" el="43" ec="0" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="0" uspid="750" ordinal="0" offset="8" sl="44" sc="0" el="44" ec="0" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="0" uspid="751" ordinal="0" offset="15" sl="45" sc="0" el="45" ec="0" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="1" uspid="748" ordinal="0" offset="0" sl="42" sc="9" el="42" ec="9" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="1" uspid="749" ordinal="0" offset="1" sl="43" sc="13" el="43" ec="13" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="1" uspid="750" ordinal="0" offset="8" sl="44" sc="13" el="44" ec="13" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="1" uspid="751" ordinal="0" offset="15" sl="45" sc="9" el="45" ec="9" bec="0" bev="0" fileid="23" />
               </SequencePoints>
               <BranchPoints />
             </Method>
@@ -2108,11 +2108,11 @@
               <Name>System.Void OscilloscopeSimulation.InteractableObjects.WireSocketText::Finalize()</Name>
               <FileRef uid="23" />
               <SequencePoints>
-                <SequencePoint vc="288" uspid="752" ordinal="0" offset="0" sl="48" sc="9" el="48" ec="9" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="288" uspid="753" ordinal="0" offset="1" sl="48" sc="9" el="48" ec="9" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="288" uspid="754" ordinal="0" offset="2" sl="49" sc="13" el="49" ec="13" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="288" uspid="755" ordinal="0" offset="22" sl="50" sc="9" el="50" ec="9" bec="0" bev="0" fileid="23" />
-                <SequencePoint vc="288" uspid="756" ordinal="0" offset="30" sl="50" sc="9" el="50" ec="9" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="290" uspid="752" ordinal="0" offset="0" sl="48" sc="9" el="48" ec="9" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="290" uspid="753" ordinal="0" offset="1" sl="48" sc="9" el="48" ec="9" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="290" uspid="754" ordinal="0" offset="2" sl="49" sc="13" el="49" ec="13" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="290" uspid="755" ordinal="0" offset="22" sl="50" sc="9" el="50" ec="9" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="290" uspid="756" ordinal="0" offset="30" sl="50" sc="9" el="50" ec="9" bec="0" bev="0" fileid="23" />
               </SequencePoints>
               <BranchPoints />
             </Method>
@@ -2122,7 +2122,7 @@
               <Name>OscilloscopeSimulation.InteractableObjects.WireSocketText::WireSocketText()</Name>
               <FileRef uid="23" />
               <SequencePoints>
-                <SequencePoint vc="577" uspid="757" ordinal="0" offset="0" sl="13" sc="9" el="13" ec="9" bec="0" bev="0" fileid="23" />
+                <SequencePoint vc="580" uspid="757" ordinal="0" offset="0" sl="13" sc="9" el="13" ec="9" bec="0" bev="0" fileid="23" />
               </SequencePoints>
               <BranchPoints />
             </Method>

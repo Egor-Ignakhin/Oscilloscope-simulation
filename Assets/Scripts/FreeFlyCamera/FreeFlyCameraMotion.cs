@@ -8,23 +8,34 @@ namespace OscilloscopeSimulation.FreeFlyCamera
 
         [SerializeField] private Rigidbody mRigidbody;
 
-        [SerializeField, Range(0, 10)] private float defaultSpeed = 1;
-        private float speed;
+        [SerializeField, Range(0, 10)] private float speed = 1;
 
         [SerializeField] private Transform cameraTransform;
 
-        internal void Update()
+        private Quaternion startLocalRotation;
+        private Vector3 startLocalPosition;
+
+        private bool inputIsLocked;
+
+        private void Awake()
         {
-            speed = CalculateSpeed();
+            startLocalRotation = transform.localRotation;
+            startLocalPosition = transform.localPosition;
+
+            ResetPositionAndRotation();
+        }
+
+        private void Update()
+        {
+            if (inputIsLocked)
+            {
+                StopMotion();
+                return;
+            }
 
             RotateCamera();
 
             MoveCamera();
-        }
-
-        private float CalculateSpeed()
-        {
-            return Input.GetKey(KeyCode.LeftShift) ? defaultSpeed * 2 : defaultSpeed;
         }
 
         private void RotateCamera()
@@ -47,6 +58,25 @@ namespace OscilloscopeSimulation.FreeFlyCamera
             {                
                 mRigidbody.velocity += 100 * speed * Time.deltaTime * -Vector3.up;
             }
+        }
+
+        internal void ResetPositionAndRotation()
+        {
+            transform.localPosition = startLocalPosition;
+            transform.localRotation = startLocalRotation;
+            StopMotion();
+        }
+
+        internal void StopMotion()
+        {
+            mRigidbody.velocity = Vector3.zero;
+            mRigidbody.angularVelocity = Vector3.zero;
+
+        }
+
+        internal void SetInputIsLocked(bool value)
+        {
+            inputIsLocked = value;
         }
     }
 }

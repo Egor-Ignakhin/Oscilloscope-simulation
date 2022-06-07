@@ -56,9 +56,19 @@ namespace OscilloscopeSimulation.Wires
             }
 
             startWirePoint.position = socketStart.GetWireConnectorSetupPosition();
-            endWirePoint.position = wiresManager.EqualsWithActiveWire(this) ?
-               PlayerRaycast.GetLastHitPosition() :
-             socketEnd.GetWireConnectorSetupPosition();
+
+            if (wiresManager.EqualsWithActiveWire(this))
+            {
+                var lastRaycastHitTr = PlayerRaycast.GetLastRaycastHit().transform;
+                if (lastRaycastHitTr && lastRaycastHitTr.GetComponent<WireSocketInteractable>())
+                {
+                    endWirePoint.position = PlayerRaycast.GetLastHitPosition();
+                }                
+            }
+            else
+            {
+                endWirePoint.position = socketEnd.GetWireConnectorSetupPosition();
+            }
         }
 
         internal void DisconnectWireFromSocket(WireSocketInteractable socket)

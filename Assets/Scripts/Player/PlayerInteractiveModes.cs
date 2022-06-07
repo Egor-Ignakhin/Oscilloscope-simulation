@@ -4,6 +4,6 @@ namespace OscilloscopeSimulation.Player
     {
         InsertingWires,
         MovingWires,
-        FreeFlight
+        FreeFlight,
     }
 }
