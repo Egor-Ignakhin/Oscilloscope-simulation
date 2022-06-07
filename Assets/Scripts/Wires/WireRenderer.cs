@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace OscilloscopeSimulation
+namespace OscilloscopeSimulation.Wires
 {
     [System.Serializable]
     internal sealed class WireRenderer

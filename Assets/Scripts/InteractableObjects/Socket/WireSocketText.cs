@@ -14,7 +14,7 @@ namespace OscilloscopeSimulation.InteractableObjects
 
         [SerializeField] private TMPro.TextMeshPro textMeshPro;
 
-        internal void Initialize()
+        public void Initialize()
         {
             textMeshPro.enabled = false;
 
@@ -22,7 +22,7 @@ namespace OscilloscopeSimulation.InteractableObjects
             OnGeneralVisibilityUpdate();
         }
 
-        internal void Write(string text)
+        public void Write(string text)
         {
             textMeshPro.SetText(text);
         }
@@ -38,7 +38,7 @@ namespace OscilloscopeSimulation.InteractableObjects
             textMeshPro.enabled = GeneralVisibility && canVisibility;
         }
 
-        internal void SetCanVisibility(bool value)
+        public void SetCanVisibility(bool value)
         {
             canVisibility = value;
             OnGeneralVisibilityUpdate();

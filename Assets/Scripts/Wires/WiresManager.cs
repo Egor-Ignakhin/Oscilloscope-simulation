@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-namespace OscilloscopeSimulation
+namespace OscilloscopeSimulation.Wires
 {
     /// <summary>
     /// ћенеджер проводов, соедин€ющих сокеты стенда

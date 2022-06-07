@@ -4,9 +4,15 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Core"
+        "Core",
+        "Unity.TextMeshPro",
+        "Unity.TextMeshPro.Editor"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor",
+        "WSA",
+        "WindowsStandalone64"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,

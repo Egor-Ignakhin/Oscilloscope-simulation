@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-namespace OscilloscopeSimulation
+namespace OscilloscopeSimulation.Wires
 {
     internal struct WiresBuilder
     {

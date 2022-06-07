@@ -1,6 +1,7 @@
 using NUnit.Framework;
 
 using OscilloscopeSimulation.Menu;
+using OscilloscopeSimulation.Wires;
 
 using System.Collections;
 

@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-namespace OscilloscopeSimulation
+namespace OscilloscopeSimulation.Wires
 {
     [System.Serializable]
-    internal sealed class WiresInfo
+    public sealed class WiresInfo
     {
         private List<Wire> wires;
 
@@ -13,7 +13,7 @@ namespace OscilloscopeSimulation
 
         [SerializeField] private Transform wiresParent;
 
-        internal List<Wire> GetWires()
+        public List<Wire> GetWires()
         {
             return wires;
         }

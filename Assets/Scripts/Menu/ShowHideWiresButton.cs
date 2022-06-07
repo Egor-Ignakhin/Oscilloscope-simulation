@@ -1,3 +1,5 @@
+using OscilloscopeSimulation.Wires;
+
 using UnityEngine;
 namespace OscilloscopeSimulation.Menu
 {

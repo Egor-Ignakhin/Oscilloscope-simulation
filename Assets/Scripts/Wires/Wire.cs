@@ -3,13 +3,13 @@ using OscilloscopeSimulation.Player;
 
 using UnityEngine;
 
-namespace OscilloscopeSimulation
+namespace OscilloscopeSimulation.Wires
 {
 
     /// <summary>
     /// Провод, соединяющий сокеты стенда 3D
     /// </summary>
-    internal sealed class Wire : MonoBehaviour
+    public sealed class Wire : MonoBehaviour
     {
         [SerializeField] private WireRenderer wireRenderer;
         [SerializeField] private WireRope wireRope;
