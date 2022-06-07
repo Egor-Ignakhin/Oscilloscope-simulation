@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace OscilloscopeSimulation.Menu
 {
-    internal sealed class SocketTextInverterButton : MonoBehaviour
+    public sealed class SocketTextInverterButton : MonoBehaviour
     {
         public void OnButtonClick()
         {

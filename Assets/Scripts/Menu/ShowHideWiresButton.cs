@@ -1,13 +1,11 @@
 using UnityEngine;
-namespace OscilloscopeSimulation
+namespace OscilloscopeSimulation.Menu
 {
-    internal sealed class ShowHideWiresButton : MonoBehaviour
+    public sealed class ShowHideWiresButton : MonoBehaviour
     {
-        [SerializeField] private WiresManager wiresManager;
-
         public void OnButtonClick()
         {
-            wiresManager.SetVisibilityToWires();
+            WiresManager.InvertVisibilityToWires();
         }
     }
 }

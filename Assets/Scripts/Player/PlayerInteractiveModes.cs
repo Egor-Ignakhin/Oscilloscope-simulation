@@ -1,6 +1,6 @@
 namespace OscilloscopeSimulation.Player
 {
-    internal enum PlayerInteractiveModes
+    public enum PlayerInteractiveModes
     {
         InsertingWires,
         MovingWires,

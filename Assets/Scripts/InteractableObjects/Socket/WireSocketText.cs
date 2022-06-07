@@ -5,9 +5,9 @@ using UnityEngine;
 namespace OscilloscopeSimulation.InteractableObjects
 {
     [Serializable]
-    internal sealed class WireSocketText
+    public sealed class WireSocketText
     {
-        private static bool generalVisibility = true;
+        public static bool GeneralVisibility { get; private set; } = true;
         private static event Action GeneralVisibilityUpdate;
 
         private bool canVisibility = false;
@@ -29,13 +29,13 @@ namespace OscilloscopeSimulation.InteractableObjects
 
         internal static void InvertGeneralVisibility()
         {
-            generalVisibility = !generalVisibility;
+            GeneralVisibility = !GeneralVisibility;
             GeneralVisibilityUpdate?.Invoke();
         }
 
         private void OnGeneralVisibilityUpdate()
         {
-            textMeshPro.enabled = generalVisibility && canVisibility;
+            textMeshPro.enabled = GeneralVisibility && canVisibility;
         }
 
         internal void SetCanVisibility(bool value)

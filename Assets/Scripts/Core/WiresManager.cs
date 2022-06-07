@@ -1,5 +1,6 @@
 using OscilloscopeSimulation.InteractableObjects;
 
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -9,16 +10,21 @@ namespace OscilloscopeSimulation
     /// <summary>
     /// ћенеджер проводов, соедин€ющих сокеты стенда
     /// </summary>
-    internal sealed class WiresManager : MonoBehaviour
+    public sealed class WiresManager : MonoBehaviour
     {
+        public static bool AllWiresVisible { get; private set; } = true;
+        private static event EventHandler AllWiresVisibleChanged;
+
         [SerializeField]
-        private WiresInfo wiresInfo = new WiresInfo();
+        private WiresInfo wiresInfo = new WiresInfo();        
 
         private void Start()
         {
             WiresBuilder wiresBuilder = new WiresBuilder(wiresInfo.GetWiresParent(), this);
             List<Wire> wires = wiresBuilder.Build(100);
             wiresInfo.SetWires(wires);
+
+            AllWiresVisibleChanged += OnAllWiresVisibleChanged;
         }
 
         internal Wire ConnectWire(WireSocketInteractable socket)
@@ -73,7 +79,13 @@ namespace OscilloscopeSimulation
             wiresInfo.SetActiveWire(wire);
         }
 
-        internal void SetVisibilityToWires()
+        internal static void InvertVisibilityToWires()
+        {
+            AllWiresVisible = !AllWiresVisible;
+            AllWiresVisibleChanged?.Invoke(null, null);
+        }
+
+        private void OnAllWiresVisibleChanged(object sender, EventArgs eventArgs)
         {
             foreach (var wire in wiresInfo.GetWires())
             {
@@ -119,6 +131,11 @@ namespace OscilloscopeSimulation
         internal Wire GetActiveWire()
         {
             return wiresInfo.GetActiveWire();
+        }
+
+        private void OnDestroy()
+        {
+            AllWiresVisibleChanged -= OnAllWiresVisibleChanged;
         }
     }
 }

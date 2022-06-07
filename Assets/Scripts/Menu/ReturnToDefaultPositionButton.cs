@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace OscilloscopeSimulation.Menu
 {
-    internal sealed class ReturnToDefaultPositionButton : MonoBehaviour
+    public sealed class ReturnToDefaultPositionButton : MonoBehaviour
     {
         public void OnButtonClick()
         {

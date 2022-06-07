@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace OscilloscopeSimulation.Tests
 {
     internal sealed class ExtensionsTest
     {
@@ -13,7 +13,7 @@ namespace Tests
         {
             bool value1 = true;
             bool value2 = false;
-            OscilloscopeSimulation.Extenions<bool>.Swap(ref value1, ref value2);
+            Extenions<bool>.Swap(ref value1, ref value2);
             Assert.IsFalse(value1);
             Assert.IsTrue(value2);
 
@@ -27,9 +27,9 @@ namespace Tests
             Color[] emptyColorArray = { };
             Color[] nullableColorArray = null;
 
-            Color filledColor = OscilloscopeSimulation.Extenions<bool>.GenerateRandomColor(filledColorArray);
-            Color emptyColor = OscilloscopeSimulation.Extenions<bool>.GenerateRandomColor(emptyColorArray);
-            Color nullableColor = OscilloscopeSimulation.Extenions<bool>.GenerateRandomColor(nullableColorArray);
+            Color filledColor = Extenions<bool>.GenerateRandomColor(filledColorArray);
+            Color emptyColor = Extenions<bool>.GenerateRandomColor(emptyColorArray);
+            Color nullableColor = Extenions<bool>.GenerateRandomColor(nullableColorArray);
 
             Assert.True(filledColorArray.Contains(filledColor));
             Assert.IsNotNull(emptyColor);

@@ -7,7 +7,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests
+namespace OscilloscopeSimulation.Tests
 {
     internal sealed class StdSceneFoldersCreatorTests
     {

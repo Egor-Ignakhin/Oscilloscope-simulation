@@ -1,10 +1,12 @@
 using Obi;
 
+using System;
+
 using UnityEngine;
 
 namespace OscilloscopeSimulation.Player
 {
-    internal sealed class PlayerInteractive : MonoBehaviour
+    public sealed class PlayerInteractive : MonoBehaviour
     {
         private static Vector3 mousePositionInBehindFrame;
 
@@ -23,16 +25,19 @@ namespace OscilloscopeSimulation.Player
 
         private WiredParticleMotionOperator wiresParticleMotionOperator;
 
-        private PlayerInteractiveModes playerInteractiveMode;
+        private static PlayerInteractiveModes playerInteractiveMode;
+        private static event EventHandler PIMChanged;
 
         [SerializeField] private GameObject FreeFlyCameraGM;
 
-        [SerializeField] private GameObject UI;        
+        [SerializeField] private GameObject UI;
 
         private void Start()
         {
             wiresParticleMotionOperator = new WiredParticleMotionOperator(obiSolver, obiParticlePicker,
                 wiresManager, wireInteractiveCursor, this);
+
+            PIMChanged += OnPIMChanged;
         }
 
         private void LateUpdate()
@@ -83,11 +88,15 @@ namespace OscilloscopeSimulation.Player
             return playerInteractiveMode;
         }
 
-        internal void SetPIM(PlayerInteractiveModes mode)
+        internal static void SetPIM(PlayerInteractiveModes mode)
         {
             playerInteractiveMode = mode;
+            PIMChanged?.Invoke(null, null);
+        }
 
-            switch (mode)
+        private void OnPIMChanged(object sender, EventArgs eventArgs)
+        {
+            switch (playerInteractiveMode)
             {
                 case PlayerInteractiveModes.FreeFlight:
                     SetupFreeFlightPIM();
@@ -114,6 +123,16 @@ namespace OscilloscopeSimulation.Player
             FreeFlyCameraGM.SetActive(false);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+        }
+
+        public static PlayerInteractiveModes GetPlayerInteractiveModes()
+        {
+            return playerInteractiveMode;
+        }
+
+        private void OnDestroy()
+        {
+            PIMChanged -= OnPIMChanged;
         }
     }
 }
