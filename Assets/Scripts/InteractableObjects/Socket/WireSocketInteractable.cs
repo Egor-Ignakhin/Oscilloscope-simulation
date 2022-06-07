@@ -1,6 +1,7 @@
 using OscilloscopeSimulation.Wires;
 
 using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -28,6 +29,8 @@ namespace OscilloscopeSimulation.InteractableObjects
 
         [SerializeField] private bool itsOutSocket;
 
+        [SerializeField] private List<WireSocketInteractable> behindSockets = new List<WireSocketInteractable>();
+
         private void WriteLogicalValueInText()
         {
             socketText.Write(logicalValue ? "1" : "0");
@@ -48,7 +51,6 @@ namespace OscilloscopeSimulation.InteractableObjects
             }
 
             socketText.Initialize();
-            socketText.SetCanVisibility(itsOutSocket || toggleSwitch);
         }
 
         internal override void Interact()
@@ -68,7 +70,6 @@ namespace OscilloscopeSimulation.InteractableObjects
 
         internal void DisconnectWire()
         {
-            socketText.SetCanVisibility(itsOutSocket || toggleSwitch);
             if (ConnectedWire.GetSocketEnd() == this)
             {
                 ConnectedWire.GetSocketStart().ChangeValueEvent = null;                
@@ -165,11 +166,32 @@ namespace OscilloscopeSimulation.InteractableObjects
             ChangeValueEvent?.Invoke(logicalValue);
 
             WriteLogicalValueInText();
+
+            socketText.SetCanVisibility(CalculateCanVisibility());
         }
 
         internal bool HaveToggleSwitch()
         {
             return toggleSwitch != null;
+        }
+
+        private bool CalculateCanVisibility()
+        {
+            if (ConnectedWire)
+                return true;
+
+            if (itsOutSocket)
+            {
+                foreach(var bs in behindSockets)
+                {
+                    if (bs.ConnectedWire)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }
